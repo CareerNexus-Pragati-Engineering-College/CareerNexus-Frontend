@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .mask-gradient-edge {
+    mask-image: radial-gradient(
+      ellipse at center,
+      rgba(0, 0, 0, 1) 60%,
+      rgba(0, 0, 0, 0.5) 85%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    -webkit-mask-image: radial-gradient(
+      ellipse at center,
+      rgba(0, 0, 0, 1) 60%,
+      rgba(0, 0, 0, 0.5) 85%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    mask-size: cover;
+    mask-repeat: no-repeat;
+  }
+
+  /* Slow glowing pulse */
+  .animate-pulse-slow {
+    animation: pulse-slow 6s ease-in-out infinite;
+  }
+
+  @keyframes pulse-slow {
+    0%, 100% {
+      opacity: 0.25;
+      transform: scale(0.95);
+    }
+    50% {
+      opacity: 0.5;
+      transform: scale(1.05);
+    }
+  }
+}
+/* index.css or global stylesheet */
+html, body {
+  overflow-x: hidden;
+}

@@ -1,0 +1,65 @@
+// src/App.jsx
+import React from "react";
+import { useLocation, Routes, Route } from "react-router-dom";
+
+// Pages
+import Home from "./pages/landingpage/Home";
+import Student from "./pages/student/Student";
+import StudentLogin from "./pages/student/StudentLogin";
+import StudentSignup from "./pages/student/StudentSignup"; 
+import TPO from "./pages/tpo/TPO";
+import TPOLogin from "./pages/tpo/TPOLogin";
+import Interviewer from "./pages/interviewer/Interviewer";
+import InterviewerLogin from "./pages/interviewer/InterviewerLogin";
+
+// Navbars
+// import NavbarLanding from "./components/NavbarLanding";
+//import NavbarStudent from "./components/NavbarStudent";
+// import NavbarTPO from "./components/NavbarTPO";
+import NavbarInterviewer from "./components/NavbarInterviewer";
+
+const App = () => {
+  const location = useLocation();
+  const path = location.pathname;
+
+  // 🎯 Pages that require their own navbar
+  const isLandingPage = path === "/";
+  const isStudentLogin = path === "/student/login";
+  const isTpoLogin = path === "/tpo/login";
+  const isInterviewerLogin = path === "/interviewer/login";
+
+  const showNavbarStudent = path.startsWith("/student") && !isStudentLogin;
+  const showNavbarTPO = path.startsWith("/tpo") && !isTpoLogin;
+  const showNavbarInterviewer = path.startsWith("/interviewer") && !isInterviewerLogin;
+
+  return (
+    <>
+      {/* Conditional Navbars */}
+      {/* {isLandingPage && <NavbarLanding />} */}
+      {/* {showNavbarStudent && <NavbarStudent />} */}
+      {/* {showNavbarTPO && <NavbarTPO />} */}
+      {/* {showNavbarInterviewer && <NavbarInterviewer />} */}
+
+      {/* Routes */}
+      <Routes>
+        {/* 🌐 Landing */}
+        <Route path="/" element={<Home />} />
+
+        {/* 🎓 Student */}
+        <Route path="/student" element={<Student />} />
+        <Route path="/student/login" element={<StudentLogin />} />
+        <Route path="/student/signup" element={<StudentSignup />} /> 
+
+        {/* 🏫 TPO */}
+        <Route path="/tpo" element={<TPO />} />
+        <Route path="/tpo/login" element={<TPOLogin />} />
+
+        {/* 👨‍💼 Interviewer */}
+        <Route path="/interviewer" element={<Interviewer />} />
+        <Route path="/interviewer/login" element={<InterviewerLogin />} />
+      </Routes>
+    </>
+  );
+};
+
+export default App;
