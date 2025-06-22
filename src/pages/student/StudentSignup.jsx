@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom"; // ✅ import useNavigate
 import {
   FaEnvelope,
   FaLock,
@@ -13,47 +13,25 @@ import {
 import { motion } from "framer-motion";
 
 const StudentSignup = () => {
+  const navigate = useNavigate(); // ✅ init navigate
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");
   const [rollNo, setRollNo] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const validatePassword = (value) => {
-    const isValid =
-      value.length >= 8 &&
-      /[A-Z]/.test(value) &&
-      /[0-9]/.test(value) &&
-      /[^A-Za-z0-9]/.test(value);
-    return isValid;
-  };
-
-  const handlePasswordChange = (e) => {
-    const value = e.target.value;
-    setPassword(value);
-
-    if (!validatePassword(value)) {
-      setPasswordError(
-        "Password must be 8+ chars with uppercase, number & symbol."
-      );
-    } else {
-      setPasswordError("");
-    }
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (passwordError) {
-      alert("Please fix the password before submitting.");
-      return;
-    }
 
+    // ✅ Simulate successful signup or implement your signup logic here
     console.log("Signup Details:", { name, rollNo, email, password });
+
+    // ✅ Redirect to Student Home
+    navigate("/student/home");
   };
 
   return (
@@ -64,6 +42,7 @@ const StudentSignup = () => {
         transition={{ duration: 0.6 }}
         className="w-full max-w-md bg-white/30 backdrop-blur-2xl border border-violet-300/40 p-8 rounded-3xl shadow-[0_0_40px_rgba(165,100,255,0.2)] text-[#2a104d] relative"
       >
+        {/* 🔙 Back Button */}
         <NavLink
           to="/student"
           className="absolute top-4 left-4 flex items-center gap-2 text-violet-600 hover:text-indigo-700 text-sm transition-all"
@@ -72,6 +51,7 @@ const StudentSignup = () => {
           Back
         </NavLink>
 
+        {/* 👤 Icon & Title */}
         <div className="flex flex-col items-center mt-6">
           <motion.div
             initial={{ scale: 0 }}
@@ -89,6 +69,7 @@ const StudentSignup = () => {
           </p>
         </div>
 
+        {/* 📄 Form */}
         <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
           <div className="relative">
             <FaUserGraduate className="absolute left-3 top-3.5 text-violet-400" />
@@ -132,7 +113,7 @@ const StudentSignup = () => {
               type={showPassword ? "text" : "password"}
               placeholder="Create password"
               value={password}
-              onChange={handlePasswordChange}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full pl-10 pr-10 py-2 rounded-md bg-white/70 border border-violet-200 text-violet-900 placeholder-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-500"
               required
             />
@@ -144,10 +125,6 @@ const StudentSignup = () => {
             </div>
           </div>
 
-          {passwordError && (
-            <p className="text-sm text-red-500 mt-1 font-poppins">{passwordError}</p>
-          )}
-
           <div className="flex items-center text-sm text-violet-600 gap-2 pl-1">
             <label className="flex items-center gap-2 pl-[1px]">
               <input type="checkbox" className="accent-violet-500" required />
@@ -158,12 +135,7 @@ const StudentSignup = () => {
           <motion.button
             whileTap={{ scale: 0.97 }}
             type="submit"
-            disabled={passwordError !== ""}
-            className={`w-full py-2 rounded-md font-semibold transition-all duration-300 ${
-              passwordError === ""
-                ? "bg-gradient-to-r from-violet-500 to-pink-500 text-white shadow-[0_0_20px_rgba(165,100,255,0.5)] hover:shadow-[0_0_30px_rgba(165,100,255,0.7)]"
-                : "bg-gray-300 text-gray-500 cursor-not-allowed"
-            }`}
+            className="w-full py-2 rounded-md font-semibold bg-gradient-to-r from-violet-500 to-pink-500 text-white shadow-[0_0_20px_rgba(165,100,255,0.5)] hover:shadow-[0_0_30px_rgba(165,100,255,0.7)] transition-all"
           >
             Create Account →
           </motion.button>

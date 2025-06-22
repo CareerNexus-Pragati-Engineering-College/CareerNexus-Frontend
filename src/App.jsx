@@ -7,6 +7,7 @@ import Home from "./pages/landingpage/Home";
 import Student from "./pages/student/Student";
 import StudentLogin from "./pages/student/StudentLogin";
 import StudentSignup from "./pages/student/StudentSignup"; 
+import StudentHome from "./pages/student/StudentHome";
 import TPO from "./pages/tpo/TPO";
 import TPOLogin from "./pages/tpo/TPOLogin";
 import Interviewer from "./pages/interviewer/Interviewer";
@@ -49,6 +50,8 @@ const App = () => {
         <Route path="/student" element={<Student />} />
         <Route path="/student/login" element={<StudentLogin />} />
         <Route path="/student/signup" element={<StudentSignup />} /> 
+        <Route path="/student/home" element={<StudentHome />} />
+
 
         {/* 🏫 TPO */}
         <Route path="/tpo" element={<TPO />} />

@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom"; // ✅ Added useNavigate
 import {
   FaEnvelope,
   FaLock,
-  FaGoogle,
   FaEye,
   FaEyeSlash,
   FaArrowLeft,
   FaUserGraduate,
+  FaGoogle,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 const StudentLogin = () => {
+  const navigate = useNavigate(); // ✅ Initialize navigate
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,7 +23,12 @@ const StudentLogin = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // ✅ Here you can add real login logic; for now we assume login is successful
     console.log("Email:", email, "Password:", password);
+
+    // ✅ Navigate to student home
+    navigate("/student/home");
   };
 
   return (
