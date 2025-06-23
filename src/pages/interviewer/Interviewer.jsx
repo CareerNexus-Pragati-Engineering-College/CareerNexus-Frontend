@@ -1,15 +1,16 @@
 // src/pages/interviewer/Interviewer.jsx
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
+import Typewriter from "typewriter-effect";
 import { Link as ScrollLink } from "react-scroll";
 import { NavLink } from "react-router-dom";
 import {
   FaArrowRight,
+  FaHome,
   FaUserTie,
   FaClipboardList,
   FaChartBar,
   FaClock,
-  FaHome,
 } from "react-icons/fa";
 import NavbarInterviewer from "../../components/NavbarInterviewer";
 
@@ -43,7 +44,7 @@ const Interviewer = () => {
 
   return (
     <div className="bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A] scroll-smooth font-poppins">
-      {/* 🔙 Back to Home */}
+      {/* 🔙 Back to Main Home */}
       <div className="fixed top-[90px] left-3 z-50 hidden md:block">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -76,11 +77,21 @@ const Interviewer = () => {
             Welcome To Interviewer Portal
           </h1>
           <div className="text-2xl sm:text-3xl font-semibold mb-6 text-[#B497FF] drop-shadow-md">
-            Empowered by CareerNexus
+            <Typewriter
+              options={{
+                strings: [
+                  "Empower the interview process",
+                  "Stay organized and efficient",
+                  "Find the best talent easily",
+                ],
+                autoStart: true,
+                loop: true,
+              }}
+            />
           </div>
           <p className="text-[#4b436f] mb-8">
-            Manage candidates, schedules, and feedback easily in one place.
-            Interviewing has never been this seamless.
+            Efficiently coordinate interviews, track candidates’ progress, and make
+            informed decisions — all in one simple interface.
           </p>
 
           <ScrollLink
@@ -161,15 +172,25 @@ const Interviewer = () => {
             About Interviewer Portal
           </h2>
           <p className="text-[#4b436f]">
-            Our portal simplifies the recruitment process by giving interviewers
-            the tools to organize, evaluate, and manage interviews efficiently — all
-            from a single dashboard.
+            Our portal simplifies the recruitment process by providing interviewers
+            with powerful tools to manage schedules, track candidates, and assess
+            performances efficiently — all from one intuitive dashboard.
           </p>
         </div>
       </section>
 
+      {/* 📍 Navbar */}
       <NavbarInterviewer />
-      
+
+     {/* 📍 Footer */}
+      <footer className="bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-10">
+        <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2">
+          <p className="text-sm sm:text-base opacity-90">
+            &copy; {new Date().getFullYear()} CareerNexus. All rights reserved.
+          </p>
+          <p className="text-xs opacity-60">Your one-stop placement tracker</p>
+        </div>
+      </footer>
     </div>
   );
 };

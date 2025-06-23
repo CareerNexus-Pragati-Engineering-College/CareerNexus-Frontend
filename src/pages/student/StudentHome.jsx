@@ -1,41 +1,41 @@
 // src/pages/student/StudentHome.jsx
 import React from "react";
 import { motion } from "framer-motion";
-import { NavLink } from "react-router-dom";
-import {
-  FaBuilding,
-  FaClipboardList,
-  FaCalendarAlt,
-  FaUser,
-  FaArrowRight,
-} from "react-icons/fa";
+import { FaArrowRight, FaBuilding } from "react-icons/fa";
 import NavbarStudentDashboard from "../../components/NavbarStudentDashboard";
 
-const dashboardItems = [
-  {
-    title: "Companies",
-    icon: <FaBuilding className="text-4xl text-violet-400" />,
-    link: "/student/companies",
-    description: "Browse companies & opportunities",
-  },
-  {
-    title: "Applications",
-    icon: <FaClipboardList className="text-4xl text-violet-400" />,
-    link: "/student/applications",
-    description: "Track all your applications",
-  },
-  {
-    title: "Interviews",
-    icon: <FaCalendarAlt className="text-4xl text-violet-400" />,
-    link: "/student/interviews",
-    description: "View interview schedules",
-  },
-  {
-    title: "Profile",
-    icon: <FaUser className="text-4xl text-violet-400" />,
-    link: "/student/profile",
-    description: "Update profile & resume",
-  },
+const visitedCompanies = [
+  { id: 1, name: "Google", logo: "/images/google.png" },
+  { id: 2, name: "Microsoft", logo: "/images/microsoft.png" },
+  { id: 3, name: "Amazon", logo: "/images/amazon.png" },
+  { id: 4, name: "Infosys", logo: "/images/infosys.png" },
+  { id: 5, name: "TCS", logo: "/images/tcs.png" },
+  { id: 6, name: "Wipro", logo: "/images/wipro.png" },
+  { id: 7, name: "Accenture", logo: "/images/accenture.png" },
+  { id: 8, name: "HCL", logo: "/images/hcl.png" },
+  { id: 9, name: "Tech Mahindra", logo: "/images/techmahindra.png" },
+];
+
+const openJobs = [
+  { id: 1, company: "Google", role: "Frontend Engineer" },
+  { id: 2, company: "Microsoft", role: "Full-Stack Developer" },
+  { id: 3, company: "Amazon", role: "Cloud Engineer" },
+  { id: 4, company: "Infosys", role: "Software Trainee" },
+];
+
+// Dummy data for the new sections
+const trackerStats = [
+  { title: "Companies Applied", value: 12 },
+  { title: "Interviews Attended", value: 5 },
+  { title: "Offers Received", value: 2 },
+];
+
+const placementNews = [
+  "Google to visit campus on July 10",
+  "Microsoft offers 5 new roles",
+  "Accenture conducting virtual drive",
+  "Infosys interview results declared",
+  "Tech Mahindra recruitment in process",
 ];
 
 const StudentHome = () => {
@@ -60,54 +60,111 @@ const StudentHome = () => {
             ✨ Welcome to Student Dashboard
           </h1>
           <p className="text-md md:text-xl text-[#4b436f] max-w-2xl mb-6 px-2">
-            Explore companies, manage your applications, track interviews, and update your profile — all in one place.
+            Explore companies that visited our campus and apply for available job roles — all in one place.
           </p>
-          <motion.div
-            className="bg-white/40 backdrop-blur-md p-6 rounded-3xl border border-violet-200/40 shadow-xl"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5, duration: 0.7 }}
-          >
-            <p className="text-violet-700 text-base md:text-lg font-medium flex items-center justify-center gap-2">
-              Get Started <FaArrowRight className="text-violet-500" />
-            </p>
-          </motion.div>
         </motion.section>
 
-        {/* 🚀 Dashboard Tiles */}
-        <motion.section
-          className="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={{
-            visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
-            hidden: { opacity: 0 },
-          }}
-        >
-          {dashboardItems.map((item, index) => (
-            <motion.div
-              key={index}
-              variants={{
-                hidden: { opacity: 0, y: 40 },
-                visible: { opacity: 1, y: 0 },
-              }}
-              transition={{ duration: 0.5 }}
-              className="w-full"
-            >
-              <NavLink
-                to={item.link}
-                className="bg-white/40 backdrop-blur-xl border border-violet-200/40 p-6 rounded-3xl shadow-md flex flex-col items-center text-center hover:scale-105 hover:shadow-[0_0_20px_rgba(130,90,255,0.3)] transition-transform duration-300"
+        {/* 🏢 Companies Visited Section */}
+        <section className="w-full max-w-7xl mb-16 overflow-hidden">
+          <h2 className="text-2xl font-semibold text-[#6B4ECF] mb-8 text-center drop-shadow-md">
+            Companies Visited
+          </h2>
+          <motion.div
+            className="flex gap-10 animate-marquee"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            {visitedCompanies.concat(visitedCompanies).map((company, index) => (
+              <motion.div
+                key={index}
+                className="bg-white/60 border border-violet-200/40 backdrop-blur-xl p-6 rounded-2xl shadow-lg flex flex-col items-center justify-center min-w-[160px] transform transition-all duration-300 hover:scale-110 hover:shadow-[0_0_20px_rgba(139,92,246,0.5)] hover:bg-white/80"
               >
-                <div className="bg-violet-100/40 p-4 rounded-full shadow-md mb-4 flex items-center justify-center">
-                  {item.icon}
+                <img
+                  src={company.logo}
+                  alt={company.name}
+                  className="h-20 w-20 mb-3 object-contain drop-shadow-sm"
+                />
+                <span className="text-md font-medium text-[#2C225A] text-center">
+                  {company.name}
+                </span>
+              </motion.div>
+            ))}
+          </motion.div>
+        </section>
+
+        {/* 📊 Progress Tracker */}
+        <section className="w-full max-w-6xl mb-16">
+          <h2 className="text-2xl font-semibold text-[#6B4ECF] mb-6 text-center">
+            Progress Tracker
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {trackerStats.map((stat, index) => (
+              <motion.div
+                key={index}
+                className="bg-white/50 border border-violet-200/50 p-6 rounded-xl shadow-md flex flex-col items-center text-center hover:shadow-xl hover:scale-105 transition-transform"
+                whileHover={{ scale: 1.03 }}
+              >
+                <motion.span
+                  className="text-3xl font-bold text-[#6B4ECF]"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {stat.value}
+                </motion.span>
+                <p className="text-sm text-[#2C225A] mt-2">{stat.title}</p>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* 📰 Latest Placement News */}
+        <section className="w-full max-w-6xl mb-16 overflow-hidden">
+          <h2 className="text-2xl font-semibold text-[#6B4ECF] mb-6 text-center">
+            Latest Placement News
+          </h2>
+          <motion.div
+            className="flex gap-8 animate-marquee"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            {placementNews.concat(placementNews).map((news, index) => (
+              <div
+                key={index}
+                className="bg-white/60 border border-violet-200/40 rounded-xl shadow-md p-4 min-w-[250px] whitespace-nowrap text-center text-[#2C225A] font-medium"
+              >
+                {news}
+              </div>
+            ))}
+          </motion.div>
+        </section>
+
+        {/* 💼 Apply for Companies Section */}
+        <section className="w-full max-w-6xl mb-16">
+          <h2 className="text-2xl font-semibold text-[#6B4ECF] mb-6 text-center">
+            Apply for Companies
+          </h2>
+          <div className="bg-white/50 border border-violet-200/50 backdrop-blur-xl p-6 rounded-2xl shadow-md space-y-4">
+            {openJobs.map((job) => (
+              <motion.div
+                key={job.id}
+                className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 bg-white/60 rounded-lg border border-violet-200/40 hover:scale-105 transition-transform"
+                whileHover={{ scale: 1.02 }}
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4">
+                  <FaBuilding className="text-violet-500 text-2xl mb-2 sm:mb-0" />
+                  <div>
+                    <h3 className="text-lg font-medium text-[#2C225A]">{job.company}</h3>
+                    <p className="text-sm text-[#4b436f]">{job.role}</p>
+                  </div>
                 </div>
-                <h2 className="text-xl font-semibold text-violet-700 mb-1">{item.title}</h2>
-                <p className="text-[#4b436f] text-sm">{item.description}</p>
-              </NavLink>
-            </motion.div>
-          ))}
-        </motion.section>
+                <button className="mt-3 sm:mt-0 px-5 py-2 bg-gradient-to-r from-violet-500 to-indigo-600 text-white rounded-full flex items-center gap-2 shadow-lg hover:shadow-violet-500/50 hover:scale-105 transition-transform hover:brightness-110 glow-effect">
+                  Apply <FaArrowRight />
+                </button>
+              </motion.div>
+            ))}
+          </div>
+        </section>
       </motion.div>
     </>
   );
