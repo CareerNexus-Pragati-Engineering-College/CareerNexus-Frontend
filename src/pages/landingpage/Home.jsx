@@ -4,7 +4,7 @@ import Typewriter from "typewriter-effect";
 import { Link as ScrollLink } from "react-scroll";
 import { FaArrowRight } from "react-icons/fa";
 import NavbarLanding from "../../components/NavbarLanding";
-
+import Footer from "../../components/Footer";
 
 const features = [
   {
@@ -35,7 +35,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="text-[#4A4A7B] bg-soft-glow scroll-smooth overflow-x-hidden">
+    <div className="text-[#4A4A7B] bg-soft-glow scroll-smooth overflow-x-hidden overflow-y-hidden">
 
       <NavbarLanding />
 
@@ -215,6 +215,9 @@ const Home = () => {
           </div>
         </motion.div>
       </section>
+      {}
+      <Footer/>
+     
 
     </div>
   );
