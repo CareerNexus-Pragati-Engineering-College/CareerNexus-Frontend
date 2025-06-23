@@ -215,7 +215,7 @@ const Home = () => {
           </div>
         </motion.div>
       </section>
-      {}
+      {/* 🦄 Footer Section */}
       <Footer/>
      
 
