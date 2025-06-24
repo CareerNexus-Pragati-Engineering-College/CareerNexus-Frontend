@@ -19,7 +19,7 @@ const NavbarTPO = () => {
   return (
     <nav className="w-full fixed top-0 left-0 z-50 bg-gradient-to-r from-[#0f0c1d] via-[#1b1433] to-[#0f0c1d] shadow-md">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* 🔹 Logo with Glow */}
+        {/* 🔹 Logo */}
         <NavLink to="/" className="flex items-center gap-3">
           <img
             src="/images/logo.png"
@@ -37,10 +37,10 @@ const NavbarTPO = () => {
             <ScrollLink
               key={link.to}
               to={link.to}
-              smooth={true}
+              smooth
               duration={500}
               offset={-80}
-              spy={true}
+              spy
               activeClass={activeClass}
               className={linkClass}
             >
@@ -48,7 +48,6 @@ const NavbarTPO = () => {
             </ScrollLink>
           ))}
 
-          {/* ✨ Login Button Only */}
           <NavLink
             to="/tpo/login"
             className="ml-4 px-4 py-2 rounded-md bg-white/10 text-white border border-violet-400 hover:bg-violet-500 hover:text-white transition duration-300 shadow-[0_0_10px_rgba(165,100,255,0.4)] hover:shadow-[0_0_20px_rgba(165,100,255,0.6)]"
@@ -76,24 +75,21 @@ const NavbarTPO = () => {
               duration={500}
               offset={-80}
               spy
-              className={linkClass}
               activeClass={activeClass}
+              className={linkClass}
               onClick={() => setIsOpen(false)}
             >
               {link.label}
             </ScrollLink>
           ))}
 
-          {/* ✨ Mobile Login Only */}
-          <div className="pt-2 flex flex-col gap-2">
-            <NavLink
-              to="/tpo/login"
-              className="px-4 py-2 rounded-md bg-white/10 text-white border border-violet-400 hover:bg-violet-500 hover:text-white transition duration-300 shadow-[0_0_12px_rgba(165,100,255,0.6)]"
-              onClick={() => setIsOpen(false)}
-            >
-              Login
-            </NavLink>
-          </div>
+          <NavLink
+            to="/tpo/login"
+            className="block px-4 py-2 rounded-md bg-white/10 text-white border border-violet-400 hover:bg-violet-500 hover:text-white transition duration-300 shadow-[0_0_12px_rgba(165,100,255,0.6)]"
+            onClick={() => setIsOpen(false)}
+          >
+            Login
+          </NavLink>
         </div>
       )}
     </nav>

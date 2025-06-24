@@ -12,21 +12,22 @@ const NavbarLanding = () => {
     { to: "about", label: "About" },
     { to: "contact", label: "Contact" },
   ];
-
   const routeLinks = [
     { path: "/student", label: "Student" },
     { path: "/tpo", label: "TPO" },
     { path: "/interviewer", label: "Interviewer" },
   ];
 
+  // 🔵 Base link style with white color & hover effect
   const linkClass =
-    "cursor-pointer text-[#EADFFD] hover:text-white transition duration-300 font-poppins tracking-wide";
-  const activeClass = "text-white underline underline-offset-4";
+    "cursor-pointer text-white hover:text-violet-400 transition duration-300 font-poppins tracking-wide";
+  // 🔵 Active class when scrollspy is active
+  const activeClass = "text-violet-400 underline underline-offset-4";
 
   return (
-    <nav className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] shadow-xl fixed top-0 left-0 z-50">
+    <nav className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] fixed top-0 left-0 z-50 shadow-xl">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* 🔗 Logo Scrolls to Home */}
+        {/* 🔹 Logo */}
         <ScrollLink
           to="home"
           smooth
@@ -50,16 +51,17 @@ const NavbarLanding = () => {
             <ScrollLink
               key={link.to}
               to={link.to}
-              smooth
+              smooth={true}
               duration={500}
               offset={-80}
-              spy
+              spy={true}
               className={linkClass}
               activeClass={activeClass}
             >
               {link.label}
             </ScrollLink>
           ))}
+
           {routeLinks.map((link) => (
             <NavLink
               key={link.path}
@@ -73,25 +75,26 @@ const NavbarLanding = () => {
           ))}
         </div>
 
-        {/* 📱 Mobile Menu Toggle */}
-        <div className="md:hidden text-white text-xl">
-          <button onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? <FaTimes /> : <FaBars />}
-          </button>
-        </div>
+        {/* 📱 Mobile Toggle */}
+        <button
+          className="md:hidden text-white text-xl"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {isOpen ? <FaTimes /> : <FaBars />}
+        </button>
       </div>
 
       {/* 📱 Mobile Dropdown */}
       {isOpen && (
-        <div className="md:hidden bg-[#0f0c1d] px-6 pb-6 space-y-4 text-white text-base">
+        <div className="absolute top-full left-0 w-full bg-[#0f0c1d] border-t border-violet-500/20 px-6 py-4 space-y-4 text-base text-white shadow-xl z-50">
           {scrollLinks.map((link) => (
             <ScrollLink
               key={link.to}
               to={link.to}
-              smooth
+              smooth={true}
               duration={500}
               offset={-80}
-              spy
+              spy={true}
               className={linkClass}
               activeClass={activeClass}
               onClick={() => setIsOpen(false)}
@@ -99,6 +102,7 @@ const NavbarLanding = () => {
               {link.label}
             </ScrollLink>
           ))}
+
           {routeLinks.map((link) => (
             <NavLink
               key={link.path}

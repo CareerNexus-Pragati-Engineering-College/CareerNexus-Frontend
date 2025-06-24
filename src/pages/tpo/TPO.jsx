@@ -14,7 +14,6 @@ import {
 } from "react-icons/fa";
 import NavbarTPO from "../../components/NavbarTPO";
 
-
 const tpoFeatures = [
   {
     icon: <FaFileAlt className="text-4xl text-violet-400 mb-4" />,
@@ -91,7 +90,7 @@ const TPO = () => {
               }}
             />
           </div>
-          <p className="text-[#3f3f5c] mb-8">
+          <p className="text-[#3f3f5c] mb-8 text-sm sm:text-base">
             CareerNexus empowers TPOs to organize, monitor, and improve placement
             activities with precision and ease.
           </p>
@@ -171,7 +170,7 @@ const TPO = () => {
           <h2 className="text-4xl font-bold text-[#6B4ECF] mb-4 font-orbitron">
             About TPO Portal
           </h2>
-          <p className="text-[#4b436f]">
+          <p className="text-[#4b436f] text-sm sm:text-base">
             The CareerNexus TPO portal is tailored for Training & Placement Officers
             to simplify recruitment coordination, monitor analytics, and streamline
             placement operations.
@@ -179,8 +178,17 @@ const TPO = () => {
         </div>
       </section>
 
+      {/* 📍 Footer */}
+      <footer className="bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-10">
+        <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2">
+          <p className="text-sm sm:text-base opacity-90">
+            &copy; {new Date().getFullYear()} CareerNexus. All rights reserved.
+          </p>
+          <p className="text-xs opacity-60">Your one-stop placement tracker</p>
+        </div>
+      </footer>
+
       <NavbarTPO />
-      
     </div>
   );
 };
