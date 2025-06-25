@@ -109,3 +109,10 @@ html, body {
   }
 }
 
+@keyframes shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.animate-\[shine_2s_infinite\] {
+  animation: shine 2s infinite;
+}
