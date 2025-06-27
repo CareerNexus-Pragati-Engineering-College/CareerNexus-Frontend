@@ -26,7 +26,7 @@ const NavbarLanding = () => {
 
   return (
     <nav className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] fixed top-0 left-0 z-50 shadow-xl">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-auto  px-6 py-4 flex items-center justify-between">
         {/* 🔹 Logo */}
         <ScrollLink
           to="home"

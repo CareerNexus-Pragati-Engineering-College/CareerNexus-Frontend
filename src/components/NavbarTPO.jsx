@@ -18,7 +18,7 @@ const NavbarTPO = () => {
 
   return (
     <nav className="w-full fixed top-0 left-0 z-50 bg-gradient-to-r from-[#0f0c1d] via-[#1b1433] to-[#0f0c1d] shadow-md">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-auto  px-6 py-4 flex items-center justify-between">
         {/* 🔹 Logo */}
         <NavLink to="/" className="flex items-center gap-3">
           <img

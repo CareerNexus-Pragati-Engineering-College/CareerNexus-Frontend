@@ -173,7 +173,7 @@ const StudentProfile = () => {
   };
   const removeSkill = (s) => setSkills((prev) => prev.filter((skill) => skill !== s));
   useEffect(() => {
-    fetch("https://leetcode-stats-api.herokuapp.com/john_doe")
+    fetch("https://leetcode-stats-api.herokuapp.com/22a31a0525")
       .then((res) => res.json())
       .then((data) => setLeetcodeStats(data));
   }, []);
