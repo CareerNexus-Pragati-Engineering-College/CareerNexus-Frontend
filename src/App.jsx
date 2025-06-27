@@ -13,6 +13,8 @@ import TPO from "./pages/tpo/TPO";
 import TPOLogin from "./pages/tpo/TPOLogin";
 import Interviewer from "./pages/interviewer/Interviewer";
 import InterviewerLogin from "./pages/interviewer/InterviewerLogin";
+import Admin from "./pages/admin/Admin"; // ✅ NEW: Admin Page
+import AdminAccessForm from "./pages/admin/AdminAccessForm";
 
 // Navbars
 // import NavbarLanding from "./components/NavbarLanding";
@@ -54,7 +56,6 @@ const App = () => {
         <Route path="/student/home" element={<StudentHome />} />
         <Route path="/student/profile" element={<StudentProfile />} />
 
-
         {/* 🏫 TPO */}
         <Route path="/tpo" element={<TPO />} />
         <Route path="/tpo/login" element={<TPOLogin />} />
@@ -62,6 +63,11 @@ const App = () => {
         {/* 👨‍💼 Interviewer */}
         <Route path="/interviewer" element={<Interviewer />} />
         <Route path="/interviewer/login" element={<InterviewerLogin />} />
+
+        {/* 🛠️ Admin */}
+        <Route path="/admin" element={<Admin />} /> {/* ✅ NEW Route */}
+        <Route path="/admin/AdminAccessForm" element={<AdminAccessForm/>}/>
+
       </Routes>
     </>
   );
