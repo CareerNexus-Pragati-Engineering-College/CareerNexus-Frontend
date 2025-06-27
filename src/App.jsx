@@ -49,6 +49,9 @@ const App = () => {
         <Route path="/student/home" element={<StudentHome />} />
         <Route path="/student/profile" element={<StudentProfile />} />
 
+        {/* 🏢 Company Details */}
+        <Route path="/student/company/:id" element={<CompanyDetails />} />
+
         {/* 🏫 TPO */}
         <Route path="/tpo" element={<TPO />} />
         <Route path="/tpo/login" element={<TPOLogin />} />
