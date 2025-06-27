@@ -14,6 +14,8 @@ import TPO from "./pages/tpo/TPO";
 import TPOLogin from "./pages/tpo/TPOLogin";
 import Interviewer from "./pages/interviewer/Interviewer";
 import InterviewerLogin from "./pages/interviewer/InterviewerLogin";
+import Admin from "./pages/admin/Admin"; // ✅ NEW: Admin Page
+import AdminAccessForm from "./pages/admin/AdminAccessForm";
 
 const App = () => {
   const location = useLocation();
@@ -47,9 +49,12 @@ const App = () => {
         <Route path="/student/home" element={<StudentHome />} />
         <Route path="/student/profile" element={<StudentProfile />} />
 
+<<<<<<< HEAD
+=======
         {/* 🏢 Company Details */}
         <Route path="/student/company/:id" element={<CompanyDetails />} />
 
+>>>>>>> 80f50cd2fa7ac472b9ce31558edd53f4effb9715
         {/* 🏫 TPO */}
         <Route path="/tpo" element={<TPO />} />
         <Route path="/tpo/login" element={<TPOLogin />} />
@@ -57,6 +62,11 @@ const App = () => {
         {/* 👨‍💼 Interviewer */}
         <Route path="/interviewer" element={<Interviewer />} />
         <Route path="/interviewer/login" element={<InterviewerLogin />} />
+
+        {/* 🛠️ Admin */}
+        <Route path="/admin" element={<Admin />} /> {/* ✅ NEW Route */}
+        <Route path="/admin/AdminAccessForm" element={<AdminAccessForm/>}/>
+
       </Routes>
     </>
   );
