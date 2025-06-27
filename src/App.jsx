@@ -7,8 +7,9 @@ import Home from "./pages/landingpage/Home";
 import Student from "./pages/student/Student";
 import StudentLogin from "./pages/student/StudentLogin";
 import StudentSignup from "./pages/student/StudentSignup"; 
-import StudentHome from "./pages/student/StudentHome";
-import StudentProfile from './pages/student/StudentProfile';
+import StudentHome from "./pages/student/StudentDashboard";  // StudentHome is loaded here
+import StudentProfile from "./pages/student/StudentProfile";
+import CompanyDetails from "./pages/student/CompanyDetails"; // Make sure this is imported
 import TPO from "./pages/tpo/TPO";
 import TPOLogin from "./pages/tpo/TPOLogin";
 import Interviewer from "./pages/interviewer/Interviewer";
@@ -16,17 +17,10 @@ import InterviewerLogin from "./pages/interviewer/InterviewerLogin";
 import Admin from "./pages/admin/Admin"; // ✅ NEW: Admin Page
 import AdminAccessForm from "./pages/admin/AdminAccessForm";
 
-// Navbars
-// import NavbarLanding from "./components/NavbarLanding";
-//import NavbarStudent from "./components/NavbarStudent";
-// import NavbarTPO from "./components/NavbarTPO";
-import NavbarInterviewer from "./components/NavbarInterviewer";
-
 const App = () => {
   const location = useLocation();
   const path = location.pathname;
 
-  // 🎯 Pages that require their own navbar
   const isLandingPage = path === "/";
   const isStudentLogin = path === "/student/login";
   const isTpoLogin = path === "/tpo/login";
@@ -38,13 +32,12 @@ const App = () => {
 
   return (
     <>
-      {/* Conditional Navbars */}
+      {/* Conditional Navbars (you can enable as needed) */}
       {/* {isLandingPage && <NavbarLanding />} */}
       {/* {showNavbarStudent && <NavbarStudent />} */}
       {/* {showNavbarTPO && <NavbarTPO />} */}
       {/* {showNavbarInterviewer && <NavbarInterviewer />} */}
 
-      {/* Routes */}
       <Routes>
         {/* 🌐 Landing */}
         <Route path="/" element={<Home />} />
@@ -56,6 +49,12 @@ const App = () => {
         <Route path="/student/home" element={<StudentHome />} />
         <Route path="/student/profile" element={<StudentProfile />} />
 
+<<<<<<< HEAD
+=======
+        {/* 🏢 Company Details */}
+        <Route path="/student/company/:id" element={<CompanyDetails />} />
+
+>>>>>>> 80f50cd2fa7ac472b9ce31558edd53f4effb9715
         {/* 🏫 TPO */}
         <Route path="/tpo" element={<TPO />} />
         <Route path="/tpo/login" element={<TPOLogin />} />

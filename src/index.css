@@ -56,3 +56,63 @@ html, body {
   animation: marquee 20s linear infinite;
 }
 
+/* Hide scrollbar for all browsers */
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+
+
+.swiper-slide {
+  opacity: 0.8;
+  transform: scale(0.85);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.swiper-slide-active {
+  opacity: 1;
+  transform: scale(1); /* active slide bigger */
+  z-index: 10;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(107, 78, 207, 0.8); /* violet background */
+  color: white;
+  font-size: 14px !important; /* smaller arrow icon */
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s, transform 0.3s;
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  background: rgba(107, 78, 207, 1); /* brighter on hover */
+  transform: scale(1.1);
+}
+
+/* Remove the default after element's larger icon size */
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 10px;
+  font-weight: bold;
+}
+
+@media (max-width: 480px) {
+  .swiper-button-prev,
+  .swiper-button-next {
+    display: none;
+  }
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.animate-\[shine_2s_infinite\] {
+  animation: shine 2s infinite;
+}
