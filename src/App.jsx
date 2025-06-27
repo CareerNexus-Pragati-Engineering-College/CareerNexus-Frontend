@@ -49,12 +49,9 @@ const App = () => {
         <Route path="/student/home" element={<StudentHome />} />
         <Route path="/student/profile" element={<StudentProfile />} />
 
-<<<<<<< HEAD
-=======
         {/* 🏢 Company Details */}
         <Route path="/student/company/:id" element={<CompanyDetails />} />
 
->>>>>>> 80f50cd2fa7ac472b9ce31558edd53f4effb9715
         {/* 🏫 TPO */}
         <Route path="/tpo" element={<TPO />} />
         <Route path="/tpo/login" element={<TPOLogin />} />
