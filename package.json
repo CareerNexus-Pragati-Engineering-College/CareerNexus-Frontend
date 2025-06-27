@@ -22,6 +22,7 @@
     "react-scroll": "^1.9.3",
     "react-simple-typewriter": "^5.0.1",
     "react-tsparticles": "^2.12.2",
+    "swiper": "^11.2.8",
     "tsparticles": "^1.43.1",
     "typewriter-effect": "^2.22.0"
   },
