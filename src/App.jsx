@@ -4,17 +4,27 @@ import { useLocation, Routes, Route } from "react-router-dom";
 
 // Pages
 import Home from "./pages/landingpage/Home";
+
+// 🎓 Student
 import Student from "./pages/student/Student";
 import StudentLogin from "./pages/student/StudentLogin";
-import StudentSignup from "./pages/student/StudentSignup"; 
-import StudentHome from "./pages/student/StudentDashboard";  // StudentHome is loaded here
+import StudentSignup from "./pages/student/StudentSignup";
+import StudentHome from "./pages/student/StudentDashboard";
 import StudentProfile from "./pages/student/StudentProfile";
-import CompanyDetails from "./pages/student/CompanyDetails"; // Make sure this is imported
+import CompanyDetails from "./pages/student/CompanyDetails";
+
+// 🏫 TPO
 import TPO from "./pages/tpo/TPO";
 import TPOLogin from "./pages/tpo/TPOLogin";
+
+// 👨‍💼 Interviewer
 import Interviewer from "./pages/interviewer/Interviewer";
 import InterviewerLogin from "./pages/interviewer/InterviewerLogin";
-import Admin from "./pages/admin/Admin"; // ✅ NEW: Admin Page
+import InterviewerDashboard from "./pages/interviewer/InterviewerDashboard";
+import InterviewerProfile from "./pages/interviewer/InterviewerProfile";
+
+// 🛠️ Admin
+import Admin from "./pages/admin/Admin";
 import AdminAccessForm from "./pages/admin/AdminAccessForm";
 
 const App = () => {
@@ -32,7 +42,7 @@ const App = () => {
 
   return (
     <>
-      {/* Conditional Navbars (you can enable as needed) */}
+      {/* Navbars (conditionally rendered if needed) */}
       {/* {isLandingPage && <NavbarLanding />} */}
       {/* {showNavbarStudent && <NavbarStudent />} */}
       {/* {showNavbarTPO && <NavbarTPO />} */}
@@ -45,11 +55,9 @@ const App = () => {
         {/* 🎓 Student */}
         <Route path="/student" element={<Student />} />
         <Route path="/student/login" element={<StudentLogin />} />
-        <Route path="/student/signup" element={<StudentSignup />} /> 
+        <Route path="/student/signup" element={<StudentSignup />} />
         <Route path="/student/home" element={<StudentHome />} />
         <Route path="/student/profile" element={<StudentProfile />} />
-
-        {/* 🏢 Company Details */}
         <Route path="/student/company/:id" element={<CompanyDetails />} />
 
         {/* 🏫 TPO */}
@@ -57,13 +65,15 @@ const App = () => {
         <Route path="/tpo/login" element={<TPOLogin />} />
 
         {/* 👨‍💼 Interviewer */}
-        <Route path="/interviewer" element={<Interviewer />} />
+        <Route path="/interviewer" element={<InterviewerDashboard />} /> 
+        <Route path="/interviewer/home" element={<InterviewerDashboard />} /> 
         <Route path="/interviewer/login" element={<InterviewerLogin />} />
+        <Route path="/interviewer/main" element={<Interviewer />} /> 
+        <Route path="/interviewer/profile" element={<InterviewerProfile />} />
 
         {/* 🛠️ Admin */}
-        <Route path="/admin" element={<Admin />} /> {/* ✅ NEW Route */}
-        <Route path="/admin/AdminAccessForm" element={<AdminAccessForm/>}/>
-
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/AdminAccessForm" element={<AdminAccessForm />} />
       </Routes>
     </>
   );
