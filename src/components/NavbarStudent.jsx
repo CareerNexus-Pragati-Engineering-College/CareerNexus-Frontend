@@ -38,7 +38,7 @@ const NavbarStudent = () => {
               key={link.to}
               to={link.to}
               smooth
-              duration={500}
+              duration={450}
               offset={-80}
               spy
               className={linkClass}
