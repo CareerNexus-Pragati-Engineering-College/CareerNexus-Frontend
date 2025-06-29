@@ -22,14 +22,16 @@ const StudentLogin = () => {
   }, []);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    // ✅ Here you can add real login logic; for now we assume login is successful
-    console.log("Email:", email, "Password:", password);
+  const isFirstTime = true; // Replace with actual backend logic or flag
 
-    // ✅ Navigate to student home
-    navigate("/student/home");
-  };
+  if (isFirstTime) {
+    navigate("/student/profile?page=data");
+  } else {
+    navigate(`/student/${email}/profile?page=update`);
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#e6d6f9] via-[#f5d0e5] to-[#fbe5ff] flex items-center justify-center px-4 py-16">

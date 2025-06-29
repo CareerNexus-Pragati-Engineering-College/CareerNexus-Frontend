@@ -1,23 +1,73 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import NavbarInterviewerDashboard from "../../components/NavbarInterviewerDashboard";
+import { toast } from "react-toastify";
 
 const InterviewerProfile = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const params = useParams();
+  const query = new URLSearchParams(location.search);
+  const pageMode = query.get("page"); // either "data" or "update"
+
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState("/images/profile.png");
   const [imageFile, setImageFile] = useState(null);
-  const [showSuccess, setShowSuccess] = useState(false); // 🎉
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   const [interviewer, setInterviewer] = useState({
-    userId: "INT2025",
-    firstName: "Ravi",
-    lastName: "Verma",
-    company: "TCS",
-    designation: "Senior Interviewer",
-    phone: "9876543210",
+    userId: "",
+    firstName: "",
+    lastName: "",
+    company: "",
+    designation: "",
+    phone: "",
   });
+
+  useEffect(() => {
+  if (pageMode === "data") {
+    setIsEditing(true);
+    setInterviewer({
+      userId: "",
+      firstName: "",
+      lastName: "",
+      company: "",
+      designation: "",
+      phone: "",
+    });
+
+    // ✅ Show toast on first load
+    toast.info("You have to fill details", {
+  position: "top-right",
+  autoClose: 3000,
+  className: "custom-careernexus-toast",
+  bodyClassName: "custom-careernexus-body",
+  // hideProgressBar: true,
+});
+
+  } else if (pageMode === "update") {
+    setIsEditing(false);
+    setInterviewer({
+      userId: params.userId || "INT2025",
+      firstName: "Ravi",
+      lastName: "Verma",
+      company: "TCS",
+      designation: "Senior Interviewer",
+      phone: "9876543210",
+    });
+  }
+}, [pageMode, params.userId]);
+
+
+    if (!pageMode) {
+  return (
+    <div className="h-screen flex items-center justify-center text-red-500 text-xl">
+      ❌ Invalid access: query param 'page' is missing.
+    </div>
+  );
+}
 
   const handleChange = (e) => {
     setInterviewer({ ...interviewer, [e.target.name]: e.target.value });
@@ -26,10 +76,44 @@ const InterviewerProfile = () => {
   const handleEditToggle = () => setIsEditing(true);
 
   const handleSave = () => {
-    setIsEditing(false);
-    setShowSuccess(true); // ✅ Show toast
-    setTimeout(() => setShowSuccess(false), 3000); // Auto-hide after 3s
-  };
+  const allFilled = Object.values(interviewer).every((v) => v.trim() !== "");
+
+  if (pageMode === "data") {
+    if (!allFilled) {
+      toast.error("You have to fill all details", {
+  position: "top-right",
+  autoClose: 3000,
+  className: "custom-careernexus-toast",
+  bodyClassName: "custom-careernexus-body",
+  // hideProgressBar: true,
+});
+      return;
+    }
+
+    toast.success("Profile saved successfully!", {
+  position: "top-right",
+  autoClose: 3000,
+  className: "custom-careernexus-toast",
+  bodyClassName: "custom-careernexus-body",
+  // hideProgressBar: true,
+});
+
+    setTimeout(() => {
+      navigate("/interviewer/home");
+    }, 2000);
+  } else {
+    toast.success("Profile updated successfully!", {
+  position: "top-right",
+  autoClose: 3000,
+  className: "custom-careernexus-toast",
+  bodyClassName: "custom-careernexus-body",
+  // hideProgressBar: true,
+});
+  }
+
+  setIsEditing(false);
+};
+
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -43,42 +127,14 @@ const InterviewerProfile = () => {
     <>
       <NavbarInterviewerDashboard />
 
-     {/* 🔙 Back Button */}
       <button
         onClick={() => navigate("/interviewer/home")}
         className="fixed top-20 left-4 z-50 bg-gradient-to-r from-violet-500 to-indigo-600 text-white px-4 py-2 rounded-xl shadow-md hover:scale-105 transition"
       >
         ← Back
       </button>
-      
-     {/* ✅ Stylish Success Toast */}
-<AnimatePresence>
-  {showSuccess && (
-    <motion.div
-      initial={{ opacity: 0, y: -20, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -20, scale: 0.9 }}
-      transition={{ duration: 0.4, type: "spring", stiffness: 120 }}
-      className="fixed top-24 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 rounded-2xl shadow-xl backdrop-blur-md border border-green-300/40 bg-gradient-to-r from-green-400/20 to-green-200/10 text-green-800 flex items-center gap-3"
-    >
-      <div className="bg-green-500 text-white rounded-full p-1.5 shadow-inner">
-        <svg
-          className="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2.5}
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-        </svg>
-      </div>
-      <span className="font-medium text-sm sm:text-base tracking-wide">
-        Profile updated successfully!
-      </span>
-    </motion.div>
-  )}
-</AnimatePresence>
 
+      
 
       <div className="min-h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] pt-24 pb-16 flex justify-center font-poppins px-4">
         <motion.div
@@ -87,7 +143,6 @@ const InterviewerProfile = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          {/* 👤 Profile Image */}
           <div className="flex flex-col items-center mb-6">
             <img
               src={profileImage}
@@ -109,12 +164,10 @@ const InterviewerProfile = () => {
             )}
           </div>
 
-          {/* 🧾 Title */}
           <h2 className="text-2xl font-bold text-center text-[#2C225A] mb-6 drop-shadow-sm">
             Interviewer Profile
           </h2>
 
-          {/* ✏️ Fields Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
             {[
               { label: "User ID", name: "userId" },
@@ -144,7 +197,6 @@ const InterviewerProfile = () => {
             ))}
           </div>
 
-          {/* ✅ Action Buttons */}
           <div className="flex justify-end mt-8 gap-4">
             {isEditing ? (
               <>
@@ -177,3 +229,4 @@ const InterviewerProfile = () => {
 };
 
 export default InterviewerProfile;
+

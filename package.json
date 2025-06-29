@@ -21,6 +21,7 @@
     "react-router-dom": "^7.6.2",
     "react-scroll": "^1.9.3",
     "react-simple-typewriter": "^5.0.1",
+    "react-toastify": "^11.0.5",
     "react-tsparticles": "^2.12.2",
     "swiper": "^11.2.8",
     "swiper-react": "^1.0.0",
