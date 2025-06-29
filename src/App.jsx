@@ -22,6 +22,7 @@ import Interviewer from "./pages/interviewer/Interviewer";
 import InterviewerLogin from "./pages/interviewer/InterviewerLogin";
 import InterviewerDashboard from "./pages/interviewer/InterviewerDashboard";
 import InterviewerProfile from "./pages/interviewer/InterviewerProfile";
+import InterviewerJob from "./pages/interviewer/InterviewerJob";
 
 // 🛠️ Admin
 import Admin from "./pages/admin/Admin";
@@ -70,6 +71,7 @@ const App = () => {
         <Route path="/interviewer/login" element={<InterviewerLogin />} />
         <Route path="/interviewer/main" element={<Interviewer />} /> 
         <Route path="/interviewer/profile" element={<InterviewerProfile />} />
+        <Route path="/interviewer/jobpostings" element={<InterviewerJob />} />
 
         {/* 🛠️ Admin */}
         <Route path="/admin" element={<Admin />} />
