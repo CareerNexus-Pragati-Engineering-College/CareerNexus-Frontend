@@ -30,7 +30,7 @@ const RecruiterJob = () => {
     company_name: "",
     job_title: "",
     job_description: "",
-    eligibility_criteria: "",
+    recruitment_process: "",
     salary_package: "",
     location: "",
     application_deadline: "",
@@ -51,7 +51,7 @@ const RecruiterJob = () => {
       !job.company_name ||
       !job.job_title ||
       !job.job_description ||
-      !job.eligibility_criteria ||
+      !job.recruitment_process ||
       !job.salary_package ||
       !job.location ||
       !job.application_deadline ||
@@ -78,7 +78,7 @@ const RecruiterJob = () => {
       company_name: "",
       job_title: "",
       job_description: "",
-      eligibility_criteria: "",
+      recruitment_process: "",
       salary_package: "",
       location: "",
       application_deadline: "",
@@ -128,7 +128,7 @@ const RecruiterJob = () => {
     <>
       <NavbarRecruiterDashboard />
 
-      {/* ✅ Toast */}
+      {/* Toast */}
       <AnimatePresence>
         {toast.show && (
           <motion.div
@@ -146,86 +146,79 @@ const RecruiterJob = () => {
         )}
       </AnimatePresence>
 
-      {/* ✅ New Simple Success Animation */}
-<AnimatePresence>
-  {showSuccessAnimation && (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
-    >
-      <motion.div
-        initial={{ y: 50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: 30, opacity: 0 }}
-        transition={{ duration: 0.5 }}
-        className="bg-white px-8 py-6 rounded-3xl shadow-2xl text-center"
-      >
-        <motion.div
-          initial={{ scale: 0.7 }}
-          animate={{ scale: 1 }}
-          exit={{ scale: 0.8 }}
-          transition={{ duration: 0.4 }}
-        >
-          <HiCheckCircle className="text-green-500 text-5xl mx-auto mb-2" />
-        </motion.div>
-        <p className="text-gray-800 font-semibold text-lg">Job Posted Successfully!</p>
-      </motion.div>
-    </motion.div>
-  )}
-</AnimatePresence>
-
-    {/* 📄 Job Details Modal */}
-<AnimatePresence>
-  {showModal && selectedJob && (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-center items-center p-4"
-    >
-      {/* Outer Glowing Border (No Blink) */}
-      <motion.div
-        initial={{ scale: 0.95 }}
-        animate={{ scale: 1 }}
-        exit={{ scale: 0.9 }}
-        className="relative p-[2px] rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-500 to-violet-700 shadow-[0_0_30px_rgba(138,43,226,0.5)]"
-      >
-        {/* Modal Card */}
-        <div className="bg-gradient-to-br from-[#1c1c2e]/90 to-[#22223b]/90 rounded-2xl w-full max-w-lg text-white">
-          
-          {/* Header (Static) */}
-          <div className="relative p-6 border-b border-purple-500/30">
-            <h3 className="text-2xl font-bold text-purple-300">
-              {selectedJob.job_title}
-            </h3>
-            <button
-              className="absolute top-6 right-6 text-purple-400 hover:text-red-400 transition"
-              onClick={() => setShowModal(false)}
+      {/* Success Animation */}
+      <AnimatePresence>
+        {showSuccessAnimation && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 30, opacity: 0 }}
+              transition={{ duration: 0.5 }}
+              className="bg-white px-8 py-6 rounded-3xl shadow-2xl text-center"
             >
-              <HiXMark size={24} />
-            </button>
-          </div>
+              <motion.div
+                initial={{ scale: 0.7 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0.8 }}
+                transition={{ duration: 0.4 }}
+              >
+                <HiCheckCircle className="text-green-500 text-5xl mx-auto mb-2" />
+              </motion.div>
+              <p className="text-gray-800 font-semibold text-lg">Job Posted Successfully!</p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          {/* Scrollable Body */}
-          <div className="p-6 pt-4 max-h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-purple-500 scrollbar-track-transparent space-y-3 text-sm text-purple-100 leading-relaxed">
-            <p><span className="font-semibold text-purple-300">🏢 Company:</span> {selectedJob.company_name}</p>
-            <p><span className="font-semibold text-purple-300">📍 Location:</span> {selectedJob.location}</p>
-            <p><span className="font-semibold text-purple-300">💰 Salary:</span> ₹{selectedJob.salary_package} LPA</p>
-            <p><span className="font-semibold text-purple-300">📑 Eligibility:</span> {selectedJob.eligibility_criteria}</p>
-            <p><span className="font-semibold text-purple-300">📝 Description:</span><br />{selectedJob.job_description}</p>
+      {/* Modal */}
+      <AnimatePresence>
+        {showModal && selectedJob && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-center items-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.95 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.9 }}
+              className="relative p-[2px] rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-500 to-violet-700 shadow-[0_0_30px_rgba(138,43,226,0.5)]"
+            >
+              <div className="bg-gradient-to-br from-[#1c1c2e]/90 to-[#22223b]/90 rounded-2xl w-full max-w-lg text-white">
+                <div className="relative p-6 border-b border-purple-500/30">
+                  <h3 className="text-2xl font-bold text-purple-300">{selectedJob.job_title}</h3>
+                  <button
+                    className="absolute top-6 right-6 text-purple-400 hover:text-red-400 transition"
+                    onClick={() => setShowModal(false)}
+                  >
+                    <HiXMark size={24} />
+                  </button>
+                </div>
 
-            <div className="text-xs text-purple-400 border-t border-purple-500/20 pt-3 mt-4">
-              ⏳ <span className="font-medium">Deadline:</span> <span className="text-purple-200">{selectedJob.application_deadline}</span><br />
-              🕒 <span className="font-medium">Posted At:</span> <span className="text-purple-200">{selectedJob.posted_at}</span>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  )}
-</AnimatePresence>
+                <div className="p-6 pt-4 max-h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-purple-500 scrollbar-track-transparent space-y-3 text-sm text-purple-100 leading-relaxed">
+                  <p><span className="font-semibold text-purple-300">Company:</span> {selectedJob.company_name}</p>
+                  <p><span className="font-semibold text-purple-300">Location:</span> {selectedJob.location}</p>
+                  <p><span className="font-semibold text-purple-300">Salary:</span> ₹{selectedJob.salary_package} LPA</p>
+                  <p><span className="font-semibold text-purple-300">Recruitment Process:</span> {selectedJob.recruitment_process}</p>
+                  <p><span className="font-semibold text-purple-300">Description:</span><br />{selectedJob.job_description}</p>
+
+                  <div className="text-xs text-purple-400 border-t border-purple-500/20 pt-3 mt-4">
+                    <span className="font-medium">Deadline:</span> <span className="text-purple-200">{selectedJob.application_deadline}</span><br />
+                    <span className="font-medium">Posted At:</span> <span className="text-purple-200">{selectedJob.posted_at}</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
 
      {/* ❗ Delete Confirmation Modal */}
@@ -287,12 +280,12 @@ const RecruiterJob = () => {
       {/* Fields */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
   {[
-    { name: "company_name", label: "Company Name", icon: "🏢", placeholder: "e.g., Infosys" },
-    { name: "job_title", label: "Job Title", icon: "💼", placeholder: "e.g., Frontend Developer" },
-    { name: "salary_package", label: "Salary (LPA)", icon: "💰", placeholder: "e.g., 6.5" },
-    { name: "location", label: "Location", icon: "📍", placeholder: "e.g., Bangalore" },
-    { name: "application_deadline", label: "Deadline", icon: "📅", type: "date" },
-    { name: "posted_at", label: "Posted At", icon: "⏰", type: "datetime-local" },
+    { name: "company_name", label: "Company Name",  placeholder: "e.g., Infosys" },
+    { name: "job_title", label: "Job Title",  placeholder: "e.g., Frontend Developer" },
+    { name: "salary_package", label: "Salary (LPA)", placeholder: "e.g., 6.5" },
+    { name: "location", label: "Location",  placeholder: "e.g., Bangalore" },
+    { name: "application_deadline", label: "Deadline",  type: "date" },
+    { name: "posted_at", label: "Posted At",  type: "date" },
   ].map((field) => (
     <div key={field.name} className="w-full max-w-sm mx-auto">
       <label className="text-sm font-medium text-purple-200 mb-1 block">
@@ -315,7 +308,7 @@ const RecruiterJob = () => {
       <div className="grid grid-cols-1 gap-6 mt-6">
   {[
     { name: "job_description", label: "Job Description", placeholder: "Describe the job role in detail..." },
-    { name: "eligibility_criteria", label: "Eligibility Criteria", placeholder: "e.g., B.Tech CSE 60%+" },
+     { name: "recruitment_process", label: "Recruitment Process", placeholder: "e.g., Online Test → Interview → HR Round" },
   ].map((field) => (
     <div key={field.name} className="w-full max-w-4xl mx-auto">
       <label className="text-sm font-medium text-purple-200 mb-1 block">{field.label}</label>
@@ -374,12 +367,12 @@ const RecruiterJob = () => {
     >
       <h4 className="text-xl font-bold text-purple-300 mb-1">{job.job_title}</h4>
       <p className="text-sm text-purple-100 mb-2">
-        <span className="font-semibold">🏢 {job.company_name}</span> &nbsp;|&nbsp;
-        <span className="font-semibold">📍 {job.location}</span>
+        <span className="font-semibold">{job.company_name}</span> &nbsp;|&nbsp;
+        <span className="font-semibold">{job.location}</span>
       </p>
       <p className="text-xs text-purple-400 mt-2">
-        ⏳ Deadline: <span className="text-purple-300">{job.application_deadline}</span> &nbsp;|&nbsp;
-        🕒 Posted: <span className="text-purple-300">{job.posted_at}</span>
+         Deadline: <span className="text-purple-300">{job.application_deadline}</span> &nbsp;|&nbsp;
+         Posted: <span className="text-purple-300">{job.posted_at}</span>
       </p>
 
       <div className="absolute top-4 right-4 flex gap-3">
