@@ -195,12 +195,17 @@ const RecruiterProfile = () => {
                 >
                   Save
                 </button>
-                <button
-                  onClick={() => setIsEditing(false)}
-                  className="px-4 py-2 border border-gray-400 text-gray-700 rounded-md hover:bg-gray-100 transition"
-                >
-                  Cancel
-                </button>
+                {pageMode === "update" && (
+                  <button
+                    onClick={() => setIsEditing(false)}
+                    
+                    className="px-4 py-2 border border-gray-400 text-gray-700 rounded-md hover:bg-gray-100 transition"
+                  >
+                    Cancel
+
+                  </button>
+                )}
+
               </>
             ) : (
               <button
