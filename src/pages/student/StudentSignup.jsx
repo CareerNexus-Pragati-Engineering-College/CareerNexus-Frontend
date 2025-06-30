@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom"; // ✅ import useNavigate
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import {
   FaEnvelope,
   FaLock,
@@ -12,12 +14,12 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 
+
 import axios from "axios"; 
 
 const StudentSignup = () => {
   const navigate = useNavigate(); // ✅ init navigate
   const [showPassword, setShowPassword] = useState(false);
-  const [name, setName] = useState("");
   const [rollNo, setRollNo] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,7 +33,7 @@ const StudentSignup = () => {
 
   try {
     const response = await axios.post("http://localhost:8080/auth/student/register", {
-      name,
+     
       userId: rollNo, // idhey user Id ...
       email,
       password,
@@ -39,13 +41,13 @@ const StudentSignup = () => {
 
     });
 
-
-    navigate("/student/profile?page=data");
+    toast.success("Registration Successful redirect to login ..")
+    navigate("/student/login");
   } catch (error) {
     if (error.response && error.response.data && error.response.data.message) {
-      alert(error.response.data.message); // user already exists msg - alert  
+      toast.error(error.response.data.message); // user already exists msg - alert  
     } else {
-      alert("Something went wrong. Please try again."); // alert
+      toast.error("Something went wrong. Please try again."); // alert
     }
     console.error("Signup Error:", error);
   }
@@ -89,17 +91,7 @@ const StudentSignup = () => {
 
         {/* 📄 Form */}
         <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
-          <div className="relative">
-            <FaUserGraduate className="absolute left-3 top-3.5 text-violet-400" />
-            <input
-              type="text"
-              placeholder="Full Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-md bg-white/70 border border-violet-200 text-violet-900 placeholder-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-500"
-              required
-            />
-          </div>
+          
 
           <div className="relative">
             <FaIdBadge className="absolute left-3 top-3.5 text-violet-400" />
