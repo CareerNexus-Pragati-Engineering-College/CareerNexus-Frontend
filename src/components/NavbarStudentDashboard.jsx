@@ -52,12 +52,7 @@ const NavbarStudentDashboard = () => {
             <div className="relative flex items-center gap-2">
               <MdWork className="text-lg text-violet-400" />
               Apply Jobs
-              {/* 🔔 Badge */}
-              {newJobCount > 0 && (
-  <span className="ml-1 px-2 py-0.5 text-[11px] font-bold rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 text-white shadow-md ring-1 ring-white/20 animate-pulse">
-    {newJobCount}
-  </span>
-)}
+     
              
             </div>
           </NavLink>
@@ -123,12 +118,6 @@ const NavbarStudentDashboard = () => {
             <div className="relative flex items-center gap-2">
               <MdWork className="text-lg text-violet-400" />
               Apply Jobs
-              {/* 🔔 Badge */}
-              {newJobCount > 0 && (
-                <span className="ml-1 bg-red-500 text-white text-[11px] font-bold px-1.5 py-0.5 rounded-full animate-pulse">
-                  {newJobCount}
-                </span>
-              )}
             </div>
           </NavLink>
           <NavLink to="/student/applications" className={getActiveClass} onClick={() => setIsOpen(false)}>
