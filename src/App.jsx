@@ -10,7 +10,7 @@ import Home from "./pages/landingpage/Home";
 import Student from "./pages/student/Student";
 import StudentLogin from "./pages/student/StudentLogin";
 import StudentSignup from "./pages/student/StudentSignup";
-import StudentHome from "./pages/student/StudentDashboard";
+import StudentDashboard from "./pages/student/StudentDashboard";
 import StudentProfile from "./pages/student/StudentProfile";
 import CompanyDetails from "./pages/student/CompanyDetails";
 

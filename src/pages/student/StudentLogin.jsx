@@ -44,7 +44,7 @@ const StudentLogin = () => {
 
         // ✅ Redirect to router path
 
-        navigate(`/student/${loginData.userId}${data.router === "/student/profile" ? "/profile?page=data" : "/home"}`);
+        navigate(`/${loginData.userId}/${data.router}`);
 
       
     } catch (err) {

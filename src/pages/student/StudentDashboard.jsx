@@ -5,8 +5,7 @@ import { Link } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import NavbarStudentDashboard from "../../components/NavbarStudentDashboard";
 import { useParams } from "react-router-dom";
-const { userId } = useParams();
-
+import getuserId from "../../services/getUserId";
 const visitedCompanies = [
   { id: 1, name: "Google", logo: "/images/google.png" },
   { id: 2, name: "Microsoft", logo: "/images/microsoft.png" },
