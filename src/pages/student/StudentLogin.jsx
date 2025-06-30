@@ -10,28 +10,48 @@ import {
   FaGoogle,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
+import axios from "axios"; 
 
 const StudentLogin = () => {
   const navigate = useNavigate(); // ✅ Initialize navigate
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
+  const [userId, setuserId] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
   e.preventDefault();
 
-  const isFirstTime = true; // Replace with actual backend logic or flag
+ const loginData = {
+      userId: userId,
+      password: password,
+    };
 
-  if (isFirstTime) {
-    navigate("/student/profile?page=data");
-  } else {
-    navigate(`/student/${email}/profile?page=update`);
-  }
-};
+    try {
+      const response = await axios.post("http://localhost:8080/auth/login", loginData);
+      const data = response.data;
+     
+        
+        toast.success(`Login Successful! Redirecting to ${data.router} ..`);
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", loginData.userId);
+
+        // ✅ Redirect to router path
+
+        navigate(data.router);
+      
+    } catch (err) {
+      console.error("Login request failed", err);
+      toast.error("Username or Password incorrect");
+    }
+  };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#e6d6f9] via-[#f5d0e5] to-[#fbe5ff] flex items-center justify-center px-4 py-16">
@@ -73,10 +93,10 @@ const StudentLogin = () => {
           <div className="relative">
             <FaEnvelope className="absolute left-3 top-3.5 text-violet-400" />
             <input
-              type="email"
-              placeholder="Email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              placeholder="Enter UserId"
+              value={userId}
+              onChange={(e) => setuserId(e.target.value)}
               className="w-full pl-10 pr-4 py-2 rounded-md bg-white/70 border border-violet-200 text-violet-900 placeholder-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-500"
               required
             />
