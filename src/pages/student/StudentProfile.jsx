@@ -136,7 +136,7 @@ const StudentProfile = () => {
 
   const [isEditing, setIsEditing] = useState(isDataMode);
   const [newSkill, setNewSkill] = useState("");
-  const [skills, setSkills] = useState(["React.js", "Tailwind CSS"]);
+  const [skills, setSkills] = useState([]);
   const [leetcodeStats, setLeetcodeStats] = useState(null);
   const [student, setStudent] = useState({
     firstName: "",
