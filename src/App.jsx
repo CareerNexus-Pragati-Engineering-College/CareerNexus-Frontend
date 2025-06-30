@@ -1,6 +1,8 @@
 // src/App.jsx
 import React from "react";
 import { useLocation, Routes, Route } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Pages
 import Home from "./pages/landingpage/Home";
@@ -59,6 +61,7 @@ const App = () => {
         <Route path="/student/signup" element={<StudentSignup />} />
         <Route path="/student/home" element={<StudentHome />} />
         <Route path="/student/profile" element={<StudentProfile />} />
+        <Route path="/student/:userId/profile" element={<StudentProfile />} />
         <Route path="/student/company/:id" element={<CompanyDetails />} />
 
         {/* 🏫 TPO */}
@@ -77,6 +80,7 @@ const App = () => {
         <Route path="/admin" element={<Admin />} />
         <Route path="/admin/AdminAccessForm" element={<AdminAccessForm />} />
       </Routes>
+      <ToastContainer />
     </>
   );
 };
