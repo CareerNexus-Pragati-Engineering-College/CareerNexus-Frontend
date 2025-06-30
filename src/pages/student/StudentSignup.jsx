@@ -12,6 +12,8 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 
+import axios from "axios"; 
+
 const StudentSignup = () => {
   const navigate = useNavigate(); // ✅ init navigate
   const [showPassword, setShowPassword] = useState(false);
@@ -24,15 +26,31 @@ const StudentSignup = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    // ✅ Simulate successful signup or implement your signup logic here
-    console.log("Signup Details:", { name, rollNo, email, password });
+  try {
+    const response = await axios.post("http://localhost:8080/auth/student/register", {
+      name,
+      userId: rollNo, // idhey user Id ...
+      email,
+      password,
 
-    // ✅ Redirect to Student Home
-    navigate("/student/home");
-  };
+
+    });
+
+
+    navigate("/student/profile?page=data");
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.message) {
+      alert(error.response.data.message); // user already exists msg - alert  
+    } else {
+      alert("Something went wrong. Please try again."); // alert
+    }
+    console.error("Signup Error:", error);
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#e6d6f9] via-[#f5d0e5] to-[#fbe5ff] flex items-center justify-center px-4 py-16">
