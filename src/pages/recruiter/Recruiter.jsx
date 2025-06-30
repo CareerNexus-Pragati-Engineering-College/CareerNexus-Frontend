@@ -1,4 +1,3 @@
-// src/pages/interviewer/Interviewer.jsx
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import Typewriter from "typewriter-effect";
@@ -12,9 +11,9 @@ import {
   FaChartBar,
   FaClock,
 } from "react-icons/fa";
-import NavbarInterviewer from "../../components/NavbarInterviewer";
+import NavbarRecruiter from "../../components/NavbarRecruiter"; // ✅ updated
 
-const interviewerFeatures = [
+const recruiterFeatures = [
   {
     icon: <FaClipboardList className="text-4xl text-violet-400 mb-4" />,
     title: "Interview Scheduler",
@@ -37,7 +36,7 @@ const interviewerFeatures = [
   },
 ];
 
-const Interviewer = () => {
+const Recruiter = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -63,7 +62,7 @@ const Interviewer = () => {
 
       {/* 🧑‍💼 Hero Section */}
       <section
-        id="interviewer-home"
+        id="recruiter-home"
         className="min-h-screen pt-28 px-6 md:px-20 flex flex-col md:flex-row items-center justify-between gap-10"
       >
         {/* 📝 Text */}
@@ -74,13 +73,13 @@ const Interviewer = () => {
           className="max-w-xl"
         >
           <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
-            Welcome To Interviewer Portal
+            Welcome To Recruiter Portal
           </h1>
           <div className="text-2xl sm:text-3xl font-semibold mb-6 text-[#B497FF] drop-shadow-md">
             <Typewriter
               options={{
                 strings: [
-                  "Empower the interview process",
+                  "Empower the hiring process",
                   "Stay organized and efficient",
                   "Find the best talent easily",
                 ],
@@ -95,7 +94,7 @@ const Interviewer = () => {
           </p>
 
           <ScrollLink
-            to="interviewer-features"
+            to="recruiter-features"
             smooth={true}
             duration={600}
             offset={-70}
@@ -119,8 +118,8 @@ const Interviewer = () => {
         >
           <div className="rounded-3xl overflow-hidden border border-[#cbbfff] shadow-[0_0_25px_rgba(165,100,255,0.25)] hover:shadow-[0_0_45px_rgba(165,100,255,0.5)] transition-all duration-500 hover:scale-[1.04] backdrop-blur-md bg-white/5">
             <img
-              src="/images/interviewer.jpeg"
-              alt="Interviewer Portal"
+              src="/images/interviewer.jpeg" // ✅ make sure this image exists
+              alt="Recruiter Portal"
               className="w-full h-auto object-cover rounded-2xl transition duration-300 hover:brightness-110"
             />
           </div>
@@ -129,15 +128,15 @@ const Interviewer = () => {
 
       {/* 🚀 Features */}
       <section
-        id="interviewer-features"
+        id="recruiter-features"
         className="min-h-screen bg-gradient-to-b from-[#E4EBFE] to-[#F8E5EB] py-20 px-6 sm:px-10 md:px-24"
       >
         <h2 className="text-4xl font-bold text-center text-[#6B4ECF] mb-16 font-orbitron">
-          Interviewer Features
+          Recruiter Features
         </h2>
 
         <div className="max-w-6xl mx-auto grid gap-12 grid-cols-1 md:grid-cols-2">
-          {interviewerFeatures.map((feature, index) => (
+          {recruiterFeatures.map((feature, index) => (
             <motion.div
               key={feature.title}
               initial={{ opacity: 0, y: 40 }}
@@ -164,15 +163,15 @@ const Interviewer = () => {
 
       {/* 📖 About */}
       <section
-        id="interviewer-about"
+        id="recruiter-about"
         className="py-20 px-6 bg-gradient-to-b from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A]"
       >
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-bold text-[#6B4ECF] mb-4 font-orbitron">
-            About Interviewer Portal
+            About Recruiter Portal
           </h2>
           <p className="text-[#4b436f]">
-            Our portal simplifies the recruitment process by providing interviewers
+            Our portal simplifies the recruitment process by providing recruiters
             with powerful tools to manage schedules, track candidates, and assess
             performances efficiently — all from one intuitive dashboard.
           </p>
@@ -180,9 +179,9 @@ const Interviewer = () => {
       </section>
 
       {/* 📍 Navbar */}
-      <NavbarInterviewer />
+      <NavbarRecruiter />
 
-     {/* 📍 Footer */}
+      {/* 📍 Footer */}
       <footer className="bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-10">
         <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2">
           <p className="text-sm sm:text-base opacity-90">
@@ -195,4 +194,4 @@ const Interviewer = () => {
   );
 };
 
-export default Interviewer;
+export default Recruiter;

@@ -12,16 +12,15 @@ const NavbarLanding = () => {
     { to: "about", label: "About" },
     { to: "contact", label: "Contact" },
   ];
+
   const routeLinks = [
     { path: "/student", label: "Student" },
     { path: "/tpo", label: "TPO" },
-    { path: "/interviewer", label: "Interviewer" },
+    { path: "/recruiter", label: "Recruiter" }, // 🔁 changed from 'interviewer'
   ];
 
-  // 🔵 Base link style with white color & hover effect
   const linkClass =
     "cursor-pointer text-white hover:text-violet-400 transition duration-300 font-poppins tracking-wide";
-  // 🔵 Active class when scrollspy is active
   const activeClass = "text-violet-400 underline underline-offset-4";
 
   return (

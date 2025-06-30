@@ -1,10 +1,11 @@
+// src/pages/recruiter/RecruiterProfile.jsx
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import NavbarInterviewerDashboard from "../../components/NavbarInterviewerDashboard";
+import { motion } from "framer-motion";
+import NavbarRecruiterDashboard from "../../components/NavbarRecruiterDashboard";
 import { toast } from "react-toastify";
 
-const InterviewerProfile = () => {
+const RecruiterProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const params = useParams();
@@ -14,10 +15,8 @@ const InterviewerProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState("/images/profile.png");
   const [imageFile, setImageFile] = useState(null);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [showError, setShowError] = useState(false);
 
-  const [interviewer, setInterviewer] = useState({
+  const [recruiter, setRecruiter] = useState({
     userId: "",
     firstName: "",
     lastName: "",
@@ -27,93 +26,85 @@ const InterviewerProfile = () => {
   });
 
   useEffect(() => {
-  if (pageMode === "data") {
-    setIsEditing(true);
-    setInterviewer({
-      userId: "",
-      firstName: "",
-      lastName: "",
-      company: "",
-      designation: "",
-      phone: "",
-    });
+    if (pageMode === "data") {
+      setIsEditing(true);
+      setRecruiter({
+        userId: "",
+        firstName: "",
+        lastName: "",
+        company: "",
+        designation: "",
+        phone: "",
+      });
 
-    // ✅ Show toast on first load
-    toast.info("You have to fill details", {
-  position: "top-right",
-  autoClose: 3000,
-  className: "custom-careernexus-toast",
-  bodyClassName: "custom-careernexus-body",
-  // hideProgressBar: true,
-});
+      toast.info("You have to fill details", {
+        position: "top-right",
+        autoClose: 3000,
+        className: "custom-careernexus-toast",
+        bodyClassName: "custom-careernexus-body",
+      });
+    } else if (pageMode === "update") {
+      setIsEditing(false);
+      setRecruiter({
+        userId: params.userId || "REC2025",
+        firstName: "Ravi",
+        lastName: "Verma",
+        company: "TCS",
+        designation: "Senior Recruiter",
+        phone: "9876543210",
+      });
+    }
+  }, [pageMode, params.userId]);
 
-  } else if (pageMode === "update") {
-    setIsEditing(false);
-    setInterviewer({
-      userId: params.userId || "INT2025",
-      firstName: "Ravi",
-      lastName: "Verma",
-      company: "TCS",
-      designation: "Senior Interviewer",
-      phone: "9876543210",
-    });
+  if (!pageMode) {
+    return (
+      <div className="h-screen flex items-center justify-center text-red-500 text-xl">
+        ❌ Invalid access: query param 'page' is missing.
+      </div>
+    );
   }
-}, [pageMode, params.userId]);
-
-
-    if (!pageMode) {
-  return (
-    <div className="h-screen flex items-center justify-center text-red-500 text-xl">
-      ❌ Invalid access: query param 'page' is missing.
-    </div>
-  );
-}
 
   const handleChange = (e) => {
-    setInterviewer({ ...interviewer, [e.target.name]: e.target.value });
+    setRecruiter({ ...recruiter, [e.target.name]: e.target.value });
   };
 
   const handleEditToggle = () => setIsEditing(true);
 
   const handleSave = () => {
-  const allFilled = Object.values(interviewer).every((v) => v.trim() !== "");
+    const allFilled = Object.values(recruiter).every((v) => v.trim() !== "");
 
-  if (pageMode === "data") {
-    if (!allFilled) {
-      toast.error("You have to fill all details", {
-  position: "top-right",
-  autoClose: 3000,
-  className: "custom-careernexus-toast",
-  bodyClassName: "custom-careernexus-body",
-  // hideProgressBar: true,
-});
-      return;
+    if (pageMode === "data") {
+      if (!allFilled) {
+        toast.error("You have to fill all details", {
+          position: "top-right",
+          autoClose: 3000,
+          className: "custom-careernexus-toast",
+          bodyClassName: "custom-careernexus-body",
+        });
+        return;
+      }
+
+      toast.success("Profile saved successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+        className: "custom-careernexus-toast",
+        bodyClassName: "custom-careernexus-body",
+      });
+
+      setTimeout(() => {
+        navigate("/recruiter/home");
+      }, 2000);
+    } else {
+      toast.success("Profile updated successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+        className: "custom-careernexus-toast",
+        bodyClassName: "custom-careernexus-body",
+      });
     }
 
-    toast.success("Profile saved successfully!", {
-  position: "top-right",
-  autoClose: 3000,
-  className: "custom-careernexus-toast",
-  bodyClassName: "custom-careernexus-body",
-  // hideProgressBar: true,
-});
-
-    setTimeout(() => {
-      navigate("/interviewer/home");
-    }, 2000);
-  } else {
-    toast.success("Profile updated successfully!", {
-  position: "top-right",
-  autoClose: 3000,
-  className: "custom-careernexus-toast",
-  bodyClassName: "custom-careernexus-body",
-  // hideProgressBar: true,
-});
-  }
-
-  setIsEditing(false);
-};
-
+    setIsEditing(false);
+  };
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -125,16 +116,14 @@ const InterviewerProfile = () => {
 
   return (
     <>
-      <NavbarInterviewerDashboard />
+      <NavbarRecruiterDashboard />
 
       <button
-        onClick={() => navigate("/interviewer/home")}
+        onClick={() => navigate("/recruiter/home")}
         className="fixed top-20 left-4 z-50 bg-gradient-to-r from-violet-500 to-indigo-600 text-white px-4 py-2 rounded-xl shadow-md hover:scale-105 transition"
       >
         ← Back
       </button>
-
-      
 
       <div className="min-h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] pt-24 pb-16 flex justify-center font-poppins px-4">
         <motion.div
@@ -165,7 +154,7 @@ const InterviewerProfile = () => {
           </div>
 
           <h2 className="text-2xl font-bold text-center text-[#2C225A] mb-6 drop-shadow-sm">
-            Interviewer Profile
+            Recruiter Profile
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
@@ -184,7 +173,7 @@ const InterviewerProfile = () => {
                 <input
                   type="text"
                   name={field.name}
-                  value={interviewer[field.name]}
+                  value={recruiter[field.name]}
                   onChange={handleChange}
                   readOnly={!isEditing}
                   className={`w-full px-4 py-2 rounded-md border text-[#2C225A] focus:outline-none focus:ring-2 transition ${
@@ -228,5 +217,4 @@ const InterviewerProfile = () => {
   );
 };
 
-export default InterviewerProfile;
-
+export default RecruiterProfile;

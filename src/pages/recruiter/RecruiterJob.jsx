@@ -9,9 +9,9 @@ import {
   HiMagnifyingGlass,
   HiCheckCircle,
 } from "react-icons/hi2";
-import NavbarInterviewerDashboard from "../../components/NavbarInterviewerDashboard";
+import NavbarRecruiterDashboard from "../../components/NavbarRecruiterDashboard";
 
-const InterviewerJob = () => {
+const RecruiterJob = () => {
   const [toast, setToast] = useState({ show: false, message: "", type: "success" });
   const [jobPosts, setJobPosts] = useState([]);
   const [filterText, setFilterText] = useState("");
@@ -45,7 +45,6 @@ const InterviewerJob = () => {
   const handleChange = (e) => {
     setJob({ ...job, [e.target.name]: e.target.value });
   };
-  
 
   const handlePostJob = () => {
     if (
@@ -127,7 +126,7 @@ const InterviewerJob = () => {
 
   return (
     <>
-      <NavbarInterviewerDashboard />
+      <NavbarRecruiterDashboard />
 
       {/* ✅ Toast */}
       <AnimatePresence>
@@ -436,5 +435,5 @@ const InterviewerJob = () => {
   );
 };
 
-export default InterviewerJob;
+export default RecruiterJob;
 

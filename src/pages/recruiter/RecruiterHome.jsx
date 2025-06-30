@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import NavbarInterviewerDashboard from "../../components/NavbarInterviewerDashboard";
+import NavbarRecruiterDashboard from "../../components/NavbarRecruiterDashboard";
 import {
   FaUniversity,
   FaSchool,
@@ -37,7 +37,7 @@ const placementNews = [
   "IIIT Hyderabad to host recruiters on July 25",
 ];
 
-const InterviewerDashboard = () => {
+const RecruiterDashboard = () => {
   const scrollRef = useRef(null);
   const scrollAmount = 220;
 
@@ -50,7 +50,7 @@ const InterviewerDashboard = () => {
 
   return (
     <>
-      <NavbarInterviewerDashboard />
+      <NavbarRecruiterDashboard />
 
       <motion.div
         className="min-h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A] font-poppins flex flex-col items-center px-4 sm:px-6 pt-24 pb-10"
@@ -67,7 +67,7 @@ const InterviewerDashboard = () => {
             transition={{ delay: 0.2, duration: 0.8 }}
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#2F2F5B] mb-4 drop-shadow-md tracking-wide leading-tight">
-              Welcome to Your Dashboard, Interviewer
+              Welcome to Your Dashboard, Recruiter
             </h1>
             <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-[#4b436f] mb-4 leading-relaxed max-w-xl">
               Review candidates, manage interviews, and make impactful hiring decisions with ease.
@@ -87,8 +87,7 @@ const InterviewerDashboard = () => {
               <h2 className="text-xl sm:text-2xl font-bold text-violet-700 mb-4">Candidate Shortlist</h2>
               <p className="text-sm sm:text-base text-[#4b436f] mb-5">Review top candidates and schedule interviews.</p>
               <div className="space-y-2 mb-4 text-left">
-                {[
-                  { name: "Pranay", role: "Frontend Developer" },
+                {[{ name: "Pranay", role: "Frontend Developer" },
                   { name: "Akshay", role: "Data Analyst" },
                   { name: "Shruti", role: "Backend Developer" },
                   { name: "Ravi", role: "AI Engineer" },
@@ -137,7 +136,7 @@ const InterviewerDashboard = () => {
             {visitedColleges.map((college) => (
               <Link
                 key={college.id}
-                to={`/interviewer/college/${college.id}`}
+                to={`/recruiter/college/${college.id}`}
                 className="bg-white/60 border border-violet-200/40 backdrop-blur-xl p-5 sm:p-7 rounded-2xl shadow-lg flex flex-col items-center justify-center min-w-[180px] transform transition-all duration-300 hover:scale-110 hover:shadow-[0_0_24px_rgba(139,92,246,0.5)] hover:bg-white/80 cursor-pointer"
               >
                 <div className="mb-3 sm:mb-4">{college.icon}</div>
@@ -189,4 +188,4 @@ const InterviewerDashboard = () => {
   );
 };
 
-export default InterviewerDashboard;
+export default RecruiterDashboard;

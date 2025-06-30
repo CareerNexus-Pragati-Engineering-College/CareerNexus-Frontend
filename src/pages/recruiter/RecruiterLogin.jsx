@@ -11,7 +11,7 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 
-const InterviewerLogin = () => {
+const RecruiterLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,7 +22,7 @@ const InterviewerLogin = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Interviewer Login:", { email, password });
+    console.log("Recruiter Login:", { email, password });
   };
 
   return (
@@ -35,7 +35,7 @@ const InterviewerLogin = () => {
       >
         {/* 🔙 Back Button */}
         <NavLink
-          to="/interviewer"
+          to="/recruiter"
           className="absolute top-4 left-4 flex items-center gap-2 text-violet-600 hover:text-indigo-700 text-sm transition-all"
         >
           <FaArrowLeft />
@@ -53,7 +53,7 @@ const InterviewerLogin = () => {
             <FaUserTie />
           </motion.div>
           <h2 className="text-3xl font-bold text-center text-violet-700">
-            Welcome Interviewer
+            Welcome Recruiter
           </h2>
           <p className="text-sm text-violet-800 mt-1 text-center">
             Sign in to <span className="font-semibold">CareerNexus</span>
@@ -130,4 +130,4 @@ const InterviewerLogin = () => {
   );
 };
 
-export default InterviewerLogin;
+export default RecruiterLogin;

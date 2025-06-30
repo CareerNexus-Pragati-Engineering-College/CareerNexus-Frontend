@@ -3,13 +3,13 @@ import { NavLink } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
 import { FaBars, FaTimes } from "react-icons/fa";
 
-const NavbarInterviewer = () => {
+const NavbarRecruiter = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const scrollLinks = [
-    { to: "interviewer-home", label: "Home" },
-    { to: "interviewer-features", label: "Features" },
-    { to: "interviewer-about", label: "About" },
+    { to: "recruiter-home", label: "Home" },
+    { to: "recruiter-features", label: "Features" },
+    { to: "recruiter-about", label: "About" },
   ];
 
   const linkClass =
@@ -50,7 +50,7 @@ const NavbarInterviewer = () => {
 
           {/* ✨ Login Button Only */}
           <NavLink
-            to="/interviewer/login"
+            to="/recruiter/login"
             className="ml-4 px-4 py-2 rounded-md bg-white/10 text-white border border-violet-400 hover:bg-violet-500 hover:text-white transition duration-300 shadow-[0_0_10px_rgba(165,100,255,0.4)] hover:shadow-[0_0_20px_rgba(165,100,255,0.6)]"
           >
             Login
@@ -85,7 +85,7 @@ const NavbarInterviewer = () => {
           ))}
 
           <NavLink
-            to="/interviewer/login"
+            to="/recruiter/login"
             className="block px-4 py-2 rounded-md bg-white/10 text-white border border-violet-400 hover:bg-violet-500 hover:text-white transition duration-300 shadow-[0_0_12px_rgba(165,100,255,0.6)]"
             onClick={() => setIsOpen(false)}
           >
@@ -97,4 +97,4 @@ const NavbarInterviewer = () => {
   );
 };
 
-export default NavbarInterviewer;
+export default NavbarRecruiter;
