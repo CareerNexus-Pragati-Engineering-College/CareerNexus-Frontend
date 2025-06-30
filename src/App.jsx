@@ -58,8 +58,8 @@ const App = () => {
         <Route path="/student" element={<Student />} />
         <Route path="/student/login" element={<StudentLogin />} />
         <Route path="/student/signup" element={<StudentSignup />} />
-        <Route path="/student/home" element={<StudentHome />} />
-        <Route path="/student/profile" element={<StudentProfile />} />
+        <Route path="/student/:userId/home" element={<StudentDashboard />} />
+        
         <Route path="/student/:userId/profile" element={<StudentProfile />} />
         <Route path="/student/company/:id" element={<CompanyDetails />} />
 

@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import NavbarStudentDashboard from "../../components/NavbarStudentDashboard";
+import { useParams } from "react-router-dom";
+const { userId } = useParams();
 
 const visitedCompanies = [
   { id: 1, name: "Google", logo: "/images/google.png" },

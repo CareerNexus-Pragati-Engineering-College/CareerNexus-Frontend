@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { useParams } from "react-router-dom";
+const { userId } = useParams();
 
 import {
   FaCheckCircle,
