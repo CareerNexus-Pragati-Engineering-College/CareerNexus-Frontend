@@ -1,19 +1,19 @@
 // src/components/NavbarRecruiterDashboard.jsx
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
-import {
-  FaBars,
-  FaTimes,
-  FaUserCircle,
-  FaSignOutAlt,
-  FaLaptopCode,
-  FaClipboardList,
-} from "react-icons/fa";
-import { MdOutlineLibraryBooks } from "react-icons/md";
+import { NavLink, useNavigate } from "react-router-dom";
+import { FaBars, FaTimes, FaUserCircle, FaSignOutAlt, FaBriefcase } from "react-icons/fa";
 
 const NavbarRecruiterDashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Clear auth or any recruiter-related localStorage here if needed
+    // localStorage.removeItem("recruiterToken");
+    setShowDropdown(false);
+    navigate("/recruiter");
+  };
 
   return (
     <nav className="w-full fixed top-0 left-0 z-50 bg-gradient-to-r from-[#0f0c1d] via-[#1b1433] to-[#0f0c1d] shadow-md font-poppins">
@@ -30,31 +30,17 @@ const NavbarRecruiterDashboard = () => {
           </span>
         </NavLink>
 
-        {/* 🔹 Desktop Menu */}
+        {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-6 text-white text-base">
           <NavLink
-            to="/recruiter/practice"
+            to="/recruiter/jobpostings"
             className="flex items-center gap-2 hover:text-violet-400 transition"
           >
-            <FaLaptopCode className="text-lg text-violet-400" />
-            Practice
-          </NavLink>
-          <NavLink
-            to="/recruiter/resources"
-            className="flex items-center gap-2 hover:text-violet-400 transition"
-          >
-            <MdOutlineLibraryBooks className="text-lg text-violet-400" />
-            Resources
-          </NavLink>
-          <NavLink
-            to="/recruiter/applications"
-            className="flex items-center gap-2 hover:text-violet-400 transition"
-          >
-            <FaClipboardList className="text-lg text-violet-400" />
-            Applications
+            <FaBriefcase className="text-lg text-violet-400" />
+            Post Job
           </NavLink>
 
-          {/* 🔹 Profile Dropdown */}
+          {/* Profile Dropdown */}
           <div className="relative">
             <button
               className="flex items-center text-white hover:text-violet-400 focus:outline-none"
@@ -74,11 +60,8 @@ const NavbarRecruiterDashboard = () => {
                   Profile
                 </NavLink>
                 <button
+                  onClick={handleLogout}
                   className="flex items-center w-full px-3 py-2 text-red-500 hover:text-red-400 transition rounded-md mt-1"
-                  onClick={() => {
-                    setShowDropdown(false);
-                    // logout logic here
-                  }}
                 >
                   <FaSignOutAlt className="mr-2 text-lg" />
                   Logout
@@ -88,7 +71,7 @@ const NavbarRecruiterDashboard = () => {
           </div>
         </div>
 
-        {/* 🔹 Mobile Toggle */}
+        {/* Mobile Toggle */}
         <div className="md:hidden text-white text-xl">
           <button onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? <FaTimes /> : <FaBars />}
@@ -96,39 +79,33 @@ const NavbarRecruiterDashboard = () => {
         </div>
       </div>
 
-      {/* 🔹 Mobile Menu */}
+      {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-[#0f0c1d] px-6 pb-6 space-y-4 text-white text-base">
           <NavLink
-            to="/recruiter/practice"
+            to="/recruiter/jobpostings"
             className="flex items-center gap-2 hover:text-violet-400 transition"
             onClick={() => setIsOpen(false)}
           >
-            <FaLaptopCode className="text-lg text-violet-400" />
-            Practice
+            <FaBriefcase className="text-lg text-violet-400" />
+            Post Job
           </NavLink>
           <NavLink
-            to="/recruiter/resources"
+            to="/recruiter/profile"
             className="flex items-center gap-2 hover:text-violet-400 transition"
-            onClick={() => setIsOpen(false)}
+            onClick={() => {
+              setIsOpen(false);
+              setShowDropdown(false);
+            }}
           >
-            <MdOutlineLibraryBooks className="text-lg text-violet-400" />
-            Resources
+            <FaUserCircle className="text-lg text-violet-400" />
+            Profile
           </NavLink>
-          <NavLink
-            to="/recruiter/applications"
-            className="flex items-center gap-2 hover:text-violet-400 transition"
-            onClick={() => setIsOpen(false)}
-          >
-            <FaClipboardList className="text-lg text-violet-400" />
-            Applications
-          </NavLink>
-
           <button
             className="flex items-center gap-2 text-red-500 mt-2 hover:text-red-400 transition"
             onClick={() => {
               setIsOpen(false);
-              // logout logic here
+              handleLogout();
             }}
           >
             <FaSignOutAlt className="text-lg" />
