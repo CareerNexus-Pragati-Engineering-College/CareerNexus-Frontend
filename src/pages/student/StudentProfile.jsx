@@ -5,7 +5,10 @@ import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { useParams } from "react-router-dom";
 import getuserId from "../../services/getUserId";
+import requestApi from "../../services/request";
+
 const userId = getuserId();
+
 
 import {
   FaCheckCircle,
@@ -118,9 +121,10 @@ const StatSection = ({ title, solved, total, rank, buttonLabel }) => {
 
 const StudentProfile = () => {
   const navigate = useNavigate();
-  const { userId } = useParams();
   const location = useLocation();
   const pageParam = new URLSearchParams(location.search).get("page");
+  const emailfromUrl = new URLSearchParams(location.search).get("email");
+  const userIdFromUrl = new URLSearchParams(location.search).get("userId");
   const isDataMode = pageParam === "data";
   useEffect(() => {
   // Redirect if ?page=update but userId is missing in URL
@@ -130,25 +134,52 @@ const StudentProfile = () => {
       theme: "colored",
       style: { backgroundColor: "#dc2626", color: "#fff" },
     });
-
     // Redirect to login or home after short delay
     setTimeout(() => navigate("/student/login"), 1500);
   }
-}, [pageParam, userId, navigate]);
+   else if (pageParam === "update" && userId) {
+    // If in update mode, set student data from backend 
+    const data=requestApi.get(`/student/${userId}/profile`);
+    data.then((response) => {
+      const studentData = response.data;
+      setStudent({
+        FirstName: studentData.firstName || "",
+        LastName: studentData.lastName || "",
+        userId: studentData.userId || userIdFromUrl || userId,
+        Department: studentData.department || "",
+        Year: studentData.year || "",
+        Cgpa: studentData.cgpa || "",
+        Email: emailfromUrl || studentData.email || "",
+        Phone: studentData.phone || "",
+        skills: studentData.skills || [],
+      });
+      setSkills(studentData.skills || []);
+    }
+    ).catch((error) => {
+      console.error("Error fetching student data:", error);
+      toast.error("Failed to fetch student data. Please try again later.", {
+        position: "top-right",
+        theme: "colored",
+        style: { backgroundColor: "#dc2626", color: "#fff" },
+      });
+    })
+}}, [pageParam, userId, navigate]);
 
   const [isEditing, setIsEditing] = useState(isDataMode);
   const [newSkill, setNewSkill] = useState("");
   const [skills, setSkills] = useState([]);
   const [leetcodeStats, setLeetcodeStats] = useState(null);
   const [student, setStudent] = useState({
-    firstName: "",
-    lastName: "",
-    rollNumber: "",
-    department: "",
-    year: "",
-    cgpa: "",
-    gmail: "",
-    phone: "",
+    FirstName: "",
+    LastName: "",
+    userId: "",
+    Department: "",
+    Year: "",
+    Cgpa: "",
+    Email: "",
+    Phone: "",
+    skills: " ",
+   
   });
 
   useEffect(() => {
@@ -158,21 +189,28 @@ const StudentProfile = () => {
         theme: "colored",
         style: { backgroundColor: "#6B4ECF", color: "white" },
       });
+      setStudent({...student, userId: userIdFromUrl || userId , Email: emailfromUrl || "" });
     }
+  
+      // If not in data mode, set default student data
     fetch("https://leetcode-stats-api.herokuapp.com/22a31a0525")
       .then(res => res.json())
       .then(data => setLeetcodeStats(data));
   }, [isDataMode]);
 
   const handleInputChange = e => {
+      //here added technique to save skills in student object
     const { name, value } = e.target;
-    setStudent(prev => ({ ...prev, [name]: value }));
+    setStudent(prev => ({ ...prev, [name]: value , skills: skills }));
+    
+   
   };
 
   const addSkill = () => {
     const s = newSkill.trim();
     if (s && skills.length < 10 && !skills.includes(s)) {
       setSkills(prev => [...prev, s]);
+      setStudent(prev => ({ ...prev,  skills: skills }));
       setNewSkill("");
     }
   };
@@ -181,7 +219,7 @@ const StudentProfile = () => {
     setSkills(prev => prev.filter(s => s !== skill));
 
   const handleSave = () => {
-    const isEmpty = Object.values(student).some(val => val.trim() === "");
+    const isEmpty = Object.values(student).some(value => value === "" || value === null);
     if (isEmpty) {
       toast.error("Please fill all fields before saving.", {
         position: "top-right",
@@ -189,13 +227,34 @@ const StudentProfile = () => {
       });
       return;
     }
-    toast.success("Successfully saved", {
+  
+    console.log(student)
+    try {
+      const payload = {
+        userId: student.userId,
+        skills: skills,
+        email: student.Email,
+        firstName: student.FirstName,
+        lastName: student.LastName,
+        department: student.Department,
+        cgpa: student.Cgpa,
+        phone: student.Phone,
+        year: student.Year,
+      };
+      const data = requestApi.post(`/student/${userId}/profile`, payload);
+      toast.success("Data saved successfully!", {
       position: "top-right",
       theme: "colored",
-    });
+      });
+    } catch (error) {
+      toast.error("Failed to save data. Please try again.", {
+      position: "top-right",
+      theme: "colored",
+      });
+    }
     setIsEditing(false);
     if (isDataMode) {
-      setTimeout(() => navigate("/student/home"), 1200);
+      setTimeout(() => navigate(`/student/${userId}/home`), 1200);
     }
   };
 
@@ -203,7 +262,7 @@ const StudentProfile = () => {
     <div className="min-h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A] p-4 relative">
       <ToastContainer />
       <button
-        onClick={() => navigate("/student/home")}
+        onClick={() => navigate(`/student/${userId}/home`)}
         className="fixed top-4 left-4 px-3 py-1.5 rounded-xl text-white bg-gradient-to-r from-[#8B5CF6] to-[#6D28D9] shadow-md hover:scale-105 transition"
       >
         ← Back
@@ -241,11 +300,13 @@ const StudentProfile = () => {
 
           {/* Info Fields */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6 text-[#4b436f]">
-            {Object.entries(student).map(([key, value]) => (
+            {/* Eliminating skills from main info section */}
+            {Object.entries(student).filter(([key, value]) => key !== "skills").map(([key, value]) => (
               <div key={key} className="flex flex-col">
                 <label className="text-xs font-medium text-[#6B4ECF]/70 mb-1 capitalize">
                   {key}
                 </label>
+                
                 {isEditing ? (
                   <input
                     required={isDataMode}

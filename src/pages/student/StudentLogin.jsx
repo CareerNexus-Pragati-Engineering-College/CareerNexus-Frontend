@@ -34,17 +34,17 @@ const StudentLogin = () => {
     };
 
     try {
-      const response = await axios.post("http://localhost:8080/auth/login", loginData);
+      const response = await axios.post("http://192.168.29.195:8080/auth/login", loginData);
       const data = response.data;
      
         
-        toast.success(`Login Successful! Redirecting to ${data.router} ..`);
+        toast.success(`Login Successful! ..`)
         localStorage.setItem("token", data.token);
         localStorage.setItem("userId", loginData.userId);
 
         // ✅ Redirect to router path
 
-        navigate(`/${loginData.userId}/${data.router}`);
+        navigate(`/student/${loginData.userId}${data.router}`);
 
       
     } catch (err) {
