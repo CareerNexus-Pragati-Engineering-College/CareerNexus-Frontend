@@ -14,6 +14,7 @@ import StudentHome from "./pages/student/StudentDashboard";
 import StudentProfile from "./pages/student/StudentProfile";
 import CompanyDetails from "./pages/student/CompanyDetails";
 import StudentApplyJobs from "./pages/student/StudentApplyJobs";
+import StudentApplications from "./pages/student/StudentApplications";
 
 // 🏫 TPO
 import TPO from "./pages/tpo/TPO";
@@ -25,6 +26,7 @@ import RecruiterLogin from "./pages/recruiter/RecruiterLogin";
 import RecruiterDashboard from "./pages/recruiter/RecruiterHome";
 import RecruiterProfile from "./pages/recruiter/RecruiterProfile";
 import RecruiterJob from "./pages/recruiter/RecruiterJob";
+import ApplicationsPage from "./pages/recruiter/ApplicationsPage";
 
 // 🛠️ Admin
 import Admin from "./pages/admin/Admin";
@@ -64,6 +66,7 @@ const App = () => {
         <Route path="/student/:userId/profile" element={<StudentProfile />} />
         <Route path="/student/company/:id" element={<CompanyDetails />} />
         <Route path="/student/apply-jobs" element={<StudentApplyJobs />} />
+        <Route path="/student/applications" element={<StudentApplications />} />
 
         {/* 🏫 TPO */}
         <Route path="/tpo" element={<TPO />} />
@@ -75,6 +78,7 @@ const App = () => {
         <Route path="/recruiter/home" element={<RecruiterDashboard />} />
         <Route path="/recruiter/profile" element={<RecruiterProfile />} />
         <Route path="/recruiter/jobpostings" element={<RecruiterJob />} />
+        <Route path="/recruiter/applications" element={<ApplicationsPage />} />
 
         {/* 🛠️ Admin */}
         <Route path="/admin" element={<Admin />} />
