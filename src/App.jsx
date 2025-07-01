@@ -2,6 +2,7 @@ import React from "react";
 import { useLocation, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ProtectedRoute from "./utils/ProtectedRoute"; //routes protection and restriction kosam
 
 // Pages
 import Home from "./pages/landingpage/Home";
@@ -58,10 +59,10 @@ const App = () => {
         <Route path="/student" element={<Student />} />
         <Route path="/student/login" element={<StudentLogin />} />
         <Route path="/student/signup" element={<StudentSignup />} />
-        <Route path="/student/:userId/home" element={<StudentDashboard />} />
-        
-        <Route path="/student/:userId/profile" element={<StudentProfile />} />
-        <Route path="/student/company/:id" element={<CompanyDetails />} />
+        <Route path="/student/:userId/home" element={<ProtectedRoute> <StudentDashboard /></ProtectedRoute>} />
+
+        <Route path="/student/:userId/profile" element={<ProtectedRoute> <StudentProfile /> </ProtectedRoute>} />
+        <Route path="/student/:userId/company/:id" element={<ProtectedRoute><CompanyDetails /></ProtectedRoute>} />
 
         {/* 🏫 TPO */}
         <Route path="/tpo" element={<TPO />} />
