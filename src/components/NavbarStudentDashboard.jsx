@@ -9,6 +9,8 @@ import {
   FaClipboardList,
 } from "react-icons/fa";
 import { MdOutlineLibraryBooks, MdWork } from "react-icons/md";
+import getUserId from "../services/getUserId";
+import logout from "../services/logout"; // Import the logout function
 
 const NavbarStudentDashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -73,7 +75,7 @@ const NavbarStudentDashboard = () => {
             {showDropdown && (
               <div className="absolute right-0 mt-2 w-40 bg-[#1b1433] border border-violet-500/30 rounded-lg shadow-xl p-2 z-50">
                 <NavLink
-                  to="/student/profile"
+                  to={`/student/${getUserId()}/profile?page=update`}
                   className="flex items-center px-3 py-2 text-white hover:text-violet-400 transition rounded-md"
                   onClick={() => setShowDropdown(false)}
                 >
@@ -82,10 +84,12 @@ const NavbarStudentDashboard = () => {
                 </NavLink>
                 <button
                   className="flex items-center w-full px-3 py-2 text-red-500 hover:text-red-400 transition rounded-md mt-1"
-                  onClick={() => {
+                  onClick={async () => {
                     setShowDropdown(false);
-                    navigate("/student");
-                  }}
+                  
+                      await logout; 
+                      navigate("/student"); }}
+                    
                 >
                   <FaSignOutAlt className="mr-2 text-lg" />
                   Logout
@@ -124,12 +128,13 @@ const NavbarStudentDashboard = () => {
             <FaClipboardList className="text-lg text-violet-400" />
             Applications
           </NavLink>
-
           <button
             className="flex items-center gap-2 text-red-500 mt-2 hover:text-red-400 transition"
-            onClick={() => {
+            onClick={async () => {
               setIsOpen(false);
-              navigate("/student");
+               
+              await logout; 
+                  
             }}
           >
             <FaSignOutAlt className="text-lg" />

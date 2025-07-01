@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import NavbarStudentDashboard from "../../components/NavbarStudentDashboard";
 import { useParams } from "react-router-dom";
-import getuserId from "../../services/getUserId";
+import getUserId from "../../services/getUserId"; // Function to get user ID
 const visitedCompanies = [
   { id: 1, name: "Google", logo: "/images/google.png" },
   { id: 2, name: "Microsoft", logo: "/images/microsoft.png" },
@@ -62,7 +62,7 @@ const StudentHome = () => {
             transition={{ delay: 0.2, duration: 0.8 }}
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#2F2F5B] mb-4 drop-shadow-md tracking-wide leading-tight">
-              Welcome to Your Dashboard, Student
+              Welcome to Your Dashboard, {getUserId()}
             </h1>
             <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-[#4b436f] mb-4 leading-relaxed max-w-xl">
               Explore exciting career opportunities, connect with top companies, and take the next step toward your future — all in one place.

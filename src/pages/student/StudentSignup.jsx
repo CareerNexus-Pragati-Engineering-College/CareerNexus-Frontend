@@ -32,7 +32,7 @@ const StudentSignup = () => {
   e.preventDefault();
 
   try {
-    const response = await axios.post("http://localhost:8080/auth/student/register", {
+    const response = await axios.post("http://192.168.29.195:8080/auth/student/register", {
      
       userId: rollNo, // idhey user Id ...
       email,
