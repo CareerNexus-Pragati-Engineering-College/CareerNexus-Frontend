@@ -26,13 +26,19 @@ const StudentSignup = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    // Check if user is already logged in
+    // If so, redirect to home page
+     if(localStorage.getItem("token")){
+            toast.error("You are already logged in. Redirecting to Home...");
+            return navigate(`/student/${localStorage.getItem("userId")}/home`);
+          }
   }, []);
 
   const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
-    const response = await axios.post("http://192.168.29.195:8080/auth/student/register", {
+    const response = await axios.post("http://localhost:8080/auth/student/register", {
      
       userId: rollNo, // idhey user Id ...
       email,

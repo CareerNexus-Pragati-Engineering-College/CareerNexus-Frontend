@@ -2,7 +2,7 @@ import React from "react";
 import { useLocation, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ProtectedRoute from "./utils/ProtectedRoute"; //routes protection and restriction kosam
+import ProtectedRoute from "./services/ProtectedRoute"
 
 // Pages
 import Home from "./pages/landingpage/Home";
