@@ -1,4 +1,7 @@
 import React, { useState, useEffect} from "react";
+
+import { useParams } from "react-router-dom"; // userid ni url lo use pettadaniki - itlu mee guna bhai
+
 import {
   FaBookmark,
   FaRegBookmark,
@@ -171,7 +174,7 @@ const StudentApplyJobs = () => {
   const [filters, setFilters] = useState({ location: "", experience: "", role: "" });
   const [isPrefModalOpen, setIsPrefModalOpen] = useState(false);
 
-  
+  const { userId } = useParams(); // url params nunchi useris id ni theeskunta - itlu mee guna bhai
   useEffect(() => {
     const savedPrefs = JSON.parse(localStorage.getItem("jobPreferences"));
     if (savedPrefs) setFilters(savedPrefs);
