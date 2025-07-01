@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://192.168.29.195:8080/api"; // Base URL for the API
+const API_URL = "http://localhost:8080/api"; // Base URL for the API
 // Ensure this matches your backend API URL   
 const token= localStorage.getItem("token");
 const headers = {

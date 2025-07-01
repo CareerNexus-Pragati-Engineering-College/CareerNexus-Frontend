@@ -124,7 +124,7 @@ const StudentProfile = () => {
   const location = useLocation();
   const pageParam = new URLSearchParams(location.search).get("page");
   const emailfromUrl = new URLSearchParams(location.search).get("email");
-  const userIdFromUrl = new URLSearchParams(location.search).get("userId");
+  const userIdFromUrl = userId || new URLSearchParams(location.search).get("userId");
   const isDataMode = pageParam === "data";
   useEffect(() => {
   // Redirect if ?page=update but userId is missing in URL

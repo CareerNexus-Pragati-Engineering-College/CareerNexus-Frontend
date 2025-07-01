@@ -2,7 +2,11 @@ import React from "react";
 import { useLocation, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+<<<<<<< HEAD
 import ProtectedRoute from "./services/ProtectedRoute"; //routes protection and restriction kosam
+=======
+import ProtectedRoute from "./services/ProtectedRoute"
+>>>>>>> 2e4d7dcd9dc04d32c91f860cec9f2b5867d124a8
 
 // Pages
 import Home from "./pages/landingpage/Home";
@@ -15,7 +19,11 @@ import StudentDashboard from "./pages/student/StudentDashboard";
 import StudentProfile from "./pages/student/StudentProfile";
 import CompanyDetails from "./pages/student/CompanyDetails";
 import StudentApplyJobs from "./pages/student/StudentApplyJobs";
+<<<<<<< HEAD
 import StudentTestPage from "./pages/student/StudentTestPage";
+=======
+import StudentApplications from "./pages/student/StudentApplications";
+>>>>>>> 2e4d7dcd9dc04d32c91f860cec9f2b5867d124a8
 
 // 🏫 TPO
 import TPO from "./pages/tpo/TPO";
@@ -27,6 +35,7 @@ import RecruiterLogin from "./pages/recruiter/RecruiterLogin";
 import RecruiterDashboard from "./pages/recruiter/RecruiterHome";
 import RecruiterProfile from "./pages/recruiter/RecruiterProfile";
 import RecruiterJob from "./pages/recruiter/RecruiterJob";
+import ApplicationsPage from "./pages/recruiter/ApplicationsPage";
 
 // 🛠️ Admin
 import Admin from "./pages/admin/Admin";
@@ -78,11 +87,13 @@ const App = () => {
         <Route path="/recruiter/home" element={<RecruiterDashboard />} />
         <Route path="/recruiter/profile" element={<RecruiterProfile />} />
         <Route path="/recruiter/jobpostings" element={<RecruiterJob />} />
+        <Route path="/recruiter/applications" element={<ApplicationsPage />} />
 
         {/* 🛠️ Admin */}
         <Route path="/admin" element={<Admin />} />
         <Route path="/admin/AdminAccessForm" element={<AdminAccessForm />} />
       </Routes>
+
 
       <ToastContainer />
     </>

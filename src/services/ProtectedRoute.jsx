@@ -9,7 +9,7 @@ const ProtectedRoute = ({ children }) => {
   const storedUserId = localStorage.getItem("userId");
   const { userId } = useParams();
 
-
+{/*
   if (!token) {
 
 
@@ -21,7 +21,7 @@ const ProtectedRoute = ({ children }) => {
 
     return <Navigate to="/student/login" replace />;
   }
-
+*/}
   return children;
 
 

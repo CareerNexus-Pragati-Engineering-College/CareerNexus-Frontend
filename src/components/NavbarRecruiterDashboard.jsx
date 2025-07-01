@@ -1,7 +1,14 @@
 // src/components/NavbarRecruiterDashboard.jsx
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { FaBars, FaTimes, FaUserCircle, FaSignOutAlt, FaBriefcase } from "react-icons/fa";
+import {
+  FaBars,
+  FaTimes,
+  FaUserCircle,
+  FaSignOutAlt,
+  FaBriefcase,
+  FaFileAlt,
+} from "react-icons/fa";
 
 const NavbarRecruiterDashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,7 +16,6 @@ const NavbarRecruiterDashboard = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Clear auth or any recruiter-related localStorage here if needed
     // localStorage.removeItem("recruiterToken");
     setShowDropdown(false);
     navigate("/recruiter");
@@ -18,7 +24,7 @@ const NavbarRecruiterDashboard = () => {
   return (
     <nav className="w-full fixed top-0 left-0 z-50 bg-gradient-to-r from-[#0f0c1d] via-[#1b1433] to-[#0f0c1d] shadow-md font-poppins">
       <div className="max-w-auto px-6 py-4 flex items-center justify-between">
-        {/* 🔹 Logo */}
+        {/* Logo */}
         <NavLink to="/recruiter/home" className="flex items-center gap-3">
           <img
             src="/images/logo.png"
@@ -33,11 +39,18 @@ const NavbarRecruiterDashboard = () => {
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-6 text-white text-base">
           <NavLink
-            to="/recruiter/jobpostings"
+            to="/recruiter/post-job"
             className="flex items-center gap-2 hover:text-violet-400 transition"
           >
             <FaBriefcase className="text-lg text-violet-400" />
             Post Job
+          </NavLink>
+          <NavLink
+            to="/recruiter/applications"
+            className="flex items-center gap-2 hover:text-violet-400 transition"
+          >
+            <FaFileAlt className="text-lg text-violet-400" />
+            Applications
           </NavLink>
 
           {/* Profile Dropdown */}
@@ -83,12 +96,20 @@ const NavbarRecruiterDashboard = () => {
       {isOpen && (
         <div className="md:hidden bg-[#0f0c1d] px-6 pb-6 space-y-4 text-white text-base">
           <NavLink
-            to="/recruiter/jobpostings"
+            to="/recruiter/post-job"
             className="flex items-center gap-2 hover:text-violet-400 transition"
             onClick={() => setIsOpen(false)}
           >
             <FaBriefcase className="text-lg text-violet-400" />
             Post Job
+          </NavLink>
+          <NavLink
+            to="/recruiter/applications"
+            className="flex items-center gap-2 hover:text-violet-400 transition"
+            onClick={() => setIsOpen(false)}
+          >
+            <FaFileAlt className="text-lg text-violet-400" />
+            Applications
           </NavLink>
           <NavLink
             to="/recruiter/profile"
