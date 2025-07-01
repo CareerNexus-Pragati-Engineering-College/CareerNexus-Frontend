@@ -109,6 +109,10 @@ html, body {
   }
 }
 
+.input-field {
+  @apply w-full border border-gray-300 rounded px-3 py-2 text-sm;
+}
+
 @keyframes shine {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }

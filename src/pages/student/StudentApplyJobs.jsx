@@ -14,6 +14,8 @@ import {
 } from "react-icons/fa";
 import { LuPenLine } from "react-icons/lu";
 import NavbarStudentDashboard from "../../components/NavbarStudentDashboard";
+import QuickApplyModal from "./QuickApplyModal"; // adjust the path if needed
+
 
 const dummyJobs = [
   {
@@ -173,24 +175,24 @@ const StudentApplyJobs = () => {
   const [selectedJob, setSelectedJob] = useState(dummyJobs[0]);
   const [filters, setFilters] = useState({ location: "", experience: "", role: "" });
   const [isPrefModalOpen, setIsPrefModalOpen] = useState(false);
-
-  const { userId } = useParams(); // url params nunchi useris id ni theeskunta - itlu mee guna bhai
+  const [showApplyModal, setShowApplyModal] = useState(false);
+const { userId } = useParams(); // url params nunchi useris id ni theeskunta - itlu mee guna bhai
   useEffect(() => {
     const savedPrefs = JSON.parse(localStorage.getItem("jobPreferences"));
     if (savedPrefs) setFilters(savedPrefs);
+
+    const storedJobs = JSON.parse(localStorage.getItem("jobs"));
+    if (storedJobs) setJobs(storedJobs);
   }, []);
 
   const toggleSave = (id) => {
-    setJobs((prev) =>
-      prev.map((job) => (job.id === id ? { ...job, saved: !job.saved } : job))
+    const updatedJobs = jobs.map((job) =>
+      job.id === id ? { ...job, saved: !job.saved } : job
     );
+    setJobs(updatedJobs);
+    localStorage.setItem("jobs", JSON.stringify(updatedJobs));
   };
 
-const applyToJob = (id) => {
-  setJobs((prev) =>
-    prev.map((job) => (job.id === id ? { ...job, applied: true } : job))
-  );
-};
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
@@ -202,14 +204,13 @@ const applyToJob = (id) => {
   };
 
   const filteredJobs = jobs.filter((job) => {
-  return (
-    (filters.location ? job.location === filters.location : true) &&
-    (filters.experience ? job.experience === filters.experience : true) &&
-    (filters.role ? job.title === filters.role : true) &&
-    (selectedTab === "Saved" ? job.saved : true) &&
-    (selectedTab === "Applied" ? job.applied : true)
-  );
-});
+    return (
+      (filters.location ? job.location === filters.location : true) &&
+      (filters.experience ? job.experience === filters.experience : true) &&
+      (filters.role ? job.title === filters.role : true) &&
+      (selectedTab === "Saved" ? job.saved : true)
+    );
+  });
 
   return (
     <>
@@ -217,25 +218,20 @@ const applyToJob = (id) => {
 
       <div className="min-h-screen bg-white text-gray-900 font-poppins px-4 pt-24 pb-6">
         <div className="max-w-7xl mx-auto">
-
-          {/* Header Title and Edit Preferences */}
           <div className="px-1 mb-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-[17px] md:text-[18px] font-semibold text-gray-800 leading-none">
-                Jobs for you
-              </h2>
+              <h2 className="text-[17px] md:text-[18px] font-semibold text-gray-800">Jobs for you</h2>
               <button
                 onClick={() => setIsPrefModalOpen(true)}
-                className="text-purple-700 text-sm font-medium flex items-center gap-1 no-underline"
+                className="text-purple-700 text-sm font-medium flex items-center gap-1"
               >
                 Edit preferences <LuPenLine size={16} />
               </button>
             </div>
           </div>
 
-          {/* Tabs Row */}
           <div className="flex gap-6 border-b border-gray-200 mb-6 text-sm px-1">
-            {["Recommended", "Applied", "Saved"].map((tab) => (
+            {["Recommended", "Saved"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setSelectedTab(tab)}
@@ -250,60 +246,58 @@ const applyToJob = (id) => {
             ))}
           </div>
 
-          {/* Layout */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Job List */}
-<div className="space-y-4 max-h-[75vh] overflow-y-auto pr-2 scrollbar-hide">
-  {filteredJobs.length > 0 ? (
-    filteredJobs.map((job) => (
-      <div
-        key={job.id}
-        onClick={() => setSelectedJob(job)}
-        className={`cursor-pointer border p-4 rounded-xl flex gap-4 items-start transition shadow-sm hover:shadow-md ${
-          selectedJob?.id === job.id ? "border-purple-600" : "border-gray-200"
-        }`}
-      >
-        <div className="bg-purple-100 text-purple-700 rounded-lg p-2">
-          <FaBuilding size={24} />
-        </div>
-        <div className="flex-1">
-          <h3 className="font-semibold text-sm mb-1">{job.title}</h3>
-          <p className="text-xs text-gray-500">{job.company}</p>
-          <div className="flex items-center gap-2 text-xs text-gray-500">
-            <span className="flex items-center gap-1">
-              <FaClock /> {job.experience}
-            </span>
-            <span className="flex items-center gap-1">
-              <FaMapMarkerAlt /> {job.location}
-            </span>
-          </div>
-          <p className="text-xs text-gray-400 mt-1">Posted {job.posted}</p>
-        </div>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleSave(job.id);
-          }}
-        >
-          {job.saved ? (
-            <FaBookmark className="text-purple-600" />
-          ) : (
-            <FaRegBookmark className="text-gray-400 hover:text-purple-600" />
-          )}
-        </button>
-      </div>
-    ))
-  ) : (
-    <p className="text-sm text-gray-500">
-      {selectedTab === "Applied"
-        ? "No applied jobs yet."
-        : "No saved jobs yet."}
-    </p>
-  )}
-</div>
+            {/* Left - Job List */}
+            <div className="space-y-4 max-h-[75vh] overflow-y-auto pr-2 scrollbar-hide">
+              {filteredJobs.length > 0 ? (
+                filteredJobs.map((job) => (
+                  <div
+                    key={job.id}
+                    onClick={() => setSelectedJob(job)}
+                    className={`cursor-pointer border p-4 rounded-xl flex gap-4 items-start transition shadow-sm hover:shadow-md ${
+                      selectedJob?.id === job.id ? "border-purple-600" : "border-gray-200"
+                    }`}
+                  >
+                    <div className="bg-purple-100 text-purple-700 rounded-lg p-2">
+                      <FaBuilding size={24} />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-sm mb-1">{job.title}</h3>
+                      <p className="text-xs text-gray-500">{job.company}</p>
+                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                        <span className="flex items-center gap-1">
+                          <FaClock /> {job.experience}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <FaMapMarkerAlt /> {job.location}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-400 mt-1">Posted {job.posted}</p>
+                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleSave(job.id);
+                      }}
+                    >
+                      {job.saved ? (
+                        <FaBookmark className="text-purple-600" />
+                      ) : (
+                        <FaRegBookmark className="text-gray-400 hover:text-purple-600" />
+                      )}
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-gray-500">
+                  {selectedTab === "Saved"
+                    ? "No saved jobs yet."
+                    : "No jobs found matching the selected filters."}
+                </p>
+              )}
+            </div>
 
-
-            {/* Job Detail Panel */}
+            {/* Right - Job Details */}
             {selectedJob && (
               <div className="bg-gray-50 p-6 rounded-xl shadow space-y-5 overflow-y-auto max-h-[75vh] border border-purple-300 scrollbar-hide">
                 <div className="flex gap-4 items-center">
@@ -319,24 +313,23 @@ const applyToJob = (id) => {
                   </div>
                 </div>
 
-                {/* INSIDE Job Detail Panel — Replace Quick Apply button with logic */}
-{selectedJob.applied ? (
-  <button
-    disabled
-    className="bg-green-100 text-green-700 py-2 px-4 rounded-full text-sm font-semibold flex items-center gap-2 cursor-default"
-  >
-    ✅ Applied
-  </button>
-) : (
-  <button
-    onClick={() => applyToJob(selectedJob.id)}
-    className="bg-purple-700 hover:bg-purple-800 text-white py-2 px-4 rounded-full text-sm font-semibold flex items-center gap-2"
-  >
-    <FaBolt /> Quick Apply
-  </button>
-)}
+                {selectedJob.applied ? (
+                  <button
+                    disabled
+                    className="bg-green-100 text-green-700 py-2 px-4 rounded-full text-sm font-semibold flex items-center gap-2 cursor-default"
+                  >
+                    ✅ Applied
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setShowApplyModal(true)}
+                    className="bg-purple-700 hover:bg-purple-800 text-white py-2 px-4 rounded-full text-sm font-semibold flex items-center gap-2"
+                  >
+                    <FaBolt /> Quick Apply
+                  </button>
+                )}
 
-
+                {/* Job Description Blocks */}
                 <div className="space-y-2 text-sm text-gray-700">
                   <div className="flex items-center gap-2">
                     <FaClock className="text-purple-600" />
@@ -408,12 +401,9 @@ const applyToJob = (id) => {
                 <div>
                   <h4 className="font-semibold mb-1">More Info</h4>
                   <p className="text-sm text-gray-700">
-                    Role: {selectedJob.moreInfo.role}
-                    <br />
-                    Industry: {selectedJob.moreInfo.industry}
-                    <br />
-                    Function: {selectedJob.moreInfo.function}
-                    <br />
+                    Role: {selectedJob.moreInfo.role}<br />
+                    Industry: {selectedJob.moreInfo.industry}<br />
+                    Function: {selectedJob.moreInfo.function}<br />
                     Job Type: {selectedJob.moreInfo.type}
                   </p>
                 </div>
@@ -423,64 +413,34 @@ const applyToJob = (id) => {
         </div>
       </div>
 
-      {/* Set Preferences Modal */}
+      {/* Preferences Modal */}
       {isPrefModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-xl">
             <h3 className="text-lg font-semibold mb-4 text-gray-800">Set Your Job Preferences</h3>
-
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Preferred Location</label>
-                <select
-                  name="location"
-                  value={filters.location}
-                  onChange={handleFilterChange}
-                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-                >
-                  <option value="">Any</option>
-                  {[...new Set(jobs.map((j) => j.location))].map((loc) => (
-                    <option key={loc} value={loc}>{loc}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1">Experience Level</label>
-                <select
-                  name="experience"
-                  value={filters.experience}
-                  onChange={handleFilterChange}
-                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-                >
-                  <option value="">Any</option>
-                  {[...new Set(jobs.map((j) => j.experience))].map((exp) => (
-                    <option key={exp} value={exp}>{exp}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1">Preferred Role</label>
-                <select
-                  name="role"
-                  value={filters.role}
-                  onChange={handleFilterChange}
-                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-                >
-                  <option value="">Any</option>
-                  {[...new Set(jobs.map((j) => j.title))].map((title) => (
-                    <option key={title} value={title}>{title}</option>
-                  ))}
-                </select>
-              </div>
+              {["location", "experience", "role"].map((key) => (
+                <div key={key}>
+                  <label className="block text-sm font-medium mb-1">
+                    {key === "role" ? "Preferred Role" : `Preferred ${key.charAt(0).toUpperCase() + key.slice(1)}`}
+                  </label>
+                  <select
+                    name={key}
+                    value={filters[key]}
+                    onChange={handleFilterChange}
+                    className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+                  >
+                    <option value="">Any</option>
+                    {[...new Set(jobs.map((j) => key === "role" ? j.title : j[key]))].map((opt) => (
+                      <option key={opt} value={opt}>{opt}</option>
+                    ))}
+                  </select>
+                </div>
+              ))}
             </div>
 
             <div className="mt-6 flex justify-end gap-3">
-              <button
-                onClick={() => setIsPrefModalOpen(false)}
-                className="text-gray-600 hover:text-gray-800 text-sm"
-              >
+              <button onClick={() => setIsPrefModalOpen(false)} className="text-gray-600 hover:text-gray-800 text-sm">
                 Cancel
               </button>
               <button
@@ -492,6 +452,22 @@ const applyToJob = (id) => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Quick Apply Modal */}
+      {showApplyModal && (
+        <QuickApplyModal
+          job={selectedJob}
+          onClose={() => setShowApplyModal(false)}
+          onApply={(updatedJob) => {
+            const updatedJobs = jobs.map((job) =>
+              job.id === updatedJob.id ? { ...updatedJob, applied: true } : job
+            );
+            setJobs(updatedJobs);
+            localStorage.setItem("jobs", JSON.stringify(updatedJobs));
+            setShowApplyModal(false);
+          }}
+        />
       )}
     </>
   );
