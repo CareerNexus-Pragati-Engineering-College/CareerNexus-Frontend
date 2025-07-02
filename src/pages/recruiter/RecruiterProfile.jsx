@@ -46,7 +46,7 @@ const RecruiterProfile = () => {
     } else if (pageMode === "update") {
       setIsEditing(false);
       setRecruiter({
-        userId: params.userId || "REC2025",
+        userId: params.userId || "",
         firstName: "Ravi",
         lastName: "Verma",
         company: "TCS",
@@ -70,40 +70,66 @@ const RecruiterProfile = () => {
 
   const handleEditToggle = () => setIsEditing(true);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const allFilled = Object.values(recruiter).every((v) => v.trim() !== "");
+    const token = localStorage.getItem("token");
 
-    if (pageMode === "data") {
-      if (!allFilled) {
-        toast.error("You have to fill all details", {
-          position: "top-right",
-          autoClose: 3000,
-          className: "custom-careernexus-toast",
-          bodyClassName: "custom-careernexus-body",
-        });
-        return;
-      }
-
-      toast.success("Profile saved successfully!", {
+    if (!allFilled) {
+      toast.error("You have to fill all details", {
         position: "top-right",
         autoClose: 3000,
         className: "custom-careernexus-toast",
         bodyClassName: "custom-careernexus-body",
       });
+      return;
+    }
 
-      setTimeout(() => {
-        navigate("/recruiter/home");
-      }, 2000);
-    } else {
-      toast.success("Profile updated successfully!", {
+    try {
+      const response = await fetch(
+        `/recruiter/${pageMode === "data" ? recruiter.userId : params.userId}/profile`,
+        {
+          method: pageMode === "data" ? "POST" : "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(recruiter),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Something went wrong");
+      }
+
+      toast.success(
+        pageMode === "data"
+          ? "Profile saved successfully!"
+          : "Profile updated successfully!",
+        {
+          position: "top-right",
+          autoClose: 3000,
+          className: "custom-careernexus-toast",
+          bodyClassName: "custom-careernexus-body",
+        }
+      );
+
+      setIsEditing(false);
+
+      if (pageMode === "data") {
+        setTimeout(() => {
+          navigate("/recruiter/home");
+        }, 2000);
+      }
+    } catch (error) {
+      toast.error(error.message || "Failed to save profile", {
         position: "top-right",
         autoClose: 3000,
         className: "custom-careernexus-toast",
         bodyClassName: "custom-careernexus-body",
       });
     }
-
-    setIsEditing(false);
   };
 
   const handleImageUpload = (e) => {
@@ -198,14 +224,11 @@ const RecruiterProfile = () => {
                 {pageMode === "update" && (
                   <button
                     onClick={() => setIsEditing(false)}
-                    
                     className="px-4 py-2 border border-gray-400 text-gray-700 rounded-md hover:bg-gray-100 transition"
                   >
                     Cancel
-
                   </button>
                 )}
-
               </>
             ) : (
               <button

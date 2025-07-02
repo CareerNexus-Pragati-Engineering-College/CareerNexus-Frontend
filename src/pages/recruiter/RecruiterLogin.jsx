@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   FaEnvelope,
   FaLock,
@@ -10,19 +10,60 @@ import {
   FaGoogle,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 
 const RecruiterLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Recruiter Login:", { email, password });
+
+    try {
+      const response = await fetch("http://localhost:8080/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Login failed");
+      }
+
+      const { token, userId, router } = data;
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("userId", userId);
+
+      toast.success("Login successful!", {
+        position: "top-right",
+        autoClose: 3000,
+        className: "custom-careernexus-toast",
+        bodyClassName: "custom-careernexus-body",
+      });
+
+      // Redirect based on router value
+      if (router === "profile") {
+        navigate(`/recruiter/${userId}/profile?page=data`);
+      } else {
+        navigate(`/recruiter/${userId}/home`);
+      }
+    } catch (error) {
+      toast.error(error.message || "Something went wrong", {
+        position: "top-right",
+        autoClose: 3000,
+        className: "custom-careernexus-toast",
+        bodyClassName: "custom-careernexus-body",
+      });
+    }
   };
 
   return (
@@ -33,7 +74,6 @@ const RecruiterLogin = () => {
         transition={{ duration: 0.6 }}
         className="w-full max-w-md bg-white/30 backdrop-blur-2xl border border-violet-300/40 p-8 rounded-3xl shadow-[0_0_40px_rgba(165,100,255,0.2)] text-[#2a104d] relative font-poppins"
       >
-        {/* 🔙 Back Button */}
         <NavLink
           to="/recruiter"
           className="absolute top-4 left-4 flex items-center gap-2 text-violet-600 hover:text-indigo-700 text-sm transition-all"
@@ -42,7 +82,6 @@ const RecruiterLogin = () => {
           Back
         </NavLink>
 
-        {/* 👤 Icon & Title */}
         <div className="flex flex-col items-center mt-6">
           <motion.div
             initial={{ scale: 0 }}
@@ -60,7 +99,6 @@ const RecruiterLogin = () => {
           </p>
         </div>
 
-        {/* 📄 Form */}
         <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
           <div className="relative">
             <FaEnvelope className="absolute left-3 top-3.5 text-violet-400" />
