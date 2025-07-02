@@ -4,6 +4,8 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import NavbarRecruiterDashboard from "../../components/NavbarRecruiterDashboard";
 import { toast } from "react-toastify";
+import requestApi from "../../services/request";
+import getuserId from "../../services/getUserId";
 
 const RecruiterProfile = () => {
   const navigate = useNavigate();
@@ -11,10 +13,13 @@ const RecruiterProfile = () => {
   const params = useParams();
   const query = new URLSearchParams(location.search);
   const pageMode = query.get("page"); // either "data" or "update"
+  const userId = getuserId(); // Get userId from localStorage or context
 
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState("/images/profile.png");
   const [imageFile, setImageFile] = useState(null);
+   const emailfromUrl = new URLSearchParams(location.search).get("email");
+  const userIdFromUrl = userId || new URLSearchParams(location.search).get("userId");
 
   const [recruiter, setRecruiter] = useState({
     userId: "",
@@ -49,7 +54,7 @@ const RecruiterProfile = () => {
         userId: params.userId || "",
         firstName: "Ravi",
         lastName: "Verma",
-        company: "TCS",
+        company: "TCS", 
         designation: "Senior Recruiter",
         phone: "9876543210",
       });
@@ -72,7 +77,6 @@ const RecruiterProfile = () => {
 
   const handleSave = async () => {
     const allFilled = Object.values(recruiter).every((v) => v.trim() !== "");
-    const token = localStorage.getItem("token");
 
     if (!allFilled) {
       toast.error("You have to fill all details", {
@@ -85,23 +89,19 @@ const RecruiterProfile = () => {
     }
 
     try {
-      const response = await fetch(
-        `/recruiter/${pageMode === "data" ? recruiter.userId : params.userId}/profile`,
-        {
-          method: pageMode === "data" ? "POST" : "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(recruiter),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Something went wrong");
+      const payload = {
+       firstName: recruiter.firstName,
+       lastName: recruiter.lastName,
+        company: recruiter.company,
+        designation: recruiter.designation,
+        phone: recruiter.phone,
+        userId: recruiter.userId || userIdFromUrl,
+        email: emailfromUrl || "",
+      
       }
+      console.log(payload)
+       const data = await requestApi.post(`/recruiter/${userId}/profile`, payload);
+            
 
       toast.success(
         pageMode === "data"
