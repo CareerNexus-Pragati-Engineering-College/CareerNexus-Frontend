@@ -3,6 +3,7 @@ import { useLocation, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./services/ProtectedRoute"; //routes protection and restriction kosam
+import ProtectedRouteRecruiter from "./services/ProtectedRouteRecruiter"; //recruiter routes protection and restriction kosam
 
 
 // Pages
@@ -79,10 +80,10 @@ const App = () => {
         {/* 👨‍💼 Recruiter */}
         <Route path="/recruiter" element={<Recruiter />} />
         <Route path="/recruiter/login" element={<RecruiterLogin />} />
-        <Route path="/recruiter/home" element={<RecruiterDashboard />} />
-        <Route path="/recruiter/profile" element={<RecruiterProfile />} />
-        <Route path="/recruiter/jobpostings" element={<RecruiterJob />} />
-        <Route path="/recruiter/applications" element={<ApplicationsPage />} />
+        <Route path="/recruiter/:userId/home" element={<ProtectedRouteRecruiter><RecruiterDashboard /></ProtectedRouteRecruiter> } />
+        <Route path="/recruiter/:userId/profile" element={<ProtectedRouteRecruiter><RecruiterProfile /></ProtectedRouteRecruiter>} />
+        <Route path="/recruiter/:userId/jobpostings"  element={<ProtectedRouteRecruiter><RecruiterJob /></ProtectedRouteRecruiter>} />
+        <Route path="/recruiter/:userId/applications" element={<ProtectedRouteRecruiter><ApplicationsPage /></ProtectedRouteRecruiter>} />
 
         {/* 🛠️ Admin */}
         <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
