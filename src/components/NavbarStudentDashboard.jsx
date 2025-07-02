@@ -29,7 +29,7 @@ const NavbarStudentDashboard = () => {
     <nav className="w-full fixed top-0 left-0 z-50 bg-gradient-to-r from-[#0f0c1d] via-[#1b1433] to-[#0f0c1d] shadow-md font-poppins">
       <div className="max-w-auto px-6 py-4 flex items-center justify-between">
         {/* 🔹 Logo */}
-        <NavLink to="/student/home" className="flex items-center gap-3">
+        <NavLink to={`/student/${getUserId()}/home`} className="flex items-center gap-3">
           <img
             src="/images/logo.png"
             alt="CareerNexus Logo"
@@ -50,7 +50,7 @@ const NavbarStudentDashboard = () => {
             <MdOutlineLibraryBooks className="text-lg text-violet-400" />
             Resources
           </NavLink>
-          <NavLink to="/student/apply-jobs" className={getActiveClass}>
+          <NavLink to={`/student/${getUserId()}/apply-jobs`} className={getActiveClass}>
             <div className="relative flex items-center gap-2">
               <MdWork className="text-lg text-violet-400" />
               Apply Jobs
@@ -58,7 +58,7 @@ const NavbarStudentDashboard = () => {
              
             </div>
           </NavLink>
-          <NavLink to="/student/applications" className={getActiveClass}>
+          <NavLink to={`/student/${getUserId()}/applications`} className={getActiveClass}>
             <FaClipboardList className="text-lg text-violet-400" />
             Applications
           </NavLink>

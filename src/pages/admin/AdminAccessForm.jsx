@@ -28,17 +28,17 @@ const AdminAccessForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = { username, email, password, role };
+    const payload = { userId:username, email:email, password:password, role:role };
 
     try {
-      const response = await axios.post("http://localhost:8080/auth/admin/register", payload);
+      const response = await axios.post(`http://localhost:8080/auth/${role}/register`, payload);
       toast.success("User registered successfully!", {
         position: "top-right",
         theme: "colored"
       });
     } catch (error) {
-      console.error("Error registering user:", error);
-      toast.error("Failed to register user.", {
+      console.error("Error registering user:", error.message);
+      toast.error(`Failed to register user.${error.response.data.message}`, {
         position: "top-right",
         theme: "colored"
       });
@@ -130,7 +130,7 @@ const AdminAccessForm = () => {
               <option value="student">Student</option>
               <option value="recruiter">Recruiter</option>
               <option value="tpo">TPO</option>
-              <option value="admin">Admin</option>
+             
             </select>
           </div>
 

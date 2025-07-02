@@ -3,7 +3,7 @@ import { useLocation, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./services/ProtectedRoute"; //routes protection and restriction kosam
-import ProtectedRoute from "./services/ProtectedRoute"
+
 
 // Pages
 import Home from "./pages/landingpage/Home";
@@ -21,7 +21,7 @@ import StudentApplications from "./pages/student/StudentApplications";
 
 // 🏫 TPO
 import TPO from "./pages/tpo/TPO";
-import TPOLogin from "./pages/tpo/TPOLogin";
+import TPOLogin from "./pages/tpo/TpoLogin";
 
 // 👨‍💼 Recruiter
 import Recruiter from "./pages/recruiter/Recruiter";
@@ -69,6 +69,7 @@ const App = () => {
         <Route path="/student/:userId/profile" element={<ProtectedRoute> <StudentProfile /> </ProtectedRoute>} />
         <Route path="/student/:userId/company/:id" element={ <ProtectedRoute><CompanyDetails /> </ProtectedRoute> }/>
         <Route path="/student/:userId/apply-jobs" element={ <ProtectedRoute><StudentApplyJobs /></ProtectedRoute> } />
+        <Route path="/student/:userId/applications" element={<ProtectedRoute><StudentApplications /></ProtectedRoute>} />
         <Route path="/student/test" element={<StudentTestPage />} />
 
         {/* 🏫 TPO */}
@@ -84,8 +85,8 @@ const App = () => {
         <Route path="/recruiter/applications" element={<ApplicationsPage />} />
 
         {/* 🛠️ Admin */}
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/admin/AdminAccessForm" element={<AdminAccessForm />} />
+        <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
+        <Route path="/admin/AdminAccessForm" element={<ProtectedRoute><AdminAccessForm /></ProtectedRoute>} />
       </Routes>
 
 

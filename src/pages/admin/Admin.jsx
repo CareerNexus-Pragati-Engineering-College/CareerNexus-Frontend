@@ -12,7 +12,7 @@ import {
   FaUserTie,
   FaPlus,
 } from "react-icons/fa";
-import NavbarAdmin from "../../components/NavbarAdmin"; // ✅ using NavbarAdmin
+import NavbarAdmin from "../../components/NavbarAdminDashboard"; // ✅ using NavbarAdmin
 
 const tpoFeatures = [
   {
@@ -46,11 +46,11 @@ const Admin = () => {
     <div className="bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A] scroll-smooth font-poppins">
        {/* 🆕 Navbar with "Add" Button */}
       <NavbarAdmin
-        extraButton={{
-          label: "Add",
-          to: "/admin/add",
-          icon: <FaPlus className="text-base" />,
-        }}
+       // extraButton={{
+          //label: "Add",
+          //to: "/admin/add",
+          //icon: <FaPlus className="text-base" />,
+       // }}
       />
       
       {/* 🔙 Back to Main Home */}

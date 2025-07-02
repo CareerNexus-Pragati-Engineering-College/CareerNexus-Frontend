@@ -37,6 +37,7 @@ const StudentLogin = () => {
  const loginData = {
       userId: userId,
       password: password,
+      role: "student" 
     };
 
     try {
@@ -57,7 +58,7 @@ const StudentLogin = () => {
       
     } catch (err) {
       console.error("Login request failed", err);
-      toast.error("Username or Password incorrect");
+      toast.error(err.response?.data?.error + " "+err.response?.data?.message || "Login failed. Please try again.");
     }
   };
 

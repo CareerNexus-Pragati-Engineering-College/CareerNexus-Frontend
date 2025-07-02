@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink,useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 import {
   FaEnvelope,
   FaLock,
@@ -11,18 +15,45 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 
+
 const TpoLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
+  const [userId, setuserId] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("TPO Login:", { email, password });
+    if (!userId || !password) {
+      toast.error("Please enter both email and password.");
+      return;
+    }
+    // Simulate login action
+    // You can replace this with your actual login API call
+    const payload = {userId:userId, password:password ,role:"tpo"};
+    try{
+      const response = await axios.post('http://localhost:8080/auth/login', payload);
+      toast.success(`Login successful! ${response.data?.msg} `, {
+        position: "top-right",
+        theme: "colored"
+      });
+      localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userId", userId);
+      // Redirect to the appropriate route based on the response
+      navigate(response.data?.router);
+
+    }
+    catch (error) {
+      console.error("Error logging in:", error);
+      toast.error(`Login failed: ${error.response.data.message}`, {
+        position: "top-right",
+        theme: "colored"
+     });
+    }
   };
 
   return (
@@ -63,12 +94,12 @@ const TpoLogin = () => {
         {/* 📄 Form */}
         <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
           <div className="relative">
-            <FaEnvelope className="absolute left-3 top-3.5 text-violet-400" />
+            <FaUserTie className="absolute left-3 top-3.5 text-violet-400" />
             <input
-              type="email"
-              placeholder="Email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              placeholder="Enter User ID"
+              value={userId}
+              onChange={(e) => setuserId(e.target.value)}
               className="w-full pl-10 pr-4 py-2 rounded-md bg-white/70 border border-violet-200 text-violet-900 placeholder-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-500"
               required
             />

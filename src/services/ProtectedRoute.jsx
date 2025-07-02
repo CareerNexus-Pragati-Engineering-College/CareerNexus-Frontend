@@ -1,6 +1,6 @@
 import React from "react";
 
-
+import { toast } from "react-toastify";
 import { Navigate, useParams } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
@@ -9,19 +9,20 @@ const ProtectedRoute = ({ children }) => {
   const storedUserId = localStorage.getItem("userId");
   const { userId } = useParams();
 
-{/*
+
   if (!token) {
 
-
-    return <Navigate to="/student/login" replace />;
+ toast.error("You are not authorized to access this page. Please log in.");
+    return <Navigate to="/" replace />;
+   
   }
 
   if (userId && userId !== storedUserId) {
+    toast.error("You are not authorized to access this page.");
 
-
-    return <Navigate to="/student/login" replace />;
+    return <Navigate to="/" replace />;
   }
-*/}
+
   return children;
 
 
