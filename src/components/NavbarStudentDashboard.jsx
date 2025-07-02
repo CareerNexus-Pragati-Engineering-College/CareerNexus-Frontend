@@ -54,8 +54,6 @@ const NavbarStudentDashboard = () => {
             <div className="relative flex items-center gap-2">
               <MdWork className="text-lg text-violet-400" />
               Apply Jobs
-     
-             
             </div>
           </NavLink>
           <NavLink to={`/student/${getUserId()}/applications`} className={getActiveClass}>
@@ -86,10 +84,11 @@ const NavbarStudentDashboard = () => {
                   className="flex items-center w-full px-3 py-2 text-red-500 hover:text-red-400 transition rounded-md mt-1"
                   onClick={async () => {
                     setShowDropdown(false);
-                  logout(); // Call the logout function
-                 
-                      navigate("/student/login"); }}
-                    
+                    logout(); // Call the logout function
+
+                    navigate("/student/login");
+                  }}
+
                 >
                   <FaSignOutAlt className="mr-2 text-lg" />
                   Logout

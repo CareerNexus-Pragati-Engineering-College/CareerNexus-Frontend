@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   FaEnvelope,
@@ -9,12 +10,13 @@ import {
   FaArrowLeft,
   FaGoogle,
 } from "react-icons/fa";
+import requestApi from "../../services/request";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 
 const RecruiterLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
+  const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
@@ -24,46 +26,37 @@ const RecruiterLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (!userId || !password) {
+          toast.error("Please enter both email and password.",{
+            autoClose: 3000,
+            position: "top-right",
+          });
+          return;
+        }
+        // Simulate login action
+        // You can replace this with your actual login API call
+        const payload = {userId:userId, password:password ,role:"recruiter"};
     try {
-      const response = await fetch("http://localhost:8080/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Login failed");
-      }
-
-      const { token, userId, router } = data;
-
-      localStorage.setItem("token", token);
-      localStorage.setItem("userId", userId);
-
-      toast.success("Login successful!", {
-        position: "top-right",
-        autoClose: 3000,
-        className: "custom-careernexus-toast",
-        bodyClassName: "custom-careernexus-body",
-      });
-
-      // Redirect based on router value
-      if (router === "profile") {
-        navigate(`/recruiter/${userId}/profile?page=data`);
-      } else {
-        navigate(`/recruiter/${userId}/home`);
-      }
-    } catch (error) {
-      toast.error(error.message || "Something went wrong", {
-        position: "top-right",
-        autoClose: 3000,
-        className: "custom-careernexus-toast",
-        bodyClassName: "custom-careernexus-body",
-      });
+     
+       const response = await axios.post('http://localhost:8080/auth/login', payload);
+            toast.success(`Login successful! ${response.data?.msg} `, {
+              position: "top-right",
+              theme: "colored",
+            autoClose: 1000,
+            });
+            localStorage.setItem("token", response.data.token);
+              localStorage.setItem("userId", userId);
+            // Redirect to the appropriate route based on the response
+            navigate(`/recruiter/${userId}/${response.data.router}`);
+      
     }
+     catch (error) {
+          console.error("Error logging in:", error);
+          toast.error(`Login failed: ${error?.response?.data?.message}`, {
+            position: "top-right",
+            theme: "colored"
+         });
+        }
   };
 
   return (
@@ -101,12 +94,12 @@ const RecruiterLogin = () => {
 
         <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
           <div className="relative">
-            <FaEnvelope className="absolute left-3 top-3.5 text-violet-400" />
+            <FaUserTie className="absolute left-3 top-3.5 text-violet-400" />
             <input
-              type="email"
-              placeholder="Email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              placeholder="Enter UserId"
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
               className="w-full pl-10 pr-4 py-2 rounded-md bg-white/70 border border-violet-200 text-violet-900 placeholder-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-500"
               required
             />

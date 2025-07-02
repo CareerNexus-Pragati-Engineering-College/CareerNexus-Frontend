@@ -79,8 +79,8 @@ const App = () => {
         {/* 👨‍💼 Recruiter */}
         <Route path="/recruiter" element={<Recruiter />} />
         <Route path="/recruiter/login" element={<RecruiterLogin />} />
-        <Route path="/recruiter/home" element={<RecruiterDashboard />} />
-        <Route path="/recruiter/profile" element={<RecruiterProfile />} />
+        <Route path="/recruiter/:userId/home" element={<RecruiterDashboard />} />
+        <Route path="/recruiter/:userId/profile" element={<RecruiterProfile />} />
         <Route path="/recruiter/jobpostings" element={<RecruiterJob />} />
         <Route path="/recruiter/applications" element={<ApplicationsPage />} />
 
