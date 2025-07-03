@@ -90,8 +90,8 @@ const App = () => {
         <Route path="/recruiter/applications" element={<ApplicationsPage />} />
 
         {/* 🛠️ Admin */}
-        <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
-        <Route path="/admin/AdminAccessForm" element={<ProtectedRoute><AdminAccessForm /></ProtectedRoute>} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/AdminAccessForm" element={<AdminAccessForm />} />
       </Routes>
 
 

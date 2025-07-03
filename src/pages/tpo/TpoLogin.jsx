@@ -21,6 +21,8 @@ const TpoLogin = () => {
   const [userId, setuserId] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
+  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -36,13 +38,14 @@ const TpoLogin = () => {
     // You can replace this with your actual login API call
     const payload = {userId:userId, password:password ,role:"tpo"};
     try{
-      const response = await axios.post('http://localhost:8080/auth/login', payload);
+      const response = await axios.post(`${backendUrl}:${backendPort}/auth/login`, payload);
       toast.success(`Login successful! ${response.data?.msg} `, {
         position: "top-right",
         theme: "colored"
       });
       localStorage.setItem("token", response.data.token);
         localStorage.setItem("userId", userId);
+        localStorage.setItem("role",response.data.role)
       // Redirect to the appropriate route based on the response
       navigate(response.data?.router);
 

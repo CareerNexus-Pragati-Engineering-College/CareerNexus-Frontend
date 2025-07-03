@@ -23,6 +23,8 @@ const StudentSignup = () => {
   const [rollNo, setRollNo] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST 
+  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT 
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -38,7 +40,7 @@ const StudentSignup = () => {
   e.preventDefault();
 
   try {
-    const response = await axios.post("http://localhost:8080/auth/student/register", {
+    const response = await axios.post(`${backendUrl}:${backendPort}/auth/student/register`, {
      
       userId: rollNo, // idhey user Id ...
       email,

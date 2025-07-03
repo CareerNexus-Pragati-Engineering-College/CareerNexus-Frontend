@@ -19,9 +19,15 @@ const RecruiterLogin = () => {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+   const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
+  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT;
 
   useEffect(() => {
     window.scrollTo(0, 0);
+     if(localStorage.getItem("token") && localStorage.getItem("role")=="recruiter"){
+        toast.error("You are already logged in. Redirecting to Home...");
+        return navigate(`/recruiter/${localStorage.getItem("userId")}/home`);
+      }
   }, []);
 
   const handleSubmit = async (e) => {
@@ -38,7 +44,7 @@ const RecruiterLogin = () => {
         const payload = {userId:userId, password:password ,role:"recruiter"};
     try {
      
-       const response = await axios.post('http://localhost:8080/auth/login', payload);
+       const response = await axios.post(`${backendUrl}:${backendPort}/auth/login`, payload);
             toast.success(`Login successful! ${response.data?.msg} `, {
               position: "top-right",
               theme: "colored",
@@ -46,8 +52,9 @@ const RecruiterLogin = () => {
             });
             localStorage.setItem("token", response.data.token);
               localStorage.setItem("userId", userId);
+              localStorage.setItem("role","recruiter")
             // Redirect to the appropriate route based on the response
-            navigate(`/recruiter/${userId}/${response.data.router}`);
+            navigate(`/recruiter/${userId}${response.data.router}`);
       
     }
      catch (error) {

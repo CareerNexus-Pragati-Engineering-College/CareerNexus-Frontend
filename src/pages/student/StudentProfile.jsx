@@ -7,7 +7,6 @@ import { useParams } from "react-router-dom";
 import getuserId from "../../services/getUserId";
 import requestApi from "../../services/request";
 
-const userId = getuserId();
 
 
 import {
@@ -122,6 +121,8 @@ const StatSection = ({ title, solved, total, rank, buttonLabel }) => {
 const StudentProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  
+const userId = getuserId();
   const pageParam = new URLSearchParams(location.search).get("page");
   const emailfromUrl = new URLSearchParams(location.search).get("email");
   const userIdFromUrl = userId || new URLSearchParams(location.search).get("userId");
@@ -228,7 +229,7 @@ const StudentProfile = () => {
       return;
     }
   
-    console.log(student)
+    
     try {
       const payload = {
         userId: student.userId,

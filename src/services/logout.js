@@ -7,6 +7,7 @@ function logout() {
        
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
+        localStorage.removeItem('role')
         toast.success("Logout successful! Redirecting to login page...");
        
         

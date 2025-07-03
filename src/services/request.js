@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api"; // Base URL for the API
-// Ensure this matches your backend API URL   
+const API_URL = import.meta.env.VITE_APP_BACKEND_HOST + ":" + import.meta.env.VITE_APP_BACKEND_PORT+"/api"; 
 const token= localStorage.getItem("token");
 const headers = {
   "Content-Type": "application/json",

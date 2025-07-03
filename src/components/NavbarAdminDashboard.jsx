@@ -67,14 +67,7 @@ const NavbarAdmin = () => {
 
             {showDropdown && (
               <div className="absolute right-0 mt-2 w-40 bg-[#1b1433] border border-violet-500/30 rounded-lg shadow-xl p-2 z-50">
-                <NavLink
-                  to={`/student/${getUserId()}/profile?page=update`}
-                  className="flex items-center px-3 py-2 text-white hover:text-violet-400 transition rounded-md"
-                  onClick={() => setShowDropdown(false)}
-                >
-                  <FaUserCircle className="mr-2 text-lg" />
-                  Profile
-                </NavLink>
+                
                 <button
                   className="flex items-center w-full px-3 py-2 text-red-500 hover:text-red-400 transition rounded-md mt-1"
                   onClick={async () => {

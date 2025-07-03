@@ -9,14 +9,17 @@ import {
   FaBriefcase,
   FaFileAlt,
 } from "react-icons/fa";
+import getUserId from "../services/getUserId";
+import logout from "../services/logout"; // Import the logout function
 
 const NavbarRecruiterDashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
+  const userId=getUserId();
 
-  const handleLogout = () => {
-    // localStorage.removeItem("recruiterToken");
+  const handleLogout = async () => {
+await logout()
     setShowDropdown(false);
     navigate("/recruiter");
   };
@@ -25,7 +28,7 @@ const NavbarRecruiterDashboard = () => {
     <nav className="w-full fixed top-0 left-0 z-50 bg-gradient-to-r from-[#0f0c1d] via-[#1b1433] to-[#0f0c1d] shadow-md font-poppins">
       <div className="max-w-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <NavLink to="/recruiter/home" className="flex items-center gap-3">
+        <NavLink to={`/recruiter/${userId}/home`} className="flex items-center gap-3">
           <img
             src="/images/logo.png"
             alt="CareerNexus Logo"
@@ -39,14 +42,14 @@ const NavbarRecruiterDashboard = () => {
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-6 text-white text-base">
           <NavLink
-            to="/recruiter/post-job"
+            to={`/recruiter/${userId}/jobpostings`}
             className="flex items-center gap-2 hover:text-violet-400 transition"
           >
             <FaBriefcase className="text-lg text-violet-400" />
             Post Job
           </NavLink>
           <NavLink
-            to="/recruiter/applications"
+            to={`/recruiter/${userId}/applications`}
             className="flex items-center gap-2 hover:text-violet-400 transition"
           >
             <FaFileAlt className="text-lg text-violet-400" />
@@ -65,7 +68,7 @@ const NavbarRecruiterDashboard = () => {
             {showDropdown && (
               <div className="absolute right-0 mt-2 w-40 bg-[#1b1433] border border-violet-500/30 rounded-lg shadow-xl p-2 z-50">
                 <NavLink
-                  to="/recruiter/profile"
+                   to={`/recruiter/${getUserId()}/profile?page=update`}
                   className="flex items-center px-3 py-2 text-white hover:text-violet-400 transition rounded-md"
                   onClick={() => setShowDropdown(false)}
                 >
@@ -96,7 +99,7 @@ const NavbarRecruiterDashboard = () => {
       {isOpen && (
         <div className="md:hidden bg-[#0f0c1d] px-6 pb-6 space-y-4 text-white text-base">
           <NavLink
-            to="/recruiter/post-job"
+            to={`/recruiter/${userId}/jobpostings`}
             className="flex items-center gap-2 hover:text-violet-400 transition"
             onClick={() => setIsOpen(false)}
           >
@@ -104,7 +107,7 @@ const NavbarRecruiterDashboard = () => {
             Post Job
           </NavLink>
           <NavLink
-            to="/recruiter/applications"
+            to={`/recruiter/${userId}/applications`}
             className="flex items-center gap-2 hover:text-violet-400 transition"
             onClick={() => setIsOpen(false)}
           >
@@ -112,7 +115,7 @@ const NavbarRecruiterDashboard = () => {
             Applications
           </NavLink>
           <NavLink
-            to="/recruiter/profile"
+            to={`/recruiter/${getUserId()}/profile?page=update`}
             className="flex items-center gap-2 hover:text-violet-400 transition"
             onClick={() => {
               setIsOpen(false);

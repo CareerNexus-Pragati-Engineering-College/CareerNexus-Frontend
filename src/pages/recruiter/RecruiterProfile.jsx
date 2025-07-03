@@ -50,18 +50,32 @@ const RecruiterProfile = () => {
       });
     } else if (pageMode === "update") {
       setIsEditing(false);
+       const data=requestApi.get(`/recruiter/${userId}/profile`);
+    data.then((response) => {
+      const recruiterData = response.data;
       setRecruiter({
-        userId: params.userId || "",
-        firstName: "Ravi",
-        lastName: "Verma",
-        company: "TCS", 
-        designation: "Senior Recruiter",
-        phone: "9876543210",
+        firstName: recruiterData.firstName || "",
+        lastName: recruiterData.lastName || "",
+        userId: recruiterData.userId || userIdFromUrl || userId,
+        designation: recruiterData.designation,
+        email: emailfromUrl || recruiterData.email || "",
+        phone: recruiterData.phone || "",
+        company:recruiterData.company || ""
       });
+      
     }
-  }, [pageMode, params.userId]);
+    ).catch((error) => {
+      console.error("Error fetching recruiter data:", error);
+      toast.error("Failed to fetch recruiter data. Please try again later.", {
+        position: "top-right",
+        theme: "colored",
+        style: { backgroundColor: "#dc2626", color: "#fff" },
+      });
+    })
+  }}, [pageMode, userId,navigate]);
 
   if (!pageMode) {
+
     return (
       <div className="h-screen flex items-center justify-center text-red-500 text-xl">
         ❌ Invalid access: query param 'page' is missing.
@@ -99,7 +113,8 @@ const RecruiterProfile = () => {
         email: emailfromUrl || "",
       
       }
-      console.log(payload)
+      console.log("hello");
+
        const data = await requestApi.post(`/recruiter/${userId}/profile`, payload);
             
 
@@ -119,7 +134,7 @@ const RecruiterProfile = () => {
 
       if (pageMode === "data") {
         setTimeout(() => {
-          navigate("/recruiter/home");
+          navigate(`/recruiter/${userId}/home`);
         }, 2000);
       }
     } catch (error) {
@@ -145,7 +160,7 @@ const RecruiterProfile = () => {
       <NavbarRecruiterDashboard />
 
       <button
-        onClick={() => navigate("/recruiter/home")}
+        onClick={() => navigate(`/recruiter/${userId}/home`)}
         className="fixed top-20 left-4 z-50 bg-gradient-to-r from-violet-500 to-indigo-600 text-white px-4 py-2 rounded-xl shadow-md hover:scale-105 transition"
       >
         ← Back

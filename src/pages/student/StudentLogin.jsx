@@ -20,12 +20,14 @@ const StudentLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [userId, setuserId] = useState("");
   const [password, setPassword] = useState("");
+    const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
+  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT 
 
   useEffect(() => {
     window.scrollTo(0, 0);
     // Check if user is already logged in
     // If so, redirect to home page
-      if(localStorage.getItem("token")){
+      if(localStorage.getItem("token") && localStorage.getItem("role")=="student"){
         toast.error("You are already logged in. Redirecting to Home...");
         return navigate(`/student/${localStorage.getItem("userId")}/home`);
       }
@@ -42,14 +44,15 @@ const StudentLogin = () => {
 
     try {
 
-
-      const response = await axios.post("http://localhost:8080/auth/login", loginData);
+console.log(`${backendUrl}:${backendPort}`)
+      const response = await axios.post(`${backendUrl}:${backendPort}/auth/login`, loginData);
       const data = response.data;
      
         
         toast.success(`Login Successful! ..`)
         localStorage.setItem("token", data.token);
         localStorage.setItem("userId", loginData.userId);
+        localStorage.setItem("role","student")
 
         // ✅ Redirect to router path
 
