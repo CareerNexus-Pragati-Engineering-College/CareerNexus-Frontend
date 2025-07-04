@@ -69,7 +69,7 @@ const App = () => {
 
         <Route path="/student/:userId/profile" element={<ProtectedRoute> <StudentProfile /> </ProtectedRoute>} />
         <Route path="/student/:userId/company/:id" element={ <ProtectedRoute><CompanyDetails /> </ProtectedRoute> }/>
-        <Route path="/student/:userId/apply-jobs" element={ <ProtectedRoute><StudentApplyJobs /></ProtectedRoute> } />
+        <Route path="/student/apply-jobs" element={<StudentApplyJobs /> } />
         <Route path="/student/:userId/applications" element={<ProtectedRoute><StudentApplications /></ProtectedRoute>} />
         <Route path="/student/test" element={<StudentTestPage />} />
 
@@ -82,7 +82,7 @@ const App = () => {
         <Route path="/recruiter/login" element={<RecruiterLogin />} />
         <Route path="/recruiter/:userId/home" element={<ProtectedRouteRecruiter><RecruiterDashboard /></ProtectedRouteRecruiter> } />
         <Route path="/recruiter/:userId/profile" element={<ProtectedRouteRecruiter><RecruiterProfile /></ProtectedRouteRecruiter>} />
-        <Route path="/recruiter/:userId/jobpostings"  element={<ProtectedRouteRecruiter><RecruiterJob /></ProtectedRouteRecruiter>} />
+        <Route path="/recruiter/jobpostings"  element={<RecruiterJob />} />
         <Route path="/recruiter/:userId/applications" element={<ProtectedRouteRecruiter><ApplicationsPage /></ProtectedRouteRecruiter>} />
         <Route path="/recruiter/:userId/home" element={<RecruiterDashboard />} />
         <Route path="/recruiter/:userId/profile" element={<RecruiterProfile />} />
