@@ -324,6 +324,8 @@ const userId = getuserId();
               </div>
             ))}
           </div>
+
+          
           {/* Skills Section */}
   <div className="bg-white/50 border border-[#6B4ECF]/30 rounded-2xl p-4 mb-6 transform-gpu transition hover:scale-[1.01] shadow-inner">
     <h3 className="text-[#6B4ECF] font-semibold mb-2 tracking-wide">Skills</h3>
