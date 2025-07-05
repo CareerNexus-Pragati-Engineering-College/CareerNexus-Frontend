@@ -269,76 +269,56 @@ const userId = getuserId();
         ← Back
       </button>
 
-      <div className="max-w-5xl mx-auto pt-24 pb-12 space-y-10">
-        {/* Student Info Card */}
-        <motion.section
-  initial={{ opacity: 0, scale: 0.8, rotateX: 15 }}
-  animate={{ opacity: 1, scale: 1, rotateX: 0 }}
-  transition={{ type: "spring", stiffness: 100, damping: 10 }}
-  className="relative group bg-white/70 backdrop-blur-xl border border-[#6B4ECF]/30 rounded-3xl shadow-2xl p-6 sm:p-8 transform-gpu transition-all hover:shadow-2xl hover:scale-[1.02]"
-  style={{ perspective: "1000px" }}
->
-  {/* Floating spark shapes */}
-  <div className="absolute top-0 left-0 w-4 h-4 bg-[#A855F7]/50 blur-xl rounded-full animate-ping opacity-60"></div>
-  <div className="absolute bottom-0 right-0 w-6 h-6 bg-[#9333EA]/50 blur-xl rounded-full animate-pulse opacity-40"></div>
+      <div className="max-w-[820px] mx-auto pt-16 pb-8 space-y-6">
 
-  {/* Profile Avatar */}
-  <div className="flex justify-center mb-6">
-    <div className="w-24 h-24 sm:w-28 sm:h-28 border-4 border-[#6B4ECF]/40 rounded-full overflow-hidden shadow-xl ring-2 ring-white transition-transform hover:scale-105">
-      {/* Placeholder image */}
-      <img
-        src="/images/profile.png"
-        alt="Profile"
-        className="w-full h-full object-cover"
-      />
+        {/* Student Info Card */}
+       <motion.section
+  className="relative group bg-white/70 backdrop-blur-xl border border-[#6B4ECF]/30 rounded-3xl shadow-2xl p-3 sm:p-4 transform-gpu transition-all hover:shadow-2xl hover:scale-[1.02]"
+>
+  <div className="flex justify-center mb-3">
+    <div className="w-16 h-16 sm:w-20 sm:h-20 border-4 border-[#6B4ECF]/40 rounded-full overflow-hidden shadow-xl ring-2 ring-white">
+      <img src="/images/profile.png" alt="Profile" className="w-full h-full object-cover" />
     </div>
   </div>
-
-  {/* Header */}
-  <h2 className="text-2xl sm:text-3xl font-bold text-[#6B4ECF] mb-6 text-center tracking-wide drop-shadow-sm">
+  <h2 className="text-lg sm:text-xl font-bold text-[#6B4ECF] mb-3 text-center tracking-wide">
     Your Profile
   </h2>
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 text-[#4b436f]">
+    {Object.entries(student).filter(([key]) => key !== "skills").map(([key, value]) => (
+      <div key={key} className="flex flex-col">
+        <label className="text-xs font-medium text-[#6B4ECF]/70 mb-1 capitalize">{key}</label>
+        {isEditing ? (
+          <input
+            required={isDataMode}
+            name={key}
+            value={value}
+            onChange={handleInputChange}
+            className="bg-white/70 border border-[#6B4ECF]/50 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#6B4ECF]/50 shadow-sm"
+          />
+        ) : (
+          <span className="font-medium bg-white/50 px-2 py-1.5 rounded-md border border-[#6B4ECF]/20 shadow-inner">
+            {value}
+          </span>
+        )}
+      </div>
+    ))}
+  </div>
 
-          {/* Info Fields */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6 text-[#4b436f]">
-            {/* Eliminating skills from main info section */}
-            {Object.entries(student).filter(([key, value]) => key !== "skills").map(([key, value]) => (
-              <div key={key} className="flex flex-col">
-                <label className="text-xs font-medium text-[#6B4ECF]/70 mb-1 capitalize">
-                  {key}
-                </label>
-                
-                {isEditing ? (
-                  <input
-                    required={isDataMode}
-                    name={key}
-                    value={value}
-                    onChange={handleInputChange}
-                    className="bg-white/70 border border-[#6B4ECF]/50 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#6B4ECF]/50 shadow-sm"
-                  />
-                ) : (
-                  <span className="font-medium bg-white/50 px-2 py-1.5 rounded-md border border-[#6B4ECF]/20 shadow-inner">
-                    {value}
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-          {/* Skills Section */}
-  <div className="bg-white/50 border border-[#6B4ECF]/30 rounded-2xl p-4 mb-6 transform-gpu transition hover:scale-[1.01] shadow-inner">
-    <h3 className="text-[#6B4ECF] font-semibold mb-2 tracking-wide">Skills</h3>
+  {/* Skills Section */}
+  <div className="bg-white/50 border border-[#6B4ECF]/30 rounded-2xl p-2.5 mb-4">
+    <h3 className="text-[#6B4ECF] font-semibold mb-1 tracking-wide">Skills</h3>
     {isEditing && (
-      <div className="flex flex-col sm:flex-row gap-2 mb-4">
+      <div className="flex flex-col sm:flex-row gap-2 mb-2">
         <input
           value={newSkill}
           onChange={(e) => setNewSkill(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && addSkill()}
-          className="flex-1 bg-white/70 border border-[#6B4ECF]/40 rounded-lg px-3 py-1.5 text-[#2C225A] focus:outline-none focus:ring focus:ring-[#6B4ECF]/50 shadow-sm"
+          className="flex-1 bg-white/70 border border-[#6B4ECF]/40 rounded-lg px-3 py-1 text-[#2C225A]"
           placeholder="Add skill & press Enter"
         />
         <button
           onClick={addSkill}
-          className="bg-[#6B4ECF] text-white px-4 py-1.5 rounded-lg hover:bg-[#5939b8] transition shadow-md hover:shadow-lg"
+          className="bg-[#6B4ECF] text-white px-3 py-1 rounded-lg hover:bg-[#5939b8]"
         >
           Add
         </button>
@@ -349,79 +329,80 @@ const userId = getuserId();
         <motion.span
           key={s}
           whileHover={{ scale: 1.1 }}
-          className="bg-[#E4EBFE] border border-[#6B4ECF]/40 text-[#6B4ECF] px-3 py-1 rounded-full flex items-center gap-2 shadow-sm"
+          className="bg-[#E4EBFE] border border-[#6B4ECF]/40 text-[#6B4ECF] px-2.5 py-0.5 rounded-full flex items-center gap-2 shadow-sm text-sm"
         >
           {s}
           {isEditing && (
-            <button onClick={() => removeSkill(s)} className="text-red-500 hover:text-red-600 font-bold">
-              ×
-            </button>
+            <button onClick={() => removeSkill(s)} className="text-red-500 font-bold">×</button>
           )}
         </motion.span>
       ))}
     </div>
   </div>
 
-  {/* Save/Edit Button */}
-          <button
-            onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
-            className="w-full py-2 bg-[#6B4ECF] text-white rounded-xl hover:bg-[#5939b8] transition shadow-md"
-          >
-            {isEditing ? "Save" : "Edit"}
-          </button>
-        </motion.section>
+  <button
+    onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
+    className="w-full py-1.5 bg-[#6B4ECF] text-white rounded-xl hover:bg-[#5939b8]"
+  >
+    {isEditing ? "Save" : "Edit"}
+  </button>
+</motion.section>
 
-        {/* Stats */}
-        <StatSection title="Problems Solved" solved={75} total={100} rank="Gold" buttonLabel="Solve More" />
-        <StatSection title="Contests Attended" solved={12} total={20} rank="Silver" buttonLabel="Join More" />
+{/* ✅ Stat Sections */}
+<StatSection
+  title="Problems Solved"
+  solved={75}
+  total={100}
+  rank="Gold"
+  buttonLabel="Solve More"
+/>
+<StatSection
+  title="Contests Attended"
+  solved={12}
+  total={20}
+  rank="Silver"
+  buttonLabel="Join More"
+/>
 
-              {/* LeetCode Stats */}
+{/* ✅ LeetCode Stats Section */}
 <motion.section
-  initial={{ opacity: 0, y: 20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.7 }}
-  className="bg-gradient-to-br from-white/80 to-[#E4EBFE]/60 backdrop-blur-md border border-[#6B4ECF]/30 rounded-2xl p-6 shadow-lg text-center hover:shadow-xl transition-all"
+  className="bg-gradient-to-br from-white/80 to-[#E4EBFE]/60 backdrop-blur-md border border-[#6B4ECF]/30 rounded-2xl p-4 shadow-lg text-center"
 >
-  <h3 className="text-2xl font-extrabold text-[#6B4ECF] mb-6 tracking-wide">LeetCode Stats</h3>
+  <h3 className="text-lg font-extrabold text-[#6B4ECF] mb-4">LeetCode Stats</h3>
 
   {leetcodeStats ? (
-    <div className="grid gap-4 sm:grid-cols-2">
-      {/* Total Solved */}
-      <div className="col-span-2 flex items-center justify-center gap-2 bg-white/50 border border-[#6B4ECF]/20 p-4 rounded-xl shadow-inner">
-        <FaCheckCircle className="text-[#6B4ECF] text-xl" />
+    <div className="grid gap-3 sm:grid-cols-2">
+      <div className="col-span-2 flex items-center justify-center gap-2 bg-white/50 border border-[#6B4ECF]/20 p-3 rounded-xl">
+        <FaCheckCircle className="text-[#6B4ECF] text-base" />
         <span className="text-[#2C225A] font-medium">Total Solved:</span>
-        <span className="bg-[#6B4ECF] text-white px-3 py-1 rounded-full text-sm shadow-md">
+        <span className="bg-[#6B4ECF] text-white px-3 py-0.5 rounded-full text-sm">
           {leetcodeStats.totalSolved}
         </span>
       </div>
 
-      {/* Easy */}
-      <div className="bg-green-50 border border-green-200 rounded-xl p-3 flex flex-col items-center shadow-sm transition hover:scale-105">
-        <FaThumbsUp className="text-green-600 text-xl mb-1" />
+      <div className="bg-green-50 border border-green-200 rounded-xl p-2.5 flex flex-col items-center">
+        <FaThumbsUp className="text-green-600 text-base mb-1" />
         <span className="text-green-600 font-medium">Easy</span>
         <span className="font-bold text-green-800">{leetcodeStats.easySolved}</span>
       </div>
 
-      {/* Medium */}
-      <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 flex flex-col items-center shadow-sm transition hover:scale-105">
-        <FaBolt className="text-yellow-600 text-xl mb-1" />
+      <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-2.5 flex flex-col items-center">
+        <FaBolt className="text-yellow-600 text-base mb-1" />
         <span className="text-yellow-600 font-medium">Medium</span>
         <span className="font-bold text-yellow-800">{leetcodeStats.mediumSolved}</span>
       </div>
 
-      {/* Hard */}
-      <div className="bg-red-50 border border-red-200 rounded-xl p-3 flex flex-col items-center shadow-sm transition hover:scale-105">
-        <FaTrophy className="text-red-600 text-xl mb-1" />
+      <div className="bg-red-50 border border-red-200 rounded-xl p-2.5 flex flex-col items-center">
+        <FaTrophy className="text-red-600 text-base mb-1" />
         <span className="text-red-600 font-medium">Hard</span>
         <span className="font-bold text-red-800">{leetcodeStats.hardSolved}</span>
       </div>
 
-      {/* Ranking */}
-      <div className="bg-purple-50 border border-purple-200 rounded-xl p-3 flex flex-col items-center shadow-sm transition hover:scale-105">
-  <FaMedal className="text-purple-600 text-xl mb-1" />
-  <span className="text-purple-600 font-medium">Ranking</span>
-  <span className="font-bold text-purple-800">#{leetcodeStats.ranking}</span>
-</div>
+      <div className="bg-purple-50 border border-purple-200 rounded-xl p-2.5 flex flex-col items-center">
+        <FaMedal className="text-purple-600 text-base mb-1" />
+        <span className="text-purple-600 font-medium">Ranking</span>
+        <span className="font-bold text-purple-800">#{leetcodeStats.ranking}</span>
+      </div>
     </div>
   ) : (
     <p className="text-[#4b436f]">Loading stats...</p>
