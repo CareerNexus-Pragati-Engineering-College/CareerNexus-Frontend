@@ -138,9 +138,9 @@ console.log(`${backendUrl}:${backendPort}`)
               <input type="checkbox" className="accent-violet-500" />
               <span className="font-poppins">Remember me</span>
             </label>
-            <a href="#" className="hover:underline text-violet-500 font-poppins">
+            <NavLink to="/student/forgot-password" className="hover:underline text-violet-500 font-poppins">
               Forgot password?
-            </a>
+            </NavLink>
           </div>
 
           <motion.button
