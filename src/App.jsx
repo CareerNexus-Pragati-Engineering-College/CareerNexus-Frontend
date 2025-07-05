@@ -19,7 +19,7 @@ import CompanyDetails from "./pages/student/CompanyDetails";
 import StudentApplyJobs from "./pages/student/StudentApplyJobs";
 import StudentTestPage from "./pages/student/StudentTestPage";
 import StudentApplications from "./pages/student/StudentApplications";
-import StudentForgotPassword from "./pages/student/StudentForgotPassword";
+import Resources from "./pages/student/Resources";
 
 // 🏫 TPO
 import TPO from "./pages/tpo/TPO";
@@ -67,13 +67,12 @@ const App = () => {
         <Route path="/student/login" element={<StudentLogin />} />
         <Route path="/student/signup" element={<StudentSignup />} />
         <Route path="/student/:userId/home" element={ <ProtectedRoute><StudentDashboard /> </ProtectedRoute>  } />
-        <Route path="/student/profile" element={<StudentProfile /> } /> // unprotected route
         <Route path="/student/:userId/profile" element={<ProtectedRoute> <StudentProfile /> </ProtectedRoute>} />
         <Route path="/student/:userId/company/:id" element={ <ProtectedRoute><CompanyDetails /> </ProtectedRoute> }/>
-        <Route path="/student/apply-jobs" element={<StudentApplyJobs /> } />
+        <Route path="/student/:userId/apply-jobs" element={ <ProtectedRoute><StudentApplyJobs /></ProtectedRoute> } />
         <Route path="/student/:userId/applications" element={<ProtectedRoute><StudentApplications /></ProtectedRoute>} />
         <Route path="/student/test" element={<StudentTestPage />} />
-        <Route path="/student/forgot-password" element={<StudentForgotPassword />} />
+        <Route path="/student/resources" element={<Resources />} />
 
         {/* 🏫 TPO */}
         <Route path="/tpo" element={<TPO />} />
@@ -83,9 +82,8 @@ const App = () => {
         <Route path="/recruiter" element={<Recruiter />} />
         <Route path="/recruiter/login" element={<RecruiterLogin />} />
         <Route path="/recruiter/:userId/home" element={<ProtectedRouteRecruiter><RecruiterDashboard /></ProtectedRouteRecruiter> } />
-        <Route path="/recruiter/profile" element={<RecruiterProfile />} /> // unprotected route
         <Route path="/recruiter/:userId/profile" element={<ProtectedRouteRecruiter><RecruiterProfile /></ProtectedRouteRecruiter>} />
-        <Route path="/recruiter/jobpostings"  element={<RecruiterJob />} />
+        <Route path="/recruiter/:userId/jobpostings"  element={<ProtectedRouteRecruiter><RecruiterJob /></ProtectedRouteRecruiter>} />
         <Route path="/recruiter/:userId/applications" element={<ProtectedRouteRecruiter><ApplicationsPage /></ProtectedRouteRecruiter>} />
         <Route path="/recruiter/:userId/home" element={<RecruiterDashboard />} />
         <Route path="/recruiter/:userId/profile" element={<RecruiterProfile />} />
