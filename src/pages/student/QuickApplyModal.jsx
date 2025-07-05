@@ -1,19 +1,54 @@
 // src/components/QuickApplyModal.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
+import axios from "axios";
 
-const QuickApplyModal = ({ job, onClose, onApply }) => {
+const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    linkedin: "",
-    education: "",
+    FirstName: "",
+    LastName: "",
+    userId: "",
+    Department: "",
+    Year: "",
+    Cgpa: "",
+    Email: "",
+    Phone: "",
+    skills: "",
     graduationYear: "",
     resume: null,
   });
 
   const [errors, setErrors] = useState({});
+  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    const fetchStudentData = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:8000/student/${userId}/profile`
+        );
+        const data = res.data;
+
+        setFormData((prev) => ({
+          ...prev,
+          FirstName: data.FirstName || "",
+          LastName: data.LastName || "",
+          userId: data.userId || "",
+          Department: data.Department || "",
+          Year: data.Year || "",
+          Cgpa: data.Cgpa || "",
+          Email: data.Email || "",
+          Phone: data.Phone || "",
+          skills: data.skills?.join(", ") || "",
+          graduationYear: data.graduationYear || "",
+        }));
+      } catch (error) {
+        console.error("Failed to fetch student data:", error);
+      }
+    };
+
+    if (userId) fetchStudentData();
+  }, [userId]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -26,12 +61,11 @@ const QuickApplyModal = ({ job, onClose, onApply }) => {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.fullName.trim()) newErrors.fullName = "Required";
-    if (!formData.email.trim()) newErrors.email = "Required";
-    if (!formData.phone.trim()) newErrors.phone = "Required";
-    if (!formData.linkedin.trim()) newErrors.linkedin = "Required";
-    if (!formData.education.trim()) newErrors.education = "Required";
-    if (!formData.graduationYear.trim()) newErrors.graduationYear = "Required";
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key !== "resume" && !value.trim()) {
+        newErrors[key] = "Required";
+      }
+    });
     if (!formData.resume) newErrors.resume = "Required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -40,6 +74,7 @@ const QuickApplyModal = ({ job, onClose, onApply }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validate()) return;
+
     const appliedJob = {
       ...job,
       applied: true,
@@ -51,7 +86,7 @@ const QuickApplyModal = ({ job, onClose, onApply }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg w-full max-w-lg shadow-xl relative overflow-y-auto max-h-[90vh]">
+      <div className="bg-white p-6 rounded-lg w-full max-w-2xl shadow-xl relative overflow-y-auto max-h-[90vh]">
         <button
           className="absolute top-3 right-4 text-gray-500 hover:text-red-500"
           onClick={onClose}
@@ -60,104 +95,59 @@ const QuickApplyModal = ({ job, onClose, onApply }) => {
         </button>
 
         <h3 className="text-xl font-semibold mb-1 text-gray-800">
-          Apply for {job.title}
+          Apply for {job.job_title}
         </h3>
-        <p className="text-sm text-gray-500 mb-4">{job.company}</p>
+        <p className="text-sm text-gray-500 mb-4">{job.company_name}</p>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Full Name */}
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Full Name <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            />
-            {errors.fullName && <p className="text-red-500 text-xs">{errors.fullName}</p>}
-          </div>
-
-          {/* Email */}
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Email Address <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            />
-            {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
-          </div>
-
-          {/* Phone */}
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Phone Number <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            />
-            {errors.phone && <p className="text-red-500 text-xs">{errors.phone}</p>}
-          </div>
-
-          {/* LinkedIn */}
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              LinkedIn Profile <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="url"
-              name="linkedin"
-              value={formData.linkedin}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            />
-            {errors.linkedin && <p className="text-red-500 text-xs">{errors.linkedin}</p>}
-          </div>
-
-          {/* Education */}
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Highest Education Qualification <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              name="education"
-              value={formData.education}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            />
-            {errors.education && <p className="text-red-500 text-xs">{errors.education}</p>}
-          </div>
-
-          {/* Graduation Year */}
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Year of Graduation <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="number"
-              name="graduationYear"
-              value={formData.graduationYear}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            />
-            {errors.graduationYear && <p className="text-red-500 text-xs">{errors.graduationYear}</p>}
-          </div>
+        <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4 text-sm">
+          {[
+            "FirstName",
+            "LastName",
+            "userId",
+            "Department",
+            "Year",
+            "Cgpa",
+            "Email",
+            "Phone",
+            "skills",
+            "graduationYear",
+          ].map((field) => (
+            <div key={field} className="col-span-1">
+              <label className="font-medium text-gray-700">
+                {field === "Cgpa"
+                  ? "CGPA"
+                  : field === "userId"
+                  ? "User ID"
+                  : field === "Email"
+                  ? "Email Address"
+                  : field === "Phone"
+                  ? "Phone Number"
+                  : field === "skills"
+                  ? "Skills"
+                  : field === "graduationYear"
+                  ? "Graduation Year"
+                  : field.replace(/([A-Z])/g, " $1")}{" "}
+                <span className="text-red-500">*</span>
+              </label>
+              <input
+                type={field === "graduationYear" ? "number" : "text"}
+                name={field}
+                value={formData[field]}
+                onChange={handleChange}
+                readOnly={!isEditing}
+                className={`w-full border ${
+                  isEditing ? "bg-white" : "bg-gray-100"
+                } border-gray-300 rounded px-3 py-2 mt-1`}
+              />
+              {errors[field] && (
+                <p className="text-red-500 text-xs">{errors[field]}</p>
+              )}
+            </div>
+          ))}
 
           {/* Resume Upload */}
-          <div>
-            <label className="text-sm font-medium text-gray-700">
+          <div className="col-span-2">
+            <label className="font-medium text-gray-700">
               Upload Resume (PDF) <span className="text-red-500">*</span>
             </label>
             <input
@@ -165,17 +155,29 @@ const QuickApplyModal = ({ job, onClose, onApply }) => {
               name="resume"
               accept=".pdf"
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+              className="w-full border border-gray-300 rounded px-3 py-2 mt-1"
             />
-            {errors.resume && <p className="text-red-500 text-xs">{errors.resume}</p>}
+            {errors.resume && (
+              <p className="text-red-500 text-xs">{errors.resume}</p>
+            )}
           </div>
 
-          <button
-            type="submit"
-            className="bg-purple-700 hover:bg-purple-800 text-white w-full py-2 rounded font-semibold text-sm"
-          >
-            Submit Application
-          </button>
+          {/* Buttons */}
+          <div className="col-span-2 flex justify-between items-center mt-4">
+            <button
+              type="button"
+              onClick={() => setIsEditing((prev) => !prev)}
+              className="text-sm text-purple-700 underline"
+            >
+              {isEditing ? "Cancel Edit" : "Edit"}
+            </button>
+            <button
+              type="submit"
+              className="bg-purple-700 hover:bg-purple-800 text-white px-6 py-2 rounded text-sm font-semibold"
+            >
+              Confirm
+            </button>
+          </div>
         </form>
       </div>
     </div>

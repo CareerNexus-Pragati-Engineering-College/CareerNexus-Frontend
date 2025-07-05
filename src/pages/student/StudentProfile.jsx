@@ -64,7 +64,7 @@ const RibbonBadge = ({ rank }) => {
         </div>
       </div>
       <span className="absolute opacity-0 group-hover:opacity-100 -translate-x-1/2 left-1/2 -bottom-8 bg-black/70 text-white text-xs px-2 py-1 rounded-full">
-        {rank} Achievement
+        {rank + "Achievement"} 
       </span>
     </motion.div>
   );
@@ -169,6 +169,8 @@ const userId = getuserId();
   const [isEditing, setIsEditing] = useState(isDataMode);
   const [newSkill, setNewSkill] = useState("");
   const [skills, setSkills] = useState([]);
+  const [profileLinks, setProfileLinks] = useState([]); // Array of { platform, url }
+  const [newLink, setNewLink] = useState({ platform: "", url: "" });
   const [leetcodeStats, setLeetcodeStats] = useState(null);
   const [student, setStudent] = useState({
     FirstName: "",
@@ -180,7 +182,7 @@ const userId = getuserId();
     Email: "",
     Phone: "",
     skills: " ",
-   
+    graduationYear: "",
   });
 
   useEffect(() => {
@@ -221,15 +223,14 @@ const userId = getuserId();
 
   const handleSave = () => {
     const isEmpty = Object.values(student).some(value => value === "" || value === null);
-    if (isEmpty) {
-      toast.error("Please fill all fields before saving.", {
+    if (isEmpty || profileLinks.length === 0) {
+      toast.error("Please fill all fields and add profile links.", {
         position: "top-right",
         theme: "colored",
       });
       return;
     }
-  
-    
+
     try {
       const payload = {
         userId: student.userId,
@@ -241,16 +242,18 @@ const userId = getuserId();
         cgpa: student.Cgpa,
         phone: student.Phone,
         year: student.Year,
+        graduationYear: student.graduationYear,
+        profileLinks: profileLinks,
       };
       const data = requestApi.post(`/student/${userId}/profile`, payload);
       toast.success("Data saved successfully!", {
-      position: "top-right",
-      theme: "colored",
+        position: "top-right",
+        theme: "colored",
       });
     } catch (error) {
       toast.error("Failed to save data. Please try again.", {
-      position: "top-right",
-      theme: "colored",
+        position: "top-right",
+        theme: "colored",
       });
     }
     setIsEditing(false);
@@ -284,7 +287,7 @@ const userId = getuserId();
     Your Profile
   </h2>
   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 text-[#4b436f]">
-    {Object.entries(student).filter(([key]) => key !== "skills").map(([key, value]) => (
+    {Object.entries(student).filter(([key]) => key !== "skills" && key !== "graduationYear").map(([key, value]) => (
       <div key={key} className="flex flex-col">
         <label className="text-xs font-medium text-[#6B4ECF]/70 mb-1 capitalize">{key}</label>
         {isEditing ? (
@@ -302,6 +305,24 @@ const userId = getuserId();
         )}
       </div>
     ))}
+
+    {/* Graduation Year */}
+    <div className="flex flex-col">
+      <label className="text-xs font-medium text-[#6B4ECF]/70 mb-1">Graduation Year</label>
+      {isEditing ? (
+        <input
+          type="date"
+          name="graduationYear"
+          value={student.graduationYear}
+          onChange={handleInputChange}
+          className="bg-white/70 border border-[#6B4ECF]/50 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#6B4ECF]/50 shadow-sm"
+        />
+      ) : (
+        <span className="font-medium bg-white/50 px-2 py-1.5 rounded-md border border-[#6B4ECF]/20 shadow-inner">
+          {student.graduationYear}
+        </span>
+      )}
+    </div>
   </div>
 
   {/* Skills Section */}
@@ -339,6 +360,82 @@ const userId = getuserId();
       ))}
     </div>
   </div>
+    {isEditing && (
+  <div className="bg-white/50 border border-[#6B4ECF]/30 rounded-2xl p-2.5 mb-4">
+    <h3 className="text-[#6B4ECF] font-semibold mb-1 tracking-wide">Add Profile Links (Max 4)</h3>
+    <div className="flex flex-col sm:flex-row gap-2 mb-2">
+      <select
+        value={newLink.platform}
+        onChange={(e) => setNewLink({ ...newLink, platform: e.target.value })}
+        className="flex-1 bg-white/70 border border-[#6B4ECF]/40 rounded-lg px-3 py-1 text-[#2C225A]"
+      >
+        <option value="">Select Platform</option>
+        <option value="GitHub">GitHub</option>
+        <option value="LinkedIn">LinkedIn</option>
+        <option value="HackerRank">HackerRank</option>
+        <option value="LeetCode">LeetCode</option>
+      </select>
+      <input
+        type="url"
+        placeholder="Paste link"
+        value={newLink.url}
+        onChange={(e) => setNewLink({ ...newLink, url: e.target.value })}
+        className="flex-1 bg-white/70 border border-[#6B4ECF]/40 rounded-lg px-3 py-1 text-[#2C225A]"
+      />
+      <button
+        onClick={() => {
+          if (
+            newLink.platform &&
+            newLink.url &&
+            !profileLinks.some(link => link.platform === newLink.platform) &&
+            profileLinks.length < 4
+          ) {
+            setProfileLinks([...profileLinks, newLink]);
+            setNewLink({ platform: "", url: "" });
+          }
+        }}
+        className="bg-[#6B4ECF] text-white px-3 py-1 rounded-lg hover:bg-[#5939b8]"
+      >
+        Add
+      </button>
+    </div>
+    <div className="flex flex-wrap gap-2">
+      {profileLinks.map((link, index) => (
+        <div
+          key={index}
+          className="bg-[#E4EBFE] border border-[#6B4ECF]/40 text-[#6B4ECF] px-2.5 py-1 rounded-md flex items-center gap-2 text-sm"
+        >
+          <a href={link.url} target="_blank" rel="noopener noreferrer" className="underline">
+            {link.platform}
+          </a>
+          <button
+            onClick={() => {
+              setProfileLinks(profileLinks.filter((_, i) => i !== index));
+            }}
+            className="text-red-500 font-bold"
+          >
+            ×
+          </button>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+{!isEditing && profileLinks.length > 0 && (
+  <div className="bg-white/50 border border-[#6B4ECF]/30 rounded-2xl p-2.5 mb-4">
+    <h3 className="text-[#6B4ECF] font-semibold mb-1 tracking-wide">Profile Links</h3>
+    <ul className="list-disc list-inside text-sm text-[#4b436f]">
+      {profileLinks.map((link, idx) => (
+        <li key={idx}>
+          <a href={link.url} className="text-blue-700 underline" target="_blank" rel="noreferrer">
+            {link.platform}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
 
   <button
     onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
