@@ -56,12 +56,13 @@ html, body {
   animation: marquee 20s linear infinite;
 }
 
-/* Hide scrollbar for all browsers */
-.scrollbar-hide {
-  scrollbar-width: none; /* Firefox */
-}
+/* index.css or App.css */
 .scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Safari and Chrome */
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE & Edge */
+  scrollbar-width: none;     /* Firefox */
 }
 
 

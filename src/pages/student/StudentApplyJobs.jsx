@@ -1,4 +1,5 @@
 // src/pages/student/StudentApplyJobs.jsx
+
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -12,7 +13,10 @@ import {
 import { LuPenLine } from "react-icons/lu";
 import NavbarStudentDashboard from "../../components/NavbarStudentDashboard";
 import QuickApplyModal from "./QuickApplyModal";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
+// ------------------ Dummy Data ------------------
 const dummyJobs = [
   {
     id: 1,
@@ -41,19 +45,32 @@ const dummyJobs = [
 ];
 
 const StudentApplyJobs = () => {
+  // ------------------ State Setup ------------------
   const [selectedTab, setSelectedTab] = useState("Recommended");
   const [jobs, setJobs] = useState(dummyJobs);
   const [selectedJob, setSelectedJob] = useState(dummyJobs[0]);
   const [filters, setFilters] = useState({ location: "", role: "" });
+  const [tempPrefs, setTempPrefs] = useState({ location: "", role: "" });
   const [isPrefModalOpen, setIsPrefModalOpen] = useState(false);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const { userId } = useParams();
 
+  // ------------------ Load Preferences ------------------
   useEffect(() => {
     const prefs = JSON.parse(localStorage.getItem("jobPreferences"));
-    if (prefs) setFilters(prefs);
+    if (prefs) {
+      setFilters(prefs);
+      setTempPrefs(prefs);
+    }
   }, []);
 
+  useEffect(() => {
+    if (isPrefModalOpen) {
+      setTempPrefs(filters);
+    }
+  }, [isPrefModalOpen]);
+
+  // ------------------ Save/Unsave Job ------------------
   const toggleSave = (id) => {
     const updated = jobs.map((job) =>
       job.id === id ? { ...job, saved: !job.saved } : job
@@ -62,16 +79,7 @@ const StudentApplyJobs = () => {
     localStorage.setItem("jobs", JSON.stringify(updated));
   };
 
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSavePreferences = () => {
-    localStorage.setItem("jobPreferences", JSON.stringify(filters));
-    setIsPrefModalOpen(false);
-  };
-
+  // ------------------ Filtered Jobs ------------------
   const filteredJobs = jobs.filter((job) => {
     return (
       (filters.location ? job.location === filters.location : true) &&
@@ -82,10 +90,14 @@ const StudentApplyJobs = () => {
 
   return (
     <>
+      {/* ------------------ Navbar ------------------ */}
       <NavbarStudentDashboard />
 
+      {/* ------------------ Main Container ------------------ */}
       <div className="min-h-screen bg-white text-gray-900 font-poppins px-4 pt-24 pb-6">
         <div className="max-w-7xl mx-auto">
+
+          {/* ------------------ Header ------------------ */}
           <div className="px-1 mb-4 flex justify-between items-center">
             <h2 className="text-lg font-semibold">Jobs for you</h2>
             <button
@@ -96,6 +108,7 @@ const StudentApplyJobs = () => {
             </button>
           </div>
 
+          {/* ------------------ Tabs ------------------ */}
           <div className="flex gap-6 border-b mb-6 text-sm px-1">
             {["Recommended", "Saved"].map((tab) => (
               <button
@@ -112,8 +125,10 @@ const StudentApplyJobs = () => {
             ))}
           </div>
 
+          {/* ------------------ Content Grid ------------------ */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Job List */}
+
+            {/* ------------------ Job List ------------------ */}
             <div className="space-y-4 max-h-[75vh] overflow-y-auto pr-2 scrollbar-hide">
               {filteredJobs.map((job) => (
                 <div
@@ -150,9 +165,9 @@ const StudentApplyJobs = () => {
               ))}
             </div>
 
-            {/* Job Details */}
+            {/* ------------------ Job Details Panel ------------------ */}
             {selectedJob && (
-              <div className="bg-gray-50 p-6 rounded-xl shadow space-y-5 overflow-y-auto max-h-[75vh] border border-purple-300">
+              <div className="bg-gray-50 p-6 rounded-xl shadow space-y-5 overflow-y-auto max-h-[75vh] border border-purple-300 scrollbar-hide">
                 <div className="flex gap-4 items-center">
                   <div className="bg-purple-100 text-purple-700 rounded-lg p-2">
                     <FaBuilding size={28} />
@@ -207,7 +222,7 @@ const StudentApplyJobs = () => {
         </div>
       </div>
 
-      {/* Preferences Modal */}
+      {/* ------------------ Preferences Modal ------------------ */}
       {isPrefModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-xl">
@@ -220,8 +235,13 @@ const StudentApplyJobs = () => {
                   </label>
                   <select
                     name={key}
-                    value={filters[key]}
-                    onChange={handleFilterChange}
+                    value={tempPrefs[key]}
+                    onChange={(e) =>
+                      setTempPrefs((prev) => ({
+                        ...prev,
+                        [e.target.name]: e.target.value,
+                      }))
+                    }
                     className="w-full border rounded px-3 py-2 text-sm"
                   >
                     <option value="">Any</option>
@@ -236,11 +256,32 @@ const StudentApplyJobs = () => {
             </div>
 
             <div className="mt-6 flex justify-end gap-3">
-              <button onClick={() => setIsPrefModalOpen(false)} className="text-gray-600 text-sm">
+              <button
+                onClick={() => setIsPrefModalOpen(false)}
+                className="text-gray-600 text-sm"
+              >
                 Cancel
               </button>
               <button
-                onClick={handleSavePreferences}
+                onClick={() => {
+                  setFilters(tempPrefs);
+                  localStorage.setItem("jobPreferences", JSON.stringify(tempPrefs));
+                  setIsPrefModalOpen(false);
+                  toast.success("Preferences updated successfully!", {
+                  position: "top-right",
+                  autoClose: 2500,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  draggable: true,
+                  className:"!top-[85px] !right-6 !absolute bg-white border border-purple-300 text-purple-800 rounded-xl shadow-lg px-4 py-3 font-medium z-[9999]",bodyClassName: "text-sm",
+                  closeButton: ({ closeToast }) => (
+                  <button
+                  onClick={closeToast}
+                  className="ml-3 text-red-500 hover:text-red-600 text-lg leading-none font-bold" aria-label="Close" >&times;
+                  </button>
+                  ),
+                });
+                }}
                 className="bg-purple-700 text-white px-4 py-2 text-sm rounded"
               >
                 Save Preferences
@@ -250,7 +291,7 @@ const StudentApplyJobs = () => {
         </div>
       )}
 
-      {/* Apply Modal */}
+      {/* ------------------ Apply Modal ------------------ */}
       {showApplyModal && (
         <QuickApplyModal
           job={selectedJob}
@@ -262,8 +303,12 @@ const StudentApplyJobs = () => {
             setJobs(updatedJobs);
             setShowApplyModal(false);
           }}
+          userId={userId}
         />
       )}
+
+      {/* ------------------ Toast Container ------------------ */}
+      <ToastContainer newestOnTop closeOnClick draggable />
     </>
   );
 };
