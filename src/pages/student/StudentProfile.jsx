@@ -17,6 +17,20 @@ import {
   FaMedal,
 } from "react-icons/fa";
 
+//parse data from jsonstringfy daata from backend
+function parseArray(value) {
+  if (!value) return [];
+  try {
+    const parsed = JSON.parse(value);
+   
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (err) {
+    console.error("Failed to parse array:", err);
+    return [];
+  }
+}
+
+
 const useInView = (offset = 150) => {
   const ref = useRef(null);
   const [inView, setInView] = useState(false);
@@ -141,20 +155,27 @@ const userId = getuserId();
    else if (pageParam === "update" && userId) {
     // If in update mode, set student data from backend 
     const data=requestApi.get(`/student/${userId}/profile`);
+  
     data.then((response) => {
       const studentData = response.data;
-      setStudent({
-        FirstName: studentData.firstName || "",
-        LastName: studentData.lastName || "",
-        userId: studentData.userId || userIdFromUrl || userId,
-        Department: studentData.department || "",
-        Year: studentData.year || "",
-        Cgpa: studentData.cgpa || "",
-        Email: emailfromUrl || studentData.email || "",
-        Phone: studentData.phone || "",
-        skills: studentData.skills || [],
-      });
-      setSkills(studentData.skills || []);
+      
+     setStudent({
+  FirstName: studentData?.firstName || "",
+  LastName: studentData?.lastName || "",
+  userId: studentData?.userId || userIdFromUrl || userId || "",
+  Department: studentData?.department || "",
+  Year: studentData?.year || "",
+  Cgpa: studentData?.cgpa || "",
+  Email: emailfromUrl || studentData?.email || "",
+  Phone: studentData?.phone || "",
+  skills: parseArray(studentData?.skills) || [],
+ graduationYear
+: studentData?.graduationYear || "",
+ 
+});
+
+      setSkills( parseArray(studentData?.skills) || []);
+      setProfileLinks( parseArray(studentData?.urls) || []);
     }
     ).catch((error) => {
       console.error("Error fetching student data:", error);
@@ -201,6 +222,7 @@ const userId = getuserId();
       .then(data => setLeetcodeStats(data));
   }, [isDataMode]);
 
+
   const handleInputChange = e => {
       //here added technique to save skills in student object
     const { name, value } = e.target;
@@ -221,7 +243,7 @@ const userId = getuserId();
   const removeSkill = skill =>
     setSkills(prev => prev.filter(s => s !== skill));
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const isEmpty = Object.values(student).some(value => value === "" || value === null);
     if (isEmpty || profileLinks.length === 0) {
       toast.error("Please fill all fields and add profile links.", {
@@ -234,7 +256,7 @@ const userId = getuserId();
     try {
       const payload = {
         userId: student.userId,
-        skills: skills,
+        skills: JSON.stringify(skills),
         email: student.Email,
         firstName: student.FirstName,
         lastName: student.LastName,
@@ -242,11 +264,12 @@ const userId = getuserId();
         cgpa: student.Cgpa,
         phone: student.Phone,
         year: student.Year,
-        graduationYear: student.graduationYear,
-        profileLinks: profileLinks,
+         graduationYear: student.graduationYear,
+        urls: JSON.stringify(profileLinks),
       };
-      const data = requestApi.post(`/student/${userId}/profile`, payload);
-      toast.success("Data saved successfully!", {
+      console.log(payload);
+      const data = await requestApi.post(`/student/${userId}/profile`, payload);
+      await toast.success("Data saved successfully!", {
         position: "top-right",
         theme: "colored",
       });
@@ -255,6 +278,7 @@ const userId = getuserId();
         position: "top-right",
         theme: "colored",
       });
+     
     }
     setIsEditing(false);
     if (isDataMode) {
@@ -302,7 +326,8 @@ const userId = getuserId();
     Your Profile
   </h2>
   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 text-[#4b436f]">
-    {Object.entries(student).filter(([key]) => key !== "skills" && key !== "graduationYear").map(([key, value]) => (
+    {Object.entries(student).filter(([key]) => key !== "skills" ).map(([key, value]) => (
+    
       <div key={key} className="flex flex-col">
         <label className="text-xs font-medium text-[#6B4ECF]/70 mb-1 capitalize">{key}</label>
         {isEditing ? (
@@ -321,25 +346,12 @@ const userId = getuserId();
       </div>
     ))}
 
-    {/* Graduation Year */}
-    <div className="flex flex-col">
-      <label className="text-xs font-medium text-[#6B4ECF]/70 mb-1">Graduation Year</label>
-      {isEditing ? (
-        <input
-          type="date"
-          name="graduationYear"
-          value={student.graduationYear}
-          onChange={handleInputChange}
-          className="bg-white/70 border border-[#6B4ECF]/50 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#6B4ECF]/50 shadow-sm"
-        />
-      ) : (
-        <span className="font-medium bg-white/50 px-2 py-1.5 rounded-md border border-[#6B4ECF]/20 shadow-inner">
-          {student.graduationYear}
-        </span>
-      )}
-    </div>
+    
   </div>
 
+        
+
+          
           {/* Skills Section */}
   <div className="bg-white/50 border border-[#6B4ECF]/30 rounded-2xl p-4 mb-6 transform-gpu transition hover:scale-[1.01] shadow-inner">
     <h3 className="text-[#6B4ECF] font-semibold mb-2 tracking-wide">Skills</h3>

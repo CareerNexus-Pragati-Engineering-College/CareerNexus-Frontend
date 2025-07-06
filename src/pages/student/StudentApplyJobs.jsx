@@ -6,62 +6,74 @@ import {
   FaBookmark,
   FaRegBookmark,
   FaBuilding,
-  FaClock,
-  FaMapMarkerAlt,
   FaBolt,
 } from "react-icons/fa";
 import { LuPenLine } from "react-icons/lu";
 import NavbarStudentDashboard from "../../components/NavbarStudentDashboard";
 import QuickApplyModal from "./QuickApplyModal";
+import requestApi from "../../services/request";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// ------------------ Dummy Data ------------------
-const dummyJobs = [
-  {
-    id: 1,
-    company_name: "TechTammina",
-    job_title: "Frontend Developer Intern",
-    job_description: "Work with React and Tailwind to build intuitive UIs.",
-    recruitment_process: "Portfolio Review > Technical Round > HR",
-    salary_package: "Stipend: ₹15,000/month",
-    location: "Remote",
-    application_deadline: "2025-07-20",
-    saved: false,
-    applied: false,
-  },
-  {
-    id: 2,
-    company_name: "DataBridge Analytics",
-    job_title: "Data Analyst",
-    job_description: "Analyze trends, create reports using SQL and Power BI.",
-    recruitment_process: "Online Test > Interview",
-    salary_package: "₹6 LPA",
-    location: "Bangalore",
-    application_deadline: "2025-07-25",
-    saved: false,
-    applied: false,
-  },
-];
+
 
 const StudentApplyJobs = () => {
   // ------------------ State Setup ------------------
   const [selectedTab, setSelectedTab] = useState("Recommended");
-  const [jobs, setJobs] = useState(dummyJobs);
-  const [selectedJob, setSelectedJob] = useState(dummyJobs[0]);
+  const [jobs, setJobs] = useState([]);
+  const [selectedJob, setSelectedJob] = useState(null);
   const [filters, setFilters] = useState({ location: "", role: "" });
   const [tempPrefs, setTempPrefs] = useState({ location: "", role: "" });
   const [isPrefModalOpen, setIsPrefModalOpen] = useState(false);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const { userId } = useParams();
 
-  // ------------------ Load Preferences ------------------
+
+  const parseLocation = (loc) => {
+    if (Array.isArray(loc)) return loc.join(", ");
+    try {
+      const parsed = JSON.parse(loc);
+      return Array.isArray(parsed) ? parsed.join(", ") : parsed;
+    } catch {
+      return loc || "N/A";
+    }
+  };
+
   useEffect(() => {
     const prefs = JSON.parse(localStorage.getItem("jobPreferences"));
-    if (prefs) {
-      setFilters(prefs);
-      setTempPrefs(prefs);
-    }
+    if (prefs) setFilters(prefs);
+
+    const fetchJobs = async () => {
+      try {
+        const res = await requestApi.get(`/job/all-jobs`);
+        console.log("Fetched jobs:", res.data);
+        const jobsWithSaved = res.data.map((job) => ({
+          job_title: job.jobTitle,
+          company_name: job.companyName,
+          job_description: job.jobDescription,
+          recruitment_process: job.recruitmentProcess,
+          salary_package: job.salaryPackage,
+          location: job.locations,
+          application_deadline: job.applicationDeadline.time
+            ? new Date(job.applicationDeadline.time).toLocaleDateString("en-US", {  
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+            : job.applicationDeadline,
+         
+          id: job.id,
+         
+          saved: false,
+          applied: false,
+        }));
+        setJobs(jobsWithSaved);
+        setSelectedJob(jobsWithSaved[0]);
+      } catch {
+        alert("Failed to fetch jobs");
+      }
+    };
+    fetchJobs();
   }, []);
 
   useEffect(() => {
@@ -81,8 +93,9 @@ const StudentApplyJobs = () => {
 
   // ------------------ Filtered Jobs ------------------
   const filteredJobs = jobs.filter((job) => {
+    const jobLoc = parseLocation(job.location);
     return (
-      (filters.location ? job.location === filters.location : true) &&
+      (filters.location ? jobLoc.includes(filters.location) : true) &&
       (filters.role ? job.job_title === filters.role : true) &&
       (selectedTab === "Saved" ? job.saved : true)
     );
@@ -135,7 +148,9 @@ const StudentApplyJobs = () => {
                   key={job.id}
                   onClick={() => setSelectedJob(job)}
                   className={`cursor-pointer border p-4 rounded-xl flex gap-4 items-start hover:shadow ${
-                    selectedJob?.id === job.id ? "border-purple-600" : "border-gray-200"
+                    selectedJob?.id === job.id
+                      ? "border-purple-600"
+                      : "border-gray-200"
                   }`}
                 >
                   <div className="bg-purple-100 text-purple-700 rounded-lg p-2">
@@ -144,7 +159,9 @@ const StudentApplyJobs = () => {
                   <div className="flex-1">
                     <h3 className="font-semibold text-sm mb-1">{job.job_title}</h3>
                     <p className="text-xs text-gray-500">{job.company_name}</p>
-                    <p className="text-xs text-gray-500">{job.location}</p>
+                    <p className="text-xs text-gray-500">
+                      {parseLocation(job.location)}
+                    </p>
                     <p className="text-xs text-gray-400">
                       Deadline: {job.application_deadline}
                     </p>
@@ -214,7 +231,7 @@ const StudentApplyJobs = () => {
 
                 <div>
                   <h4 className="font-semibold mb-1">Location</h4>
-                  <p className="text-sm text-gray-700">{selectedJob.location}</p>
+                  <p className="text-sm text-gray-700">{parseLocation(selectedJob.location)}</p>
                 </div>
               </div>
             )}
@@ -245,7 +262,22 @@ const StudentApplyJobs = () => {
                     className="w-full border rounded px-3 py-2 text-sm"
                   >
                     <option value="">Any</option>
-                    {[...new Set(jobs.map((j) => j[key === "role" ? "job_title" : "location"]))].map((val) => (
+                    {[...new Set(
+                      jobs.flatMap((j) =>
+                        key === "role"
+                          ? [j.job_title]
+                          : (() => {
+                              try {
+                                const parsed = JSON.parse(j.location);
+                                return Array.isArray(parsed) ? parsed : [parsed];
+                              } catch {
+                                return Array.isArray(j.location)
+                                  ? j.location
+                                  : [j.location];
+                              }
+                            })()
+                      )
+                    )].map((val) => (
                       <option key={val} value={val}>
                         {val}
                       </option>
