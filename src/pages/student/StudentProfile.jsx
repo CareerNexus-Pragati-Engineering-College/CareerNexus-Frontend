@@ -340,33 +340,6 @@ const userId = getuserId();
     </div>
   </div>
 
-          {/* Info Fields */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6 text-[#4b436f]">
-            {/* Eliminating skills from main info section */}
-            {Object.entries(student).filter(([key, value]) => key !== "skills").map(([key, value]) => (
-              <div key={key} className="flex flex-col">
-                <label className="text-xs font-medium text-[#6B4ECF]/70 mb-1 capitalize">
-                  {key}
-                </label>
-                
-                {isEditing ? (
-                  <input
-                    required={isDataMode}
-                    name={key}
-                    value={value}
-                    onChange={handleInputChange}
-                    className="bg-white/70 border border-[#6B4ECF]/50 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#6B4ECF]/50 shadow-sm"
-                  />
-                ) : (
-                  <span className="font-medium bg-white/50 px-2 py-1.5 rounded-md border border-[#6B4ECF]/20 shadow-inner">
-                    {value}
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-
-          
           {/* Skills Section */}
   <div className="bg-white/50 border border-[#6B4ECF]/30 rounded-2xl p-4 mb-6 transform-gpu transition hover:scale-[1.01] shadow-inner">
     <h3 className="text-[#6B4ECF] font-semibold mb-2 tracking-wide">Skills</h3>
