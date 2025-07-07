@@ -159,6 +159,9 @@ const StudentApplyJobs = () => {
                   <div className="flex-1">
                     <h3 className="font-semibold text-sm mb-1">{job.job_title}</h3>
                     <p className="text-xs text-gray-500">{job.company_name}</p>
+                     <p className="text-xs text-gray-800">
+                     Job Id: {job.id}
+                    </p>
                     <p className="text-xs text-gray-500">
                       {parseLocation(job.location)}
                     </p>
@@ -190,8 +193,12 @@ const StudentApplyJobs = () => {
                     <FaBuilding size={28} />
                   </div>
                   <div>
+                  
                     <h3 className="text-xl font-bold">{selectedJob.job_title}</h3>
                     <p className="text-sm text-gray-600">{selectedJob.company_name}</p>
+                    <p className="text-xs text-gray-800">
+                     Job Id: {selectedJob.id}
+                    </p>
                     <p className="text-xs text-gray-400">
                       Deadline: {selectedJob.application_deadline}
                     </p>

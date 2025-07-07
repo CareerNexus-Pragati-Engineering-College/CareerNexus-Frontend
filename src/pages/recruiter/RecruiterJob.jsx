@@ -67,7 +67,7 @@ const RecruiterJob = () => {
             job_description: job.jobDescription || job.job_description,
             recruitment_process: job.recruitmentProcess || job.recruitment_process,
             salary_package: job.salaryPackage || job.salary_package,
-            locations: job.locations || job.location,
+            locations: parseLocations(job.locations) || parseLocations(job.location),
             application_deadline: job.applicationDeadline || job.application_deadline,  
           }));
         })
@@ -394,7 +394,7 @@ const RecruiterJob = () => {
               </p>
              <p className="text-sm text-gray-500 mb-2">
   <span className="font-semibold">Locations:</span>{" "}
-  {parseLocations(job.location || job.locations)}
+  {parseLocations(job.location || job.locations).join(" , ")}
 </p>
 
               <p className="text-sm text-gray-500">
@@ -471,7 +471,7 @@ const RecruiterJob = () => {
             <p className="text-md text-gray-700 mb-3">
               <strong>Locations: </strong> 
               
-             {parseLocations(selectedJob.location || selectedJob.locations)}
+             {parseLocations(selectedJob.location || selectedJob.locations).join(" , ")}
 
 
             </p>
