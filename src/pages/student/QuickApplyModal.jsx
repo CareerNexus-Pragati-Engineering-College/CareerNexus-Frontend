@@ -18,19 +18,18 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
     resume: null,
   });
 
+  const [originalData, setOriginalData] = useState({});
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
+  const [isModified, setIsModified] = useState(false);
 
   useEffect(() => {
     const fetchStudentData = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:8000/student/${userId}/profile`
-        );
+        const res = await axios.get(`http://localhost:8000/student/${userId}/profile`);
         const data = res.data;
 
-        setFormData((prev) => ({
-          ...prev,
+        const populated = {
           FirstName: data.FirstName || "",
           LastName: data.LastName || "",
           userId: data.userId || "",
@@ -41,7 +40,11 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
           Phone: data.Phone || "",
           skills: data.skills?.join(", ") || "",
           graduationYear: data.graduationYear || "",
-        }));
+          resume: null,
+        };
+
+        setFormData(populated);
+        setOriginalData(populated);
       } catch (error) {
         console.error("Failed to fetch student data:", error);
       }
@@ -52,17 +55,25 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === "resume") {
-      setFormData((prev) => ({ ...prev, resume: files[0] }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
+    const newValue = name === "resume" ? files[0] : value;
+
+    setFormData((prev) => {
+      const updated = { ...prev, [name]: newValue };
+
+      const modified = Object.keys(updated).some((key) => {
+        if (key === "resume") return updated.resume !== null;
+        return updated[key] !== originalData[key];
+      });
+
+      setIsModified(modified);
+      return updated;
+    });
   };
 
   const validate = () => {
     const newErrors = {};
     Object.entries(formData).forEach(([key, value]) => {
-      if (key !== "resume" && !value.trim()) {
+      if (key !== "resume" && !value.toString().trim()) {
         newErrors[key] = "Required";
       }
     });
@@ -71,10 +82,24 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
+    if (isEditing && isModified) {
+      try {
+        await axios.put(`http://localhost:8000/student/${userId}/profile`, formData);
+        setIsEditing(false);
+        setIsModified(false);
+        setOriginalData(formData);
+        onClose(); // close modal after update
+      } catch (err) {
+        console.error("Failed to update profile:", err);
+      }
+      return;
+    }
+
+    // Regular job apply
     const appliedJob = {
       ...job,
       applied: true,
@@ -82,6 +107,19 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
       status: "Under Review",
     };
     onApply(appliedJob);
+    onClose(); // close modal after confirm
+  };
+
+  const handleEditToggle = () => {
+    if (isEditing) {
+      // Cancel edit
+      setFormData(originalData);
+      setIsEditing(false);
+      setIsModified(false);
+    } else {
+      // Enable edit
+      setIsEditing(true);
+    }
   };
 
   return (
@@ -166,16 +204,16 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
           <div className="col-span-2 flex justify-between items-center mt-4">
             <button
               type="button"
-              onClick={() => setIsEditing((prev) => !prev)}
-              className="text-sm text-purple-700 underline"
+              onClick={handleEditToggle}
+              className="border border-purple-700 text-purple-700 px-4 py-1.5 rounded hover:bg-purple-50 transition text-sm font-semibold"
             >
-              {isEditing ? "Cancel Edit" : "Edit"}
+              {isEditing ? "Cancel" : "Edit"}
             </button>
             <button
               type="submit"
               className="bg-purple-700 hover:bg-purple-800 text-white px-6 py-2 rounded text-sm font-semibold"
             >
-              Confirm
+              {isEditing && isModified ? "Update" : "Confirm"}
             </button>
           </div>
         </form>

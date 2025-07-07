@@ -68,10 +68,12 @@ const App = () => {
         <Route path="/student/signup" element={<StudentSignup />} />
         <Route path="/student/:userId/home" element={ <ProtectedRoute><StudentDashboard /> </ProtectedRoute>  } />
         <Route path="/student/:userId/profile" element={<ProtectedRoute> <StudentProfile /> </ProtectedRoute>} />
-                <Route path="/student/profile" element={ <StudentProfile /> } />
+        <Route path="/student/profile" element={ <StudentProfile /> } />
 
         <Route path="/student/:userId/company/:id" element={ <ProtectedRoute><CompanyDetails /> </ProtectedRoute> }/>
         <Route path="/student/:userId/apply-jobs" element={ <ProtectedRoute><StudentApplyJobs /></ProtectedRoute> } />
+        <Route path="/student/apply-jobs" element={ <StudentApplyJobs /> } />
+
         <Route path="/student/:userId/applications" element={<ProtectedRoute><StudentApplications /></ProtectedRoute>} />
         <Route path="/student/test" element={<StudentTestPage />} />
         <Route path="/student/resources" element={<Resources />} />
