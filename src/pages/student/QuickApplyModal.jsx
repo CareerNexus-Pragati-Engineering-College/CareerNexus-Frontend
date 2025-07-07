@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
 import axios from "axios";
-
-const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
+import requestApi from "../../services/request";
+const QuickApplyModal = ({ job, onClose, onApply,userId}) => {
   const [formData, setFormData] = useState({
     FirstName: "",
     LastName: "",
@@ -18,6 +18,18 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
     resume: null,
   });
 
+function parseArray(value) {
+  if (!value) return [];
+  try {
+    const parsed = JSON.parse(value);
+   
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (err) {
+    console.error("Failed to parse array:", err);
+    return [];
+  }
+}
+
   const [originalData, setOriginalData] = useState({});
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
@@ -26,19 +38,19 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
   useEffect(() => {
     const fetchStudentData = async () => {
       try {
-        const res = await axios.get(`http://localhost:8000/student/${userId}/profile`);
+        const res = await requestApi.get(`/student/${userId}/profile`);
         const data = res.data;
 
         const populated = {
-          FirstName: data.FirstName || "",
-          LastName: data.LastName || "",
+          FirstName: data.firstName || "",
+          LastName: data.lastName || "",
           userId: data.userId || "",
-          Department: data.Department || "",
-          Year: data.Year || "",
-          Cgpa: data.Cgpa || "",
-          Email: data.Email || "",
-          Phone: data.Phone || "",
-          skills: data.skills?.join(", ") || "",
+          Department: data.department || "",
+          Year: data.year || "",
+          Cgpa: data.cgpa || "",
+          Email: data.email || "",
+          Phone: data.phone || "",
+          skills: parseArray(data.skills)|| "",
           graduationYear: data.graduationYear || "",
           resume: null,
         };
@@ -88,7 +100,20 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
 
     if (isEditing && isModified) {
       try {
-        await axios.put(`http://localhost:8000/student/${userId}/profile`, formData);
+        const payload = {
+        userId: formData.userId,
+        skills: JSON.stringify(formData.skills.split(",").map((s) => s.trim())),
+        email: formData.Email,
+        phone: formData.Phone,
+        firstName: formData.FirstName,
+        lastName: formData.LastName,
+        department: formData.Department,
+        year: formData.Year,
+        cgpa: formData.Cgpa,
+        graduationYear: formData.graduationYear,
+
+      };
+        await requestApi.post(`student/${userId}/profile`, formData);
         setIsEditing(false);
         setIsModified(false);
         setOriginalData(formData);

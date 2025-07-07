@@ -14,6 +14,7 @@ import QuickApplyModal from "./QuickApplyModal";
 import requestApi from "../../services/request";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import getUserId from "../../services/getUserId";
 
 
 
@@ -26,7 +27,7 @@ const StudentApplyJobs = () => {
   const [tempPrefs, setTempPrefs] = useState({ location: "", role: "" });
   const [isPrefModalOpen, setIsPrefModalOpen] = useState(false);
   const [showApplyModal, setShowApplyModal] = useState(false);
-  const { userId } = useParams();
+  const userId  = getUserId();
 
 
   const parseLocation = (loc) => {
@@ -46,7 +47,7 @@ const StudentApplyJobs = () => {
     const fetchJobs = async () => {
       try {
         const res = await requestApi.get(`/job/all-jobs`);
-        console.log("Fetched jobs:", res.data);
+       
         const jobsWithSaved = res.data.map((job) => ({
           job_title: job.jobTitle,
           company_name: job.companyName,

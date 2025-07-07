@@ -452,7 +452,7 @@ const RecruiterJob = () => {
       {showModal && selectedJob && (
         <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex justify-center items-center p-6">
           <div className="relative max-w-3xl w-full bg-white rounded-3xl shadow-2xl p-10 overflow-y-auto max-h-[90vh]">
-            <button
+            <button 
               onClick={() => setShowModal(false)}
               className="absolute top-6 right-6 text-gray-500 hover:text-gray-700 text-4xl font-semibold transition"
               aria-label="Close modal"
