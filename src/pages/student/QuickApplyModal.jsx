@@ -1,9 +1,10 @@
 // src/components/QuickApplyModal.jsx
 import React, { useState, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
-import axios from "axios";
+import requestApi from "../../services/request";
+import getUserId from "../../services/getUserId";
 
-const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
+const QuickApplyModal = ({ job, onClose, onApply }) => {
   const [formData, setFormData] = useState({
     FirstName: "",
     LastName: "",
@@ -17,11 +18,20 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
     graduationYear: "",
     resume: null,
   });
+  const parseArray = (arr) => {
+  if (Array.isArray(arr)) return loc;
+  try {
+    return JSON.parse(arr);
+  } catch {
+    return [arr]; 
+  }
+};
 
   const [originalData, setOriginalData] = useState({});
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [isModified, setIsModified] = useState(false);
+  const userId=getUserId();
 
   useEffect(() => {
     const fetchStudentData = async () => {
@@ -32,13 +42,22 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
         const populated = {
           FirstName: data.FirstName || "",
           LastName: data.LastName || "",
+        const res = await requestApi.get(
+          `/student/${userId}/profile`
+        );
+        const data = res.data;
+
+        setFormData((prev) => ({
+          ...prev,
+          FirstName: data.firstName || "",
+          LastName: data.lastName || "",
           userId: data.userId || "",
-          Department: data.Department || "",
-          Year: data.Year || "",
-          Cgpa: data.Cgpa || "",
-          Email: data.Email || "",
-          Phone: data.Phone || "",
-          skills: data.skills?.join(", ") || "",
+          Department: data.department || "",
+          Year: data.year || "",
+          Cgpa: data.cgpa || "",
+          Email: data.email || "",
+          Phone: data.phone || "",
+          skills: parseArray(data?.skills)  || "",
           graduationYear: data.graduationYear || "",
           resume: null,
         };

@@ -21,6 +21,8 @@ const RecruiterJob = () => {
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
   const [jobPosts, setJobPosts] = useState([]);
   const [job, setJob] = useState({
+    job_id: "",
+    
     company_name: "",
     job_title: "",
     job_description: "",
@@ -38,18 +40,49 @@ const RecruiterJob = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
   const jobsPerPage = 5;
+  const parseLocations = (loc) => {
+  if (Array.isArray(loc)) return loc;
+  try {
+    return JSON.parse(loc);
+  } catch {
+    return [loc]; // fallback for unexpected format
+  }
+};
+
 
   useEffect(() => {
     const fetchJobs = async () => {
       try {
         const res = await requestApi.get(`/job/${userId}`);
-        setJobPosts(res.data || []);
+        setJobPosts(res.data);
+        
+        if (res.data.length === 0) {
+          showToast("No jobs found. Start posting your jobs!");
+        }
+        setJobPosts((prev) => {
+          return prev.map((job) => ({
+            ...job,
+            company_name: job.companyName || job.company_name,
+            job_title: job.jobTitle || job.job_title,
+            job_description: job.jobDescription || job.job_description,
+            recruitment_process: job.recruitmentProcess || job.recruitment_process,
+            salary_package: job.salaryPackage || job.salary_package,
+            locations: parseLocations(job.locations) || parseLocations(job.location),
+            application_deadline: job.applicationDeadline || job.application_deadline,  
+          }));
+        })
+       
       } catch {
         showToast("Failed to fetch jobs", "danger");
       }
     };
     fetchJobs();
-  }, [userId]);
+  }, []);
+
+ useEffect(() => {
+    window.scrollTo(0, 0);
+   
+  }, [ showModal, showDeleteModal,editIndex, currentPage]);
 
   const showToast = (message, type = "success") => {
     setToast({ show: true, message, type });
@@ -76,7 +109,7 @@ const RecruiterJob = () => {
       jobDescription: job.job_description,
       recruitmentProcess: job.recruitment_process,
       salaryPackage: job.salary_package,
-      locations: job.location,
+      locations:JSON.stringify(job.location),
       applicationDeadline: job.application_deadline,
     };
 
@@ -257,7 +290,7 @@ const RecruiterJob = () => {
             <div className="col-span-2">
               <label className="block mb-3 text-base font-semibold text-purple-700">Locations</label>
               <div className="w-full flex flex-wrap items-center gap-3 px-4 py-3 border border-purple-200 rounded-2xl bg-purple-50 shadow-inner focus-within:ring-4 focus-within:ring-purple-300 transition duration-300">
-                {job.location.map((loc, idx) => (
+                {parseLocations(job.location).map((loc, idx) => (
                   <div
                     key={idx}
                     className="bg-purple-600 text-white px-4 py-1 rounded-full flex items-center gap-3 text-sm font-semibold shadow-lg hover:bg-purple-700 transition"
@@ -266,7 +299,7 @@ const RecruiterJob = () => {
                     <button
                       type="button"
                       onClick={() =>
-                        setJob({ ...job, location: job.location.filter((_, i) => i !== idx) })
+                        setJob({ ...job, location:parseLocations(job.location).filter((_, i) => i !== idx) })
                       }
                       className="hover:text-red-400 text-white font-bold"
                     >
@@ -352,19 +385,25 @@ const RecruiterJob = () => {
               transition={{ delay: index * 0.1 }}
               className="relative p-8 rounded-3xl border border-purple-200 bg-white text-purple-900 shadow-lg hover:shadow-2xl transition-shadow cursor-pointer"
             >
+              
               <h4 className="text-2xl font-extrabold text-purple-700 mb-2 tracking-wide">
                 {job.job_title || job.jobTitle}
               </h4>
               <p className="text-lg font-semibold text-gray-700 mb-3">
                 {job.company_name || job.companyName}
               </p>
-              <p className="text-sm text-gray-500 mb-2">
-                <span className="font-semibold">Locations:</span>{" "}
-                {(job.location || job.locations)?.join(", ")}
-              </p>
+             <p className="text-sm text-gray-500 mb-2">
+  <span className="font-semibold">Locations:</span>{" "}
+  {parseLocations(job.location || job.locations).join(" , ")}
+</p>
+
               <p className="text-sm text-gray-500">
                 <span className="font-semibold">Deadline:</span>{" "}
                 {job.application_deadline || job.applicationDeadline}
+              </p>
+              <p className="text-sm text-gray-500 mb-4">
+                <span className="font-semibold">Job Id: </span>{" "}
+                {job.job_id || job.id}
               </p>
               <p className="text-xs text-gray-400 mt-2">
                 Posted: {dayjs(job.posted_at).format("YYYY-MM-DD HH:mm")}
@@ -430,7 +469,11 @@ const RecruiterJob = () => {
               <strong>Salary Package: </strong> {selectedJob.salary_package || selectedJob.salaryPackage} LPA
             </p>
             <p className="text-md text-gray-700 mb-3">
-              <strong>Locations: </strong> {(selectedJob.location || selectedJob.locations)?.join(", ")}
+              <strong>Locations: </strong> 
+              
+             {parseLocations(selectedJob.location || selectedJob.locations).join(" , ")}
+
+
             </p>
             <p className="text-md text-gray-700 mb-6">
               <strong>Deadline: </strong> {selectedJob.application_deadline || selectedJob.applicationDeadline}
