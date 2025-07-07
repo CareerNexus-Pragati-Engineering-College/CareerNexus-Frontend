@@ -267,7 +267,7 @@ const userId = getuserId();
          graduationYear: student.graduationYear,
         urls: JSON.stringify(profileLinks),
       };
-      console.log(payload);
+      console.log(skills);
       const data = await requestApi.post(`/student/${userId}/profile`, payload);
       await toast.success("Data saved successfully!", {
         position: "top-right",

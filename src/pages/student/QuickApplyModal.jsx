@@ -1,6 +1,8 @@
 // src/components/QuickApplyModal.jsx
 import React, { useState, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 import requestApi from "../../services/request";
 const QuickApplyModal = ({ job, onClose, onApply,userId}) => {
@@ -16,6 +18,7 @@ const QuickApplyModal = ({ job, onClose, onApply,userId}) => {
     skills: "",
     graduationYear: "",
     resume: null,
+    
   });
 
 function parseArray(value) {
@@ -34,6 +37,7 @@ function parseArray(value) {
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [isModified, setIsModified] = useState(false);
+  const [urls, setUrls] = useState([]);
 
   useEffect(() => {
     const fetchStudentData = async () => {
@@ -53,8 +57,9 @@ function parseArray(value) {
           skills: parseArray(data.skills)|| "",
           graduationYear: data.graduationYear || "",
           resume: null,
+          
         };
-
+        setUrls(parseArray(data.urls));
         setFormData(populated);
         setOriginalData(populated);
       } catch (error) {
@@ -96,13 +101,15 @@ function parseArray(value) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("hello")
+    console.log(validate());
     if (!validate()) return;
+    console.log("hello")
 
     if (isEditing && isModified) {
-      try {
-        const payload = {
+      const payload = {
         userId: formData.userId,
-        skills: JSON.stringify(formData.skills.split(",").map((s) => s.trim())),
+        skills: JSON.stringify(formData.skills),
         email: formData.Email,
         phone: formData.Phone,
         firstName: formData.FirstName,
@@ -111,9 +118,16 @@ function parseArray(value) {
         year: formData.Year,
         cgpa: formData.Cgpa,
         graduationYear: formData.graduationYear,
-
-      };
-        await requestApi.post(`student/${userId}/profile`, formData);
+        urls: JSON.stringify(urls),
+      }
+      try {
+       
+        
+        await requestApi.post(`student/${userId}/profile`, payload);
+        toast.success("Profile updated successfully!", {
+          position: "top-right",
+          autoClose: 800,
+         });
         setIsEditing(false);
         setIsModified(false);
         setOriginalData(formData);
