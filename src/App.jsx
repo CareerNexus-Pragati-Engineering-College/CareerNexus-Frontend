@@ -32,6 +32,8 @@ import RecruiterDashboard from "./pages/recruiter/RecruiterHome";
 import RecruiterProfile from "./pages/recruiter/RecruiterProfile";
 import RecruiterJob from "./pages/recruiter/RecruiterJob";
 import ApplicationsPage from "./pages/recruiter/ApplicationsPage";
+import RecruitmentProcessPage from "./pages/recruiter/RecruitmentProcessPage";
+
 
 // 🛠️ Admin
 import Admin from "./pages/admin/Admin";
@@ -93,6 +95,8 @@ const App = () => {
         <Route path="/recruiter/:userId/profile" element={<RecruiterProfile />} />
         <Route path="/recruiter/jobpostings" element={<RecruiterJob />} />
         <Route path="/recruiter/applications" element={<ApplicationsPage />} />
+        <Route path="/recruitment-process" element={<RecruitmentProcessPage />} />
+
 
         {/* 🛠️ Admin */}
         <Route path="/admin" element={<Admin />} />
