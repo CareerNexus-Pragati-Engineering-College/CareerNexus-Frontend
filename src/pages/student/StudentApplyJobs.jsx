@@ -46,7 +46,7 @@ const StudentApplyJobs = () => {
 
     const fetchJobs = async () => {
       try {
-        const res = await requestApi.get(`/job/all-jobs`);
+        const res = await requestApi.get(`/jobs/all`);
        
         const jobsWithSaved = res.data.map((job) => ({
           job_title: job.jobTitle,

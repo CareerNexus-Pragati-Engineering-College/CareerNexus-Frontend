@@ -52,12 +52,12 @@ const dummyJobs = [
 ];
 
 const StudentApplications = () => {
-  const [appliedJobs, setAppliedJobs] = useState([]);
+  const [appliedJobs, setAppliedJobs] = useState(dummyJobs);
   const [selectedJob, setSelectedJob] = useState(null);
   const [sortOrder, setSortOrder] = useState("latest");
 
   useEffect(() => {
-    const allJobs = JSON.parse(localStorage.getItem("jobs")) || [];
+    const allJobs = JSON.parse(localStorage.getItem("jobs")) ||dummyJobs;
     const filtered = allJobs.filter((job) => job.applied);
     const enriched = filtered.map((job) => ({
       ...job,
