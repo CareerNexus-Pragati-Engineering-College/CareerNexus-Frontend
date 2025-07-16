@@ -147,10 +147,15 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
         return;
       }
      try{
-      console.log(formData)
-      const formData = new FormData();
-formData.append("resumeFile", formData.resume);
-      const response=await requestApiWithFileUpload.post(`/applications/apply/${userId}/${job.id}`,formData);
+      
+      const resumeData = new FormData();
+      resumeData.append("resumeFile", formData.resume);
+      const response=await requestApiWithFileUpload.post(`/applications/apply/${userId}/${job.id}`,resumeData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      } 
+      );
       setLoading(true);
      
       const appliedJob = {
