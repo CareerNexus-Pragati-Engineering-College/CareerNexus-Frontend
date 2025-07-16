@@ -3,6 +3,7 @@ import { FaTimes } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import requestApi from "../../services/request";
+import requestApiWithFileUpload from "../../services/request";
 
 const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
   // Form state
@@ -135,24 +136,54 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
       }
       return;
     }
+    else{
+     
+      if (!formData.resume) {
+        toast.error("Please upload your resume.", {
+          position: "top-right",
+          autoClose: 1200,
+        });
+        setLoading(false);
+        return;
+      }
+     try{
+      console.log(formData)
+      const formData = new FormData();
+formData.append("resumeFile", formData.resume);
+      const response=await requestApiWithFileUpload.post(`/applications/apply/${userId}/${job.id}`,formData);
+      setLoading(true);
+     
+      const appliedJob = {
+        ...job,
+        applied: true,
+        appliedDate: new Date().toISOString(),
+        status: "Under Review",
+      };
 
-    // Handle confirm apply
-    const appliedJob = {
-      ...job,
-      applied: true,
-      appliedDate: new Date().toISOString(),
-      status: "Under Review",
-    };
+    onApply(appliedJob);
+    toast.success("Application submitted successfully!", {
+      position: "top-right",
+      autoClose: 1200,
+      onClose: () => {
+        onClose();
+      },
+    });
 
-  onApply(appliedJob);
-  toast.success("Application submitted successfully!", {
-    position: "top-right",
-    autoClose: 1200,
-    onClose: () => {
-      onClose();
-    },
-  });
+     }
+
+      catch (error) {
+        console.error("Failed to apply for job:", error);
+        toast.error("Failed to apply for job. Please try again.", {
+          position: "top-right",
+          autoClose: 1200,
+        });}
+
+      finally {
+        setLoading(false);
+      }
+    }
   };
+
 
   // Toggle edit mode
   const handleEditToggle = () => {

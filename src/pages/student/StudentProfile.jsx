@@ -217,9 +217,9 @@ const userId = getuserId();
     }
   
       // If not in data mode, set default student data
-    fetch("https://leetcode-stats-api.herokuapp.com/22a31a0525")
-      .then(res => res.json())
-      .then(data => setLeetcodeStats(data));
+    //fetch("https://leetcode-stats-api.herokuapp.com/22a31a0525")
+      //.then(res => res.json())
+      //.then(data => setLeetcodeStats(data));
   }, [isDataMode]);
 
 
@@ -267,7 +267,7 @@ const userId = getuserId();
          graduationYear: student.graduationYear,
         urls: JSON.stringify(profileLinks),
       };
-      console.log(skills);
+      console.log(payload);
       const data = await requestApi.post(`/student/${userId}/profile`, payload);
       await toast.success("Data saved successfully!", {
         position: "top-right",
