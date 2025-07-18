@@ -3,7 +3,7 @@ import { FaTimes } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import requestApi from "../../services/request";
-import requestApiWithFileUpload from "../../services/request";
+
 
 const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
   // Form state
@@ -159,7 +159,7 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
       
       const resumeData = new FormData();
       resumeData.append("resumeFile", formData.resume);
-      const response=await requestApiWithFileUpload.post(`/applications/apply/${userId}/${job.id}`,resumeData, {
+      const response=await requestApi.post(`/applications/apply/${userId}/${job.id}`,resumeData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

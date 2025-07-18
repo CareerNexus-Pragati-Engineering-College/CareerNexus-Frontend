@@ -13,17 +13,6 @@ const requestApi = axios.create({
 });
 
 
-const requestApiWithFileUpload = axios.create({
-  baseURL: API_URL,
-  headers: {
-    "Content-Type": "multipart/form-data",
-    Authorization: `Bearer ${token}`,
-  },
-   onUploadProgress: (progressEvent => {
-                    const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-                    console.log(`Upload progress: ${percentCompleted}%`);
-                    // Update your UI with progress here
-                })
-});
+
 
 export default requestApi;
