@@ -126,13 +126,22 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
           position: "top-right",
           autoClose: 1200,
         });
+     
         setIsEditing(false);
         setIsModified(false);
         setOriginalData(formData);
-        setLoading(false);
+        
+       
       } catch (err) {
         console.error("Failed to update profile:", err);
-        setLoading(false);
+        toast.error("Failed to update profile. Please try again.", {
+          position: "top-right",
+          autoClose: 1200,
+        });
+      }
+      finally{
+        
+         setLoading(false);
       }
       return;
     }
@@ -185,6 +194,7 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
 
       finally {
         setLoading(false);
+        window.location.reload();
       }
     }
   };

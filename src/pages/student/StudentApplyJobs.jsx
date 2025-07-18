@@ -46,7 +46,7 @@ const StudentApplyJobs = () => {
 
     const fetchJobs = async () => {
       try {
-        const res = await requestApi.get(`/jobs/all`);
+        const res = await requestApi.get(`/jobs/${userId}/all`);
        
         const jobsWithSaved = res.data.map((job) => ({
           job_title: job.jobTitle,
@@ -71,7 +71,7 @@ const StudentApplyJobs = () => {
         setJobs(jobsWithSaved);
         setSelectedJob(jobsWithSaved[0]);
       } catch {
-        alert("Failed to fetch jobs");
+        toast.error("Failed to fetch jobs");
       }
     };
     fetchJobs();
