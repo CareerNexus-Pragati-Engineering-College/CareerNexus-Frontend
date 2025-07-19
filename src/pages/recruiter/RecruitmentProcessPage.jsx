@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import NavbarRecruiterDashboard from "../../components/NavbarRecruiterDashboard";
-import { FaClock, FaFileUpload, FaClipboardList } from "react-icons/fa";
+import { FaClock, FaFileUpload, FaClipboardList, FaArrowLeft } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 const RecruitmentProcessPage = () => {
@@ -9,6 +10,9 @@ const RecruitmentProcessPage = () => {
   const [endTime, setEndTime] = useState("");
   const [questionFile, setQuestionFile] = useState(null);
   const [answerFile, setAnswerFile] = useState(null);
+
+  const { username } = useParams();
+  const navigate = useNavigate();
 
   const handleFileUpload = (e, type) => {
     const file = e.target.files[0];
@@ -30,10 +34,26 @@ const RecruitmentProcessPage = () => {
     alert("Recruitment round configured successfully!");
   };
 
+  const handleBack = () => {
+    navigate(`/recruiter/${username}/applications`);
+  };
+
   return (
     <>
       <NavbarRecruiterDashboard />
-      <div className="pt-24 px-6 pb-16 bg-white min-h-screen font-poppins text-gray-800">
+
+      {/* Back Button */}
+      <div className="pt-20 px-6">
+        <button
+          onClick={handleBack}
+          className="flex items-center text-purple-700 text-base font-semibold mb-6 hover:underline"
+        >
+          <FaArrowLeft className="mr-2 text-lg" />
+          Back to Applications
+        </button>
+      </div>
+
+      <div className="px-6 pb-16 bg-white min-h-screen font-poppins text-gray-800">
         <h1 className="text-3xl font-bold mb-10 text-purple-700 text-center">Recruitment Process</h1>
 
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">

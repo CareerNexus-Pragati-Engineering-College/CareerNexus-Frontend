@@ -144,6 +144,12 @@ function parseLocations (loc) {
       console.error("Job post failed:", error);
       showToast("Failed to post job", "danger");
     }
+    
+
+    finally{
+      window.location.reload()
+    }
+
 
     setJob({
       company_name: "",
