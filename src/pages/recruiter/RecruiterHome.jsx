@@ -10,7 +10,7 @@ import {
   FaBuilding,
   FaBriefcase,
   FaGraduationCap,
-  FaIndustry,
+  FaIndustry, 
 } from "react-icons/fa";
 
 const visitedColleges = [

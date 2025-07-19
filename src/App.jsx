@@ -2,9 +2,8 @@ import React from "react";
 import { useLocation, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ProtectedRoute from "./services/ProtectedRoute"; //routes protection and restriction kosam
-import ProtectedRouteRecruiter from "./services/ProtectedRouteRecruiter"; //recruiter routes protection and restriction kosam
-
+import ProtectedRoute from "./services/ProtectedRoute";
+import ProtectedRouteRecruiter from "./services/ProtectedRouteRecruiter";
 
 // Pages
 import Home from "./pages/landingpage/Home";
@@ -24,6 +23,8 @@ import Resources from "./pages/student/Resources";
 // 🏫 TPO
 import TPO from "./pages/tpo/TPO";
 import TPOLogin from "./pages/tpo/TpoLogin";
+import Tpohome from "./pages/tpo/Tpohome";
+import TpoProfile from "./pages/tpo/TpoProfile"; 
 
 // 👨‍💼 Recruiter
 import Recruiter from "./pages/recruiter/Recruiter";
@@ -33,7 +34,6 @@ import RecruiterProfile from "./pages/recruiter/RecruiterProfile";
 import RecruiterJob from "./pages/recruiter/RecruiterJob";
 import ApplicationsPage from "./pages/recruiter/ApplicationsPage";
 import RecruitmentProcessPage from "./pages/recruiter/RecruitmentProcessPage";
-
 
 // 🛠️ Admin
 import Admin from "./pages/admin/Admin";
@@ -68,14 +68,12 @@ const App = () => {
         <Route path="/student" element={<Student />} />
         <Route path="/student/login" element={<StudentLogin />} />
         <Route path="/student/signup" element={<StudentSignup />} />
-        <Route path="/student/:userId/home" element={ <ProtectedRoute><StudentDashboard /> </ProtectedRoute>  } />
-        <Route path="/student/:userId/profile" element={<ProtectedRoute> <StudentProfile /> </ProtectedRoute>} />
-        <Route path="/student/profile" element={ <StudentProfile /> } />
-
-        <Route path="/student/:userId/company/:id" element={ <ProtectedRoute><CompanyDetails /> </ProtectedRoute> }/>
-        <Route path="/student/:userId/apply-jobs" element={ <ProtectedRoute><StudentApplyJobs /></ProtectedRoute> } />
-        <Route path="/student/apply-jobs" element={ <StudentApplyJobs /> } />
-
+        <Route path="/student/:userId/home" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
+        <Route path="/student/:userId/profile" element={<ProtectedRoute><StudentProfile /></ProtectedRoute>} />
+        <Route path="/student/profile" element={<StudentProfile />} />
+        <Route path="/student/:userId/company/:id" element={<ProtectedRoute><CompanyDetails /></ProtectedRoute>} />
+        <Route path="/student/:userId/apply-jobs" element={<ProtectedRoute><StudentApplyJobs /></ProtectedRoute>} />
+        <Route path="/student/apply-jobs" element={<StudentApplyJobs />} />
         <Route path="/student/:userId/applications" element={<ProtectedRoute><StudentApplications /></ProtectedRoute>} />
         <Route path="/student/test" element={<StudentTestPage />} />
         <Route path="/student/resources" element={<Resources />} />
@@ -83,13 +81,15 @@ const App = () => {
         {/* 🏫 TPO */}
         <Route path="/tpo" element={<TPO />} />
         <Route path="/tpo/login" element={<TPOLogin />} />
+        <Route path="/tpo/home" element={<Tpohome />} />
+        <Route path="/tpo/profile" element={<TpoProfile />} /> 
 
         {/* 👨‍💼 Recruiter */}
         <Route path="/recruiter" element={<Recruiter />} />
         <Route path="/recruiter/login" element={<RecruiterLogin />} />
-        <Route path="/recruiter/:userId/home" element={<ProtectedRouteRecruiter><RecruiterDashboard /></ProtectedRouteRecruiter> } />
+        <Route path="/recruiter/:userId/home" element={<ProtectedRouteRecruiter><RecruiterDashboard /></ProtectedRouteRecruiter>} />
         <Route path="/recruiter/:userId/profile" element={<ProtectedRouteRecruiter><RecruiterProfile /></ProtectedRouteRecruiter>} />
-        <Route path="/recruiter/:userId/jobpostings"  element={<ProtectedRouteRecruiter><RecruiterJob /></ProtectedRouteRecruiter>} />
+        <Route path="/recruiter/:userId/jobpostings" element={<ProtectedRouteRecruiter><RecruiterJob /></ProtectedRouteRecruiter>} />
         <Route path="/recruiter/:userId/applications" element={<ProtectedRouteRecruiter><ApplicationsPage /></ProtectedRouteRecruiter>} />
         <Route path="/recruiter/:userId/home" element={<RecruiterDashboard />} />
         <Route path="/recruiter/:userId/profile" element={<RecruiterProfile />} />
@@ -97,12 +97,10 @@ const App = () => {
         <Route path="/recruiter/applications" element={<ApplicationsPage />} />
         <Route path="/recruitment-process" element={<RecruitmentProcessPage />} />
 
-
         {/* 🛠️ Admin */}
         <Route path="/admin" element={<Admin />} />
         <Route path="/admin/AdminAccessForm" element={<AdminAccessForm />} />
       </Routes>
-
 
       <ToastContainer />
     </>
