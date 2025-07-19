@@ -17,13 +17,14 @@ const TPOProfile = () => {
   const [profileImage, setProfileImage] = useState("/images/profile.png");
   const [imageFile, setImageFile] = useState(null);
 
-  const emailfromUrl = query.get("email");
+  const emailfromUrl = query.get("email") || "";
+  
+
 
   const [tpo, setTpo] = useState({
-    userId: userId,
+    userId: userId || "",
     firstName: "",
     lastName: "",
-    college: "",
     phone: "",
     email: emailfromUrl || "",
   });
@@ -47,7 +48,7 @@ const TPOProfile = () => {
             userId: r.userId || userId,
             firstName: r.firstName || "",
             lastName: r.lastName || "",
-            college: r.college || "",
+          
             phone: r.phone || "",
             email: r.email || emailfromUrl || "",
           });
@@ -77,7 +78,6 @@ const TPOProfile = () => {
       const payload = {
         firstName: tpo.firstName,
         lastName: tpo.lastName,
-        college: tpo.college,
         phone: tpo.phone,
         userId: tpo.userId,
         email: tpo.email,
@@ -96,7 +96,7 @@ const TPOProfile = () => {
       setIsEditing(false);
 
       if (pageMode === "data") {
-        setTimeout(() => navigate(`/tpo/home`), 2000);
+        setTimeout(() => navigate(`/tpo/${userId}home`), 2000);
       }
     } catch (error) {
       toast.error("Failed to save profile");
@@ -162,7 +162,7 @@ const TPOProfile = () => {
               { label: "First Name", name: "firstName" },
               { label: "Last Name", name: "lastName" },
               { label: "Email", name: "email" },
-              { label: "College Name", name: "college" },
+              
               { label: "Phone Number", name: "phone" },
             ].map((field) => (
               <div key={field.name}>

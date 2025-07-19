@@ -3,7 +3,7 @@ import { NavLink,useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-
+import getUserId from "../../services/getUserId";
 import {
   FaEnvelope,
   FaLock,
@@ -23,11 +23,17 @@ const TpoLogin = () => {
   const navigate = useNavigate();
   const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
   const backendPort = import.meta.env.VITE_APP_BACKEND_PORT;
+ 
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    // Check if user is already logged in
+    // If so, redirect to home page
+      if(localStorage.getItem("token") && localStorage.getItem("role")=="tpo"){
+        toast.info("You are already logged in. Redirecting to Home...");
+        return navigate(`/tpo/${getUserId()}/home`);
+      }
   }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!userId || !password) {
@@ -43,11 +49,13 @@ const TpoLogin = () => {
         position: "top-right",
         theme: "colored"
       });
+      console.log(response)
       localStorage.setItem("token", response.data.token);
         localStorage.setItem("userId", userId);
         localStorage.setItem("role",response.data.role)
       // Redirect to the appropriate route based on the response
-      navigate(response.data?.router);
+       navigate(`/tpo/${userId}${response.data.router}`);
+
 
     }
     catch (error) {

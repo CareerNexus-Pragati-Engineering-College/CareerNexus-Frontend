@@ -10,12 +10,14 @@ import {
   FaBuilding,
   FaHome,
 } from "react-icons/fa";
+import getUserId from "../services/getUserId";
 import logout from "../services/logout";
 
 const NavbarTPODashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
+  const userId=getUserId();
 
   const handleLogout = async () => {
     await logout();
@@ -41,7 +43,7 @@ const NavbarTPODashboard = () => {
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-6 text-white text-base">
           <NavLink
-            to="/tpo/home"
+            to={`/tpo/${userId}home`}
             className="flex items-center gap-2 hover:text-violet-400 transition"
           >
             <FaHome className="text-lg text-violet-400" />
@@ -74,7 +76,7 @@ const NavbarTPODashboard = () => {
             {showDropdown && (
               <div className="absolute right-0 mt-2 w-40 bg-[#1b1433] border border-violet-500/30 rounded-lg shadow-xl p-2 z-50">
                 <NavLink
-                  to="/tpo/profile"
+                  to={`/tpo/${userId}/profile?page=update`}
                   className="flex items-center px-3 py-2 text-white hover:text-violet-400 transition rounded-md"
                   onClick={() => setShowDropdown(false)}
                 >

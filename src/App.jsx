@@ -81,8 +81,8 @@ const App = () => {
         {/* 🏫 TPO */}
         <Route path="/tpo" element={<TPO />} />
         <Route path="/tpo/login" element={<TPOLogin />} />
-        <Route path="/tpo/home" element={<Tpohome />} />
-        <Route path="/tpo/profile" element={<TpoProfile />} /> 
+        <Route path="/tpo/:userId/home" element={<Tpohome />} />
+        <Route path="/tpo/:userId/profile" element={<TpoProfile />} /> 
 
         {/* 👨‍💼 Recruiter */}
         <Route path="/recruiter" element={<Recruiter />} />

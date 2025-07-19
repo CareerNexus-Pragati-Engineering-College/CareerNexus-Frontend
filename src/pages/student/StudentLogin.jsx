@@ -44,7 +44,7 @@ const StudentLogin = () => {
 
     try {
 
-console.log(`${backendUrl}:${backendPort}`)
+
       const response = await axios.post(`${backendUrl}:${backendPort}/auth/login`, loginData);
       const data = response.data;
      
