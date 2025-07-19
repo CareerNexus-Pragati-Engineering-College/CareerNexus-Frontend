@@ -1,4 +1,3 @@
-// src/pages/tpo/TPOProfile.jsx
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -19,15 +18,14 @@ const TPOProfile = () => {
   const [imageFile, setImageFile] = useState(null);
 
   const emailfromUrl = query.get("email");
-  const userIdFromUrl = userId;
 
   const [tpo, setTpo] = useState({
-    userId: "",
+    userId: userId,
     firstName: "",
     lastName: "",
     college: "",
     phone: "",
-    email: "",
+    email: emailfromUrl || "",
   });
 
   useEffect(() => {
@@ -46,12 +44,12 @@ const TPOProfile = () => {
         .then((res) => {
           const r = res.data;
           setTpo({
+            userId: r.userId || userId,
             firstName: r.firstName || "",
             lastName: r.lastName || "",
-            userId: r.userId || userIdFromUrl,
-            email: r.email || emailfromUrl || "",
-            phone: r.phone || "",
             college: r.college || "",
+            phone: r.phone || "",
+            email: r.email || emailfromUrl || "",
           });
         })
         .catch((err) => {
@@ -159,7 +157,7 @@ const TPOProfile = () => {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
-            {[
+            {[ 
               { label: "User ID", name: "userId" },
               { label: "First Name", name: "firstName" },
               { label: "Last Name", name: "lastName" },
