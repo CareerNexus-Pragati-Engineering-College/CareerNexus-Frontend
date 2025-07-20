@@ -41,7 +41,7 @@ const ApplicationsPage = () => {
   }, []);
 
   const handleStartRecruitment = (jobId) => {
-    navigate("/recruitment-process");
+    navigate(`/recruiter/${userId}/recruitment-process`);
   };
 
   // Safely filter jobs by title (handling undefined values)

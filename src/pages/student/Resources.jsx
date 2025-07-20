@@ -182,7 +182,157 @@ const Resources = () => {
 
         {category === "academic" && (
           <>
-            {/* keep your existing academic logic unchanged here */}
+          {(year || regulation || semester || branch) && (
+              <div className="flex items-center gap-3 bg-purple-50 border border-purple-200 rounded-xl px-4 py-2 shadow text-purple-700 font-medium w-fit">
+                <button onClick={handleBack} className="text-purple-600 hover:text-purple-800 text-lg transition">
+                  <FaArrowLeft />
+                </button>
+                <span className="text-sm">
+                  {year && `${year}st Year`}
+                  {regulation && ` • ${regulation}`}
+                  {semester && ` • Semester ${semester}`}
+                  {branch && ` • ${branch}`}
+                </span>
+              </div>
+            )}
+
+            {!year && (
+              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
+                <h2 className="text-xl font-semibold mb-2">Select Year</h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {[1, 2, 3, 4].map((y) => (
+                    <button
+                      key={y}
+                      onClick={() => setYear(y)}
+                      className="bg-gray-100 hover:bg-purple-100 px-6 py-3 rounded-xl font-medium shadow"
+                    >
+                      {y}st Year
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
+            {year && !regulation && (
+              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
+                <h2 className="text-xl font-semibold mb-2">Select Regulation</h2>
+                <div className="flex gap-4 flex-wrap">
+                  {Object.keys(academicStructure).map((reg) => (
+                    <button
+                      key={reg}
+                      onClick={() => setRegulation(reg)}
+                      className="bg-gray-100 hover:bg-purple-100 px-6 py-3 rounded-xl font-medium shadow"
+                    >
+                      {reg}
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
+            {regulation && !semester && (
+              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
+                <h2 className="text-xl font-semibold mb-2">Select Semester</h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {Object.keys(academicStructure[regulation])
+                    .filter((sem) => sem.startsWith(`${year}-`))
+                    .map((sem) => (
+                      <button
+                        key={sem}
+                        onClick={() => setSemester(sem)}
+                        className="bg-gray-100 hover:bg-purple-100 px-6 py-3 rounded-xl font-medium shadow"
+                      >
+                        Semester {sem}
+                      </button>
+                    ))}
+                </div>
+              </motion.div>
+            )}
+
+            {semester && !branch && (
+              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
+                <h2 className="text-xl font-semibold mb-2">Select Branch</h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {branches.map((b) => (
+                    <button
+                      key={b}
+                      onClick={() => setBranch(b)}
+                      className="bg-gray-100 hover:bg-purple-100 px-6 py-3 rounded-xl font-medium shadow"
+                    >
+                      {b}
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
+            {branch && (
+  <motion.div ref={subjectsRef} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
+    <h2 className="text-2xl font-bold text-purple-700 mb-4">Subjects</h2>
+    <div className="grid md:grid-cols-2 gap-6">
+      {Object.entries(getSubjects()).map(([subject, resources]) => (
+        <motion.div
+          key={subject}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="bg-gradient-to-tr from-white via-purple-50 to-white border border-purple-200 p-6 rounded-2xl shadow-md hover:shadow-lg transition-all"
+        >
+          <h3 className="text-xl font-bold text-purple-700 mb-3">{subject}</h3>
+          <ul className="space-y-4 text-sm text-gray-800">
+            {resources.map((res, i) => (
+              <li key={i} className="border-b border-gray-200 pb-4">
+                <div className="flex flex-col gap-2">
+                  <p className="text-gray-600">
+                    📄 <span className="font-medium">Description:</span> {res.description || "No description provided."}
+                  </p>
+
+                  <div className="flex flex-col md:flex-row gap-3">
+                    <a
+                      href={res.pdf}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2 text-purple-700 font-semibold hover:underline"
+                    >
+                      <FaFilePdf className="text-red-500" /> View PDF
+                    </a>
+                    <a
+                      href={res.pdf}
+                      download
+                      className="flex items-center gap-2 text-green-700 font-semibold hover:underline"
+                    >
+                      ⬇️ Download PDF
+                    </a>
+                  </div>
+
+                  {res.videoLink && (
+                    <a
+                      href={res.videoLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2 text-blue-600 font-semibold hover:underline"
+                    >
+                      <FaYoutube className="text-red-600" /> Watch Video
+                    </a>
+                  )}
+                </div>
+
+                <div className="mt-3 flex justify-end">
+                  <button
+                    onClick={() => confirmDelete(i, subject)}
+                    className="text-red-600 hover:text-red-700 hover:underline text-sm font-medium"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </motion.div>
+      ))}
+    </div>
+  </motion.div>
+)}
           </>
         )}
 

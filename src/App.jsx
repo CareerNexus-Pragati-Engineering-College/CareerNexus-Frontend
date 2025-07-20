@@ -93,9 +93,9 @@ const App = () => {
         <Route path="/recruiter/:userId/applications" element={<ProtectedRouteRecruiter><ApplicationsPage /></ProtectedRouteRecruiter>} />
         <Route path="/recruiter/:userId/home" element={<RecruiterDashboard />} />
         <Route path="/recruiter/:userId/profile" element={<RecruiterProfile />} />
-        <Route path="/recruiter/jobpostings" element={<RecruiterJob />} />
-        <Route path="/recruiter/applications" element={<ApplicationsPage />} />
-        <Route path="/recruitment-process" element={<RecruitmentProcessPage />} />
+        <Route path="/recruiter/:userId/jobpostings" element={<RecruiterJob />} />
+        <Route path="/recruiter/:userId/applications" element={<ApplicationsPage />} />
+        <Route path="/recruiter/:userId/recruitment-process" element={<RecruitmentProcessPage />} />
 
         {/* 🛠️ Admin */}
         <Route path="/admin" element={<Admin />} />

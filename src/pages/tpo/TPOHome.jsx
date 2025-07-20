@@ -7,6 +7,7 @@ import {
   FaClipboardCheck,
   FaUniversity,
 } from "react-icons/fa";
+import getUserId from "../../services/getUserId";
 
 const studentStats = [
   { title: "Students Registered", value: 450, icon: <FaUserGraduate size={30} /> },
@@ -23,7 +24,7 @@ const recentRecruiters = [
   "Adobe",
   "Capgemini",
 ];
-
+const userId = getUserId()
 const TpoHome = () => {
   return (
     <>
@@ -43,7 +44,7 @@ const TpoHome = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6 }}
           >
-            Welcome, TPO!
+            Welcome, {userId}!
           </motion.h1>
           <motion.p
             className="mt-4 text-lg sm:text-xl text-[#4b436f] max-w-2xl mx-auto"
