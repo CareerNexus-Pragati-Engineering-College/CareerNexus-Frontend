@@ -25,6 +25,7 @@ import TPO from "./pages/tpo/TPO";
 import TPOLogin from "./pages/tpo/TpoLogin";
 import Tpohome from "./pages/tpo/Tpohome";
 import TpoProfile from "./pages/tpo/TpoProfile"; 
+import TPOStudents from "./pages/tpo/TPOStudents"; 
 
 // 👨‍💼 Recruiter
 import Recruiter from "./pages/recruiter/Recruiter";
@@ -83,6 +84,7 @@ const App = () => {
         <Route path="/tpo/login" element={<TPOLogin />} />
         <Route path="/tpo/:userId/home" element={<Tpohome />} />
         <Route path="/tpo/:userId/profile" element={<TpoProfile />} /> 
+        <Route path="/tpo/:userid/students" element={<TPOStudents />} />
 
         {/* 👨‍💼 Recruiter */}
         <Route path="/recruiter" element={<Recruiter />} />

@@ -50,14 +50,14 @@ const NavbarTPODashboard = () => {
             Home
           </NavLink>
           <NavLink
-            to="/tpo/students"
+            to={`/tpo/${userId}/students`}
             className="flex items-center gap-2 hover:text-violet-400 transition"
           >
             <FaUsers className="text-lg text-violet-400" />
             Students
           </NavLink>
           <NavLink
-            to="/tpo/recruiters"
+            to={`/tpo/${userId}/recruiters`}
             className="flex items-center gap-2 hover:text-violet-400 transition"
           >
             <FaBuilding className="text-lg text-violet-400" />
