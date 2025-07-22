@@ -89,8 +89,15 @@ const TpoStudents = () => {
             })
             .flat()  
         );
-
-        toast.success("Student data fetched successfully!")
+        if( response.data.length === 0) {
+          toast.error("No students found for the selected filters.", {
+            position: "top-right",
+            theme: "colored",
+            style: { backgroundColor: "#dc2626", color: "#fff" },
+          });
+        } else {
+          toast.success("Student data fetched successfully!")
+        }
       } catch (error) {
         console.error("Error fetching student data:", error);
         toast.error("Failed to fetch student data.", {
