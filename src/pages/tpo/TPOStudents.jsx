@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as XLSX from "xlsx";
 import { motion } from "framer-motion";
+import requestApi from "../../services/request";
+import getuserId from "../../services/getUserId";
+import { toast } from "react-toastify";
 
 const departments = [
   "CSE", "CSE-IT", "CSE-AI", "CSE-AIML", "CSE-DS", "Cyber Security",
   "ECE", "EEE", "MECH", "CIVIL"
 ];
 
-const platforms = ["LinkedIn", "LeetCode", "HackerRank"];
+const platforms = ["LinkedIn", "LeetCode", "HackerRank", "GitHub"];
 
 const dummyData = [
   {
@@ -65,18 +68,51 @@ const TpoStudents = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const handleFilter = () => {
+  const handleFilter = async () => {
+
     if (year && department && platform) {
-      setFilteredData(
-        dummyData.filter(
-          (student) =>
-            student.department === department &&
-            student.profileLink.toLowerCase().includes(platform.toLowerCase())
-        )
-      );
+
+      try {
+        const response = await requestApi.get(`/tpo/student/get-profile-links/${year}/${department}`);
+     
+        setFilteredData(
+          response.data
+            .map(student => {
+              return JSON.parse(student.urls)
+                .filter(url => url.platform === platform)       
+                .map(url => ({
+                  id: student.userId,
+                  name: student.firstName + ' ' + student.lastName,
+                  department: department,              
+                  profileLink: url.url                         
+                }));
+            })
+            .flat()  
+        );
+
+        toast.success("Student data fetched successfully!")
+      } catch (error) {
+        console.error("Error fetching student data:", error);
+        toast.error("Failed to fetch student data.", {
+          position: "top-right",
+          theme: "colored",
+          style: { backgroundColor: "#dc2626", color: "#fff" },
+        });
+      }
+
+    } else {
+      setFilteredData(dummyData);
+      toast.error("Please select all filters", {
+        position: "top-right",
+
+      })
     }
   };
 
+
+  useEffect(() => {
+    console.log(filteredData);
+  }, [filteredData])
   const handleDownload = () => {
     const ws = XLSX.utils.json_to_sheet(
       filteredData.map(({ id, name, department, profileLink }) => ({
