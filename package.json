@@ -1,0 +1,49 @@
+{
+  "name": "career-nexus",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tsparticles/all": "^3.8.1",
+    "aos": "^2.3.4",
+    "axios": "^1.10.0",
+    "chart.js": "^4.5.0",
+    "dayjs": "^1.11.13",
+    "framer-motion": "^12.18.1",
+    "react": "^19.1.0",
+    "react-chartjs-2": "^5.3.0",
+    "react-confirm-alert": "^3.0.6",
+    "react-dom": "^19.1.0",
+    "react-icons": "^5.5.0",
+    "react-router-dom": "^7.6.2",
+    "react-scroll": "^1.9.3",
+    "react-simple-typewriter": "^5.0.1",
+    "react-toastify": "^11.0.5",
+    "react-tsparticles": "^2.12.2",
+    "swiper": "^11.2.8",
+    "swiper-react": "^1.0.0",
+    "tsparticles": "^1.43.1",
+    "typewriter-effect": "^2.22.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.0",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.25.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17",
+    "vite": "^6.3.5"
+  }
+}
