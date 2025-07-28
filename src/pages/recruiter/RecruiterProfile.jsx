@@ -18,8 +18,8 @@ const RecruiterProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState("/images/profile.png");
   const [imageFile, setImageFile] = useState(null);
-   const emailfromUrl = new URLSearchParams(location.search).get("email");
-  const userIdFromUrl = userId || new URLSearchParams(location.search).get("userId");
+   const emailfromUrl = query.get("email");
+  const userIdFromUrl = query.get("userId");
 
   const [recruiter, setRecruiter] = useState({
     userId: "",
@@ -34,7 +34,7 @@ const RecruiterProfile = () => {
     if (pageMode === "data") {
       setIsEditing(true);
       setRecruiter({
-        userId: "",
+        userId: userIdFromUrl || userId,
         firstName: "",
         lastName: "",
         company: "",
