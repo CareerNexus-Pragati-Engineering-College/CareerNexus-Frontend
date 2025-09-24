@@ -55,10 +55,11 @@ const RecruitmentProcessPage = () => {
      console.log("Selected Round:", selectedRound);
       const roundDetails = {
         createdByUserId: userId,
-        jobPostId:2,     
+        jobPostId:1,     
         roundName: selectedRound,
         startTime: startTime,            
-        endTime: endTime,              
+        endTime: endTime,      
+        min_marks: 0,        
        
       };
 
@@ -83,7 +84,7 @@ const RecruitmentProcessPage = () => {
 
     
       alert("Recruitment round configured successfully!");
-      
+      console.log("API Response:", response.data);
       setSelectedRound("");
       setStartTime("");
       setEndTime("");
