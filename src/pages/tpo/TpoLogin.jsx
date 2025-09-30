@@ -54,6 +54,11 @@ const TpoLogin = () => {
         localStorage.setItem("userId", userId);
         localStorage.setItem("role",response.data.role)
       // Redirect to the appropriate route based on the response
+      if(response.data.role=="admin"){
+        navigate(`/admin`);
+        return;
+      }
+      
        navigate(`/tpo/${userId}${response.data.router}`);
 
 
