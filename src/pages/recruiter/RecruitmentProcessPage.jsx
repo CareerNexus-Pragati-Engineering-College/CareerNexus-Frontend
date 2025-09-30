@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import NavbarRecruiterDashboard from "../../components/NavbarRecruiterDashboard";
-import { FaClock, FaFileUpload, FaClipboardList, FaArrowLeft } from "react-icons/fa";
+import { FaClock, FaFileUpload, FaClipboardList, FaArrowLeft , FaCheckCircle} from "react-icons/fa";
 import { motion } from "framer-motion";
 import requestApi from "../../services/request";
 import getuserId from "../../services/getUserId";
@@ -179,47 +179,49 @@ const RecruitmentProcessPage = () => {
             </div>
           </motion.div>
 
-          {/* Right: Upload PDFs */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4 }}
-            className="bg-purple-50 p-6 rounded-xl shadow-md"
-          >
-            <div className="space-y-4">
-              <div>
-                <label className="flex items-center text-sm font-semibold text-gray-700 mb-2 gap-2">
-                  <FaFileUpload className="text-purple-600" />
-                  Upload Questions (PDF)
-                </label>
-                <input
-                  type="file"
-                  accept=".pdf"
-                  onChange={(e) => handleFileUpload(e, "question")}
-                  className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm"
-                />
-                {questionFile && (
-                  <p className="text-green-600 text-sm mt-1">{questionFile.name}</p>
-                )}
-              </div>
+          {/* Right: Upload PDFs / Minimum Marks */}
+<motion.div
+  initial={{ opacity: 0, x: 20 }}
+  animate={{ opacity: 1, x: 0 }}
+  transition={{ duration: 0.4 }}
+  className="bg-purple-50 p-6 rounded-xl shadow-md"
+>
+  <div className="space-y-4">
+    {/* Upload Questions PDF (unchanged) */}
+    <div>
+      <label className="flex items-center text-sm font-semibold text-gray-700 mb-2 gap-2">
+        <FaFileUpload className="text-purple-600" />
+        Upload Questions (PDF)
+      </label>
+      <input
+        type="file"
+        accept=".pdf"
+        onChange={(e) => handleFileUpload(e, "question")}
+        className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm"
+      />
+      {questionFile && (
+        <p className="text-green-600 text-sm mt-1">{questionFile.name}</p>
+      )}
+    </div>
 
-              <div>
-                <label className="flex items-center text-sm font-semibold text-gray-700 mb-2 gap-2">
-                  <FaFileUpload className="text-purple-600" />
-                  Upload Answers (PDF)
-                </label>
-                <input
-                  type="file"
-                  accept=".pdf"
-                  onChange={(e) => handleFileUpload(e, "answer")}
-                  className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm"
-                />
-                {answerFile && (
-                  <p className="text-green-600 text-sm mt-1">{answerFile.name}</p>
-                )}
-              </div>
-            </div>
-          </motion.div>
+    {/* Minimum Marks input (replaces Upload Answers) */}
+    <div>
+      <label className="flex items-center text-sm font-semibold text-gray-700 mb-2 gap-2">
+        <FaCheckCircle className="text-purple-600" />
+        Minimum Marks
+      </label>
+      <input
+        type="number"
+        min="0"
+        value={answerFile || ""} 
+        onChange={(e) => setAnswerFile(e.target.value)}
+        placeholder="Enter minimum marks"
+        className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+      />
+    </div>
+  </div>
+</motion.div>
+
         </div>
 
         {/* Submit Button */}

@@ -206,7 +206,7 @@ const TPORecruiters = () => {
                           <p className="text-red-600 text-xs">Deadline: {job.applicationDeadline || "N/A"}</p>
                           <p className="text-yellow-600 text-xs">Posted At: {job.postedAt || "N/A"}</p>
                         </div>
-                        <span className="px-3 py-1 bg-violet-200 text-violet-700 rounded-full text-xs">
+                        <span className="px-3 py-1 bg-violet-200  text-violet-700 rounded-full text-xs">
                           {applicantCounts[job.id] !== undefined ? applicantCounts[job.id] : "0"} Applicants
                         </span>
                         <button className="text-gray-500 hover:text-violet-700 transition">
