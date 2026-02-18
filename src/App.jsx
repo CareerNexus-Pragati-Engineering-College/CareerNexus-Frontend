@@ -19,6 +19,7 @@ import StudentApplyJobs from "./pages/student/StudentApplyJobs";
 import StudentTestPage from "./pages/student/StudentTestPage";
 import StudentApplications from "./pages/student/StudentApplications";
 import Resources from "./pages/student/Resources";
+import StudentPractice from "./pages/student/StudentPractice";
 
 // 🏫 TPO
 import TPO from "./pages/tpo/TPO";
@@ -79,6 +80,9 @@ const App = () => {
         <Route path="/student/:userId/applications" element={<ProtectedRoute><StudentApplications /></ProtectedRoute>} />
         <Route path="/student/test" element={<StudentTestPage />} />
         <Route path="/student/resources" element={<Resources />} />
+        <Route path="/student/practice" element={<StudentPractice />} />
+
+        
 
         {/* 🏫 TPO */}
         <Route path="/tpo" element={<TPO />} />
