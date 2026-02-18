@@ -18,8 +18,10 @@ const RecruiterProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState("/images/profile.png");
   const [imageFile, setImageFile] = useState(null);
-   const emailfromUrl = new URLSearchParams(location.search).get("email");
-  const userIdFromUrl = userId || new URLSearchParams(location.search).get("userId");
+   const emailfromUrl = query.get("email");
+  const userIdFromUrl = query.get("userId");
+    const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
+  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT 
 
   const [recruiter, setRecruiter] = useState({
     userId: "",
@@ -34,7 +36,7 @@ const RecruiterProfile = () => {
     if (pageMode === "data") {
       setIsEditing(true);
       setRecruiter({
-        userId: "",
+        userId: userIdFromUrl || userId,
         firstName: "",
         lastName: "",
         company: "",
@@ -60,8 +62,11 @@ const RecruiterProfile = () => {
         designation: recruiterData.designation,
         email: emailfromUrl || recruiterData.email || "",
         phone: recruiterData.phone || "",
-        company:recruiterData.company || ""
+        company:recruiterData.company || "",
+        
       });
+      setProfileImage(`${backendUrl}:${backendPort}/uploads/images${recruiterData.img_loc}`);
+      
       
     }
     ).catch((error) => {
@@ -113,9 +118,19 @@ const RecruiterProfile = () => {
         email: emailfromUrl || "",
       
       }
-      console.log("hello");
+      const formData = new FormData();
+      console.log(imageFile)
+      formData.append("data", new Blob([JSON.stringify(payload)], { type: "application/json" }));
+      if (imageFile) {
+        formData.append("imageFile", imageFile);
+      }
 
-       const data = await requestApi.post(`/recruiter/${userId}/profile`, payload);
+       const data = await requestApi.post(`/recruiter/${userId}/profile`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+     
             
 
       toast.success(
@@ -149,6 +164,7 @@ const RecruiterProfile = () => {
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
+    console.log(file);
     if (file) {
       setImageFile(file);
       setProfileImage(URL.createObjectURL(file));

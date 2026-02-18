@@ -11,6 +11,7 @@ const TPOProfile = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const pageMode = query.get("page");
+  
   const userId = getuserId();
 
   const [isEditing, setIsEditing] = useState(false);

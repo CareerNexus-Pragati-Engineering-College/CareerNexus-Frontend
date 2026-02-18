@@ -5,18 +5,12 @@ import { Link } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import NavbarStudentDashboard from "../../components/NavbarStudentDashboard";
 import { useParams } from "react-router-dom";
+import { useEffect, useState} from "react";
 import getUserId from "../../services/getUserId"; // Function to get user ID
-const visitedCompanies = [
-  { id: 1, name: "Google", logo: "/images/google.png" },
-  { id: 2, name: "Microsoft", logo: "/images/microsoft.png" },
-  { id: 3, name: "Amazon", logo: "/images/amazon.png" },
-  { id: 4, name: "Infosys", logo: "/images/infosys.png" },
-  { id: 5, name: "TCS", logo: "/images/tcs.png" },
-  { id: 6, name: "Wipro", logo: "/images/wipro.png" },
-  { id: 7, name: "Accenture", logo: "/images/accenture.png" },
-  { id: 8, name: "HCL", logo: "/images/hcl.png" },
-  { id: 9, name: "Tech Mahindra", logo: "/images/techmahindra.png" },
-];
+import requestApi from "../../services/request";
+
+
+
 
 const trackerStats = [
   { title: "Companies Applied", value: 12 },
@@ -32,8 +26,23 @@ const placementNews = [
   "Tech Mahindra recruitment in process",
 ];
 
+
 const StudentHome = () => {
+  const Companies = [
+  { userId: 1, company: "Google", img_loc: "/images/google.png" },
+  { userId: 2, company: "Microsoft", img_loc: "/images/microsoft.png" },
+  { userId: 3, company: "Amazon", img_loc: "/images/amazon.png" },
+  { userId: 4, company: "Infosys", img_loc: "/images/infosys.png" },
+  { userId: 5, company: "TCS", img_loc: "/images/tcs.png" },
+  { userId: 6, company: "Wipro", img_loc: "/images/wipro.png" },
+  { userId: 7, company: "Accenture", img_loc: "/images/accenture.png" },
+  { userId: 8, company: "HCL", img_loc: "/images/hcl.png" },
+  { userId: 9, company: "Tech Mahindra", img_loc: "/images/techmahindra.png" },
+];
+ const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
+  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT 
   const scrollRef = useRef(null);
+  const [visitedCompanies, setVisitedCompanies] = useState([]);
   const scrollAmount = 220; // Adjust this for the scroll jump per click
 
   const scrollLeft = () => {
@@ -42,6 +51,18 @@ const StudentHome = () => {
   const scrollRight = () => {
     scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
   };
+
+useEffect(() => {
+   const data= requestApi.get(`/student/companies-visited`);
+  data.then((response) => {
+      const companies = response.data;
+      console.log(companies);
+      setVisitedCompanies(companies || Companies);
+    });
+    
+
+
+  }, []);
 
   return (
     <>
@@ -134,16 +155,16 @@ const StudentHome = () => {
           >
             {visitedCompanies.map((company) => (
               <Link
-                key={company.id}
-                to={`/student/company/${company.id}`}
+                key={company.userId}
+                to={`/student/company/${company.userId}`}
                 className="bg-white/60 border border-violet-200/40 backdrop-blur-xl p-5 sm:p-7 rounded-2xl shadow-lg flex flex-col items-center justify-center min-w-[180px] transform transition-all duration-300 hover:scale-110 hover:shadow-[0_0_24px_rgba(139,92,246,0.5)] hover:bg-white/80 cursor-pointer"
               >
                 <img
-                  src={company.logo}
-                  alt={company.name}
+                  src={`${backendUrl}:${backendPort}/uploads/images${ company.img_loc}`|| company.img_loc}
+                  alt={"Company Logo"}
                   className="h-20 w-20 sm:h-24 sm:w-24 mb-3 sm:mb-4 object-contain drop-shadow-sm"
                 />
-                <span className="text-base sm:text-lg font-medium text-[#2C225A] text-center">{company.name}</span>
+                <span className="text-base sm:text-lg font-medium text-[#2C225A] text-center">{company.company}</span>
               </Link>
             ))}
           </div>
