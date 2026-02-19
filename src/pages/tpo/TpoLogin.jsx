@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { NavLink,useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import toast from "react-hot-toast";
 import getUserId from "../../services/getUserId";
 import {
   FaEnvelope,
@@ -23,52 +22,46 @@ const TpoLogin = () => {
   const navigate = useNavigate();
   const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
   const backendPort = import.meta.env.VITE_APP_BACKEND_PORT;
- 
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
     // Check if user is already logged in
     // If so, redirect to home page
-      if(localStorage.getItem("token") && localStorage.getItem("role")=="tpo"){
-        toast.info("You are already logged in. Redirecting to Home...");
-        return navigate(`/tpo/${getUserId()}/home`);
-      }
+    if (localStorage.getItem("token") && localStorage.getItem("role") == "tpo") {
+      toast("You are already logged in. Redirecting to Home...", { id: "already-logged-in", icon: "ℹ️" });
+      return navigate(`/tpo/${getUserId()}/home`);
+    }
   }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!userId || !password) {
-      toast.error("Please enter both email and password.");
+      toast.error("Please enter both email and password.", { id: "missing-fields" });
       return;
     }
     // Simulate login action
     // You can replace this with your actual login API call
-    const payload = {userId:userId, password:password ,role:"tpo"};
-    try{
+    const payload = { userId: userId, password: password, role: "tpo" };
+    try {
       const response = await axios.post(`${backendUrl}:${backendPort}/auth/login`, payload);
-      toast.success(`Login successful! ${response.data?.msg} `, {
-        position: "top-right",
-        theme: "colored"
-      });
+      toast.success(`Login successful! ${response.data?.msg} `);
       console.log(response)
       localStorage.setItem("token", response.data.token);
-        localStorage.setItem("userId", userId);
-        localStorage.setItem("role",response.data.role)
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("role", response.data.role)
       // Redirect to the appropriate route based on the response
-      if(response.data.role=="admin"){
+      if (response.data.role == "admin") {
         navigate(`/admin`);
         return;
       }
-      
-       navigate(`/tpo/${userId}${response.data.router}`);
+
+      navigate(`/tpo/${userId}${response.data.router}`);
 
 
     }
     catch (error) {
       console.error("Error logging in:", error);
-      toast.error(`Login failed: ${error.response.data.message}`, {
-        position: "top-right",
-        theme: "colored"
-     });
+      toast.error(`Login failed: ${error.response.data.message}`);
     }
   };
 

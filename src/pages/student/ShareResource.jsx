@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { FaTimes, FaFileUpload } from "react-icons/fa";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast from "react-hot-toast";
 
 const branches = [
   "CSE", "CSE-AI", "CSE-DS", "CSE-AIML", "CSE-CS", "CSE-IT",
@@ -44,14 +43,14 @@ const ShareResource = ({ onShare, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.subject || !formData.pdfFile) {
-      toast.error("Please enter subject and upload a PDF.");
+      toast.error("Please enter subject and upload a PDF.", { id: "missing-fields" });
       return;
     }
 
     setIsLoading(true);
     setTimeout(() => {
       onShare(formData);
-      toast.success("Resource uploaded successfully!");
+      toast.success("Resource uploaded successfully!", { id: "upload-success" });
       setIsLoading(false);
       setFormData({
         year: "",
@@ -141,9 +140,8 @@ const ShareResource = ({ onShare, onClose }) => {
 
             {/* 📄 Upload */}
             <div
-              className={`col-span-1 md:col-span-2 border-2 ${
-                dragActive ? "border-dashed border-purple-500 bg-purple-50" : "border-gray-300"
-              } p-4 text-center rounded-lg`}
+              className={`col-span-1 md:col-span-2 border-2 ${dragActive ? "border-dashed border-purple-500 bg-purple-50" : "border-gray-300"
+                } p-4 text-center rounded-lg`}
             >
               <label htmlFor="pdfFile" className="cursor-pointer text-sm text-gray-600">
                 {formData.pdfFile ? (

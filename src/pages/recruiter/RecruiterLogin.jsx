@@ -12,58 +12,48 @@ import {
 } from "react-icons/fa";
 import requestApi from "../../services/request";
 import { motion } from "framer-motion";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 const RecruiterLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-   const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
+  const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
   const backendPort = import.meta.env.VITE_APP_BACKEND_PORT;
 
   useEffect(() => {
     window.scrollTo(0, 0);
-     if(localStorage.getItem("token") && localStorage.getItem("role")=="recruiter"){
-        toast.error("You are already logged in. Redirecting to Home...");
-        return navigate(`/recruiter/${localStorage.getItem("userId")}/home`);
-      }
+    if (localStorage.getItem("token") && localStorage.getItem("role") == "recruiter") {
+      toast.error("You are already logged in. Redirecting to Home...", { id: "already-logged-in" });
+      return navigate(`/recruiter/${localStorage.getItem("userId")}/home`);
+    }
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!userId || !password) {
-          toast.error("Please enter both email and password.",{
-            autoClose: 3000,
-            position: "top-right",
-          });
-          return;
-        }
-        // Simulate login action
-        // You can replace this with your actual login API call
-        const payload = {userId:userId, password:password ,role:"recruiter"};
-    try {
-     
-       const response = await axios.post(`${backendUrl}:${backendPort}/auth/login`, payload);
-            toast.success(`Login successful! ${response.data?.msg} `, {
-              position: "top-right",
-              theme: "colored",
-            autoClose: 1000,
-            });
-            localStorage.setItem("token", response.data.token);
-              localStorage.setItem("userId", userId);
-              localStorage.setItem("role","recruiter")
-            // Redirect to the appropriate route based on the response
-            navigate(`/recruiter/${userId}${response.data.router}`);
-      
+      toast.error("Please enter both email and password.", { id: "missing-fields" });
+      return;
     }
-     catch (error) {
-          console.error("Error logging in:", error);
-          toast.error(`Login failed: ${error?.response?.data?.message}`, {
-            position: "top-right",
-            theme: "colored"
-         });
-        }
+    // Simulate login action
+    // You can replace this with your actual login API call
+    const payload = { userId: userId, password: password, role: "recruiter" };
+    try {
+
+      const response = await axios.post(`${backendUrl}:${backendPort}/auth/login`, payload);
+      toast.success(`Login successful! ${response.data?.msg} `);
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("role", "recruiter")
+      // Redirect to the appropriate route based on the response
+      navigate(`/recruiter/${userId}${response.data.router}`);
+
+    }
+    catch (error) {
+      console.error("Error logging in:", error);
+      toast.error(`Login failed: ${error?.response?.data?.message}`);
+    }
   };
 
   return (

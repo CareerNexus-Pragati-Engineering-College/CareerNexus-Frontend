@@ -4,7 +4,7 @@ import * as XLSX from "xlsx";
 import { motion } from "framer-motion";
 import requestApi from "../../services/request";
 import getuserId from "../../services/getUserId";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 const departments = [
   "CSE", "CSE-IT", "CSE-AI", "CSE-AIML", "CSE-DS", "Cyber Security",
@@ -74,45 +74,40 @@ const TpoStudents = () => {
 
       try {
         const response = await requestApi.get(`/tpo/student/get-profile-links/${year}/${department}`);
-     
+
         setFilteredData(
           response.data
             .map(student => {
               return JSON.parse(student.urls)
-                .filter(url => url.platform === platform)       
+                .filter(url => url.platform === platform)
                 .map(url => ({
                   id: student.userId,
                   name: student.firstName + ' ' + student.lastName,
-                  department: department,              
-                  profileLink: url.url                         
+                  department: department,
+                  profileLink: url.url
                 }));
             })
-            .flat()  
+            .flat()
         );
-        if( response.data.length === 0) {
+        if (response.data.length === 0) {
           toast.error("No students found for the selected filters.", {
-            position: "top-right",
-            theme: "colored",
-            style: { backgroundColor: "#dc2626", color: "#fff" },
+            id: "no-students",
           });
         } else {
-          toast.success("Student data fetched successfully!")
+          toast.success("Student data fetched successfully!");
         }
       } catch (error) {
         console.error("Error fetching student data:", error);
         toast.error("Failed to fetch student data.", {
-          position: "top-right",
-          theme: "colored",
-          style: { backgroundColor: "#dc2626", color: "#fff" },
+          id: "fetch-error",
         });
       }
 
     } else {
       setFilteredData(dummyData);
       toast.error("Please select all filters", {
-        position: "top-right",
-
-      })
+        id: "select-filters",
+      });
     }
   };
 

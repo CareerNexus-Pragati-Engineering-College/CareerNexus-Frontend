@@ -16,11 +16,12 @@ export default {
         pastelLavender: '#E4EBFE',
       },
       backgroundImage: {
-    "soft-glow": "linear-gradient(to right, #F8E5EB, #E4EBFE)",
-  },
-   fontFamily: {
+        "soft-glow": "linear-gradient(to right, #F8E5EB, #E4EBFE)",
+      },
+      fontFamily: {
         orbitron: ['Orbitron', 'sans-serif'],
-       poppins: ["Poppins", "sans-serif"],
+        poppins: ["Poppins", "sans-serif"],
+        outfit: ["Outfit", "sans-serif"],
       },
     },
   },

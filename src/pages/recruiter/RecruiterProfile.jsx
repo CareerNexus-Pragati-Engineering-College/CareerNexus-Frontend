@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import NavbarRecruiterDashboard from "../../components/NavbarRecruiterDashboard";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import requestApi from "../../services/request";
 import getuserId from "../../services/getUserId";
 
@@ -18,10 +18,10 @@ const RecruiterProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState("/images/profile.png");
   const [imageFile, setImageFile] = useState(null);
-   const emailfromUrl = query.get("email");
+  const emailfromUrl = query.get("email");
   const userIdFromUrl = query.get("userId");
-    const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
-  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT 
+  const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
+  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT
 
   const [recruiter, setRecruiter] = useState({
     userId: "",
@@ -44,40 +44,35 @@ const RecruiterProfile = () => {
         phone: "",
       });
 
-      toast.info("You have to fill details", {
-        position: "top-right",
-        autoClose: 3000,
-        className: "custom-careernexus-toast",
-        bodyClassName: "custom-careernexus-body",
+      toast("You have to fill details", {
+        id: "fill-details",
+        icon: 'ℹ️',
       });
     } else if (pageMode === "update") {
       setIsEditing(false);
-       const data=requestApi.get(`/recruiter/${userId}/profile`);
-    data.then((response) => {
-      const recruiterData = response.data;
-      setRecruiter({
-        firstName: recruiterData.firstName || "",
-        lastName: recruiterData.lastName || "",
-        userId: recruiterData.userId || userIdFromUrl || userId,
-        designation: recruiterData.designation,
-        email: emailfromUrl || recruiterData.email || "",
-        phone: recruiterData.phone || "",
-        company:recruiterData.company || "",
-        
-      });
-      setProfileImage(`${backendUrl}:${backendPort}/uploads/images${recruiterData.img_loc}`);
-      
-      
+      const data = requestApi.get(`/recruiter/${userId}/profile`);
+      data.then((response) => {
+        const recruiterData = response.data;
+        setRecruiter({
+          firstName: recruiterData.firstName || "",
+          lastName: recruiterData.lastName || "",
+          userId: recruiterData.userId || userIdFromUrl || userId,
+          designation: recruiterData.designation,
+          email: emailfromUrl || recruiterData.email || "",
+          phone: recruiterData.phone || "",
+          company: recruiterData.company || "",
+
+        });
+        setProfileImage(`${backendUrl}:${backendPort}/uploads/images${recruiterData.img_loc}`);
+
+
+      }
+      ).catch((error) => {
+        console.error("Error fetching recruiter data:", error);
+        toast.error("Failed to fetch recruiter data. Please try again later.", { id: "fetch-error" });
+      })
     }
-    ).catch((error) => {
-      console.error("Error fetching recruiter data:", error);
-      toast.error("Failed to fetch recruiter data. Please try again later.", {
-        position: "top-right",
-        theme: "colored",
-        style: { backgroundColor: "#dc2626", color: "#fff" },
-      });
-    })
-  }}, [pageMode, userId,navigate]);
+  }, [pageMode, userId, navigate]);
 
   if (!pageMode) {
 
@@ -98,25 +93,20 @@ const RecruiterProfile = () => {
     const allFilled = Object.values(recruiter).every((v) => v.trim() !== "");
 
     if (!allFilled) {
-      toast.error("You have to fill all details", {
-        position: "top-right",
-        autoClose: 3000,
-        className: "custom-careernexus-toast",
-        bodyClassName: "custom-careernexus-body",
-      });
+      toast.error("You have to fill all details", { id: "fill-all-details" });
       return;
     }
 
     try {
       const payload = {
-       firstName: recruiter.firstName,
-       lastName: recruiter.lastName,
+        firstName: recruiter.firstName,
+        lastName: recruiter.lastName,
         company: recruiter.company,
         designation: recruiter.designation,
         phone: recruiter.phone,
         userId: recruiter.userId || userIdFromUrl,
         email: emailfromUrl || "",
-      
+
       }
       const formData = new FormData();
       console.log(imageFile)
@@ -125,24 +115,19 @@ const RecruiterProfile = () => {
         formData.append("imageFile", imageFile);
       }
 
-       const data = await requestApi.post(`/recruiter/${userId}/profile`, formData, {
+      const data = await requestApi.post(`/recruiter/${userId}/profile`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-     
-            
+
+
 
       toast.success(
         pageMode === "data"
           ? "Profile saved successfully!"
           : "Profile updated successfully!",
-        {
-          position: "top-right",
-          autoClose: 3000,
-          className: "custom-careernexus-toast",
-          bodyClassName: "custom-careernexus-body",
-        }
+        { id: "profile-save-success" }
       );
 
       setIsEditing(false);
@@ -153,12 +138,7 @@ const RecruiterProfile = () => {
         }, 2000);
       }
     } catch (error) {
-      toast.error(error.message || "Failed to save profile", {
-        position: "top-right",
-        autoClose: 3000,
-        className: "custom-careernexus-toast",
-        bodyClassName: "custom-careernexus-body",
-      });
+      toast.error(error.message || "Failed to save profile", { id: "save-error" });
     }
   };
 
@@ -233,11 +213,10 @@ const RecruiterProfile = () => {
                   value={recruiter[field.name]}
                   onChange={handleChange}
                   readOnly={!isEditing}
-                  className={`w-full px-4 py-2 rounded-md border text-[#2C225A] focus:outline-none focus:ring-2 transition ${
-                    isEditing
+                  className={`w-full px-4 py-2 rounded-md border text-[#2C225A] focus:outline-none focus:ring-2 transition ${isEditing
                       ? "border-violet-400 bg-white/80 focus:ring-violet-300"
                       : "border-gray-300 bg-gray-100 cursor-not-allowed"
-                  }`}
+                    }`}
                 />
               </div>
             ))}

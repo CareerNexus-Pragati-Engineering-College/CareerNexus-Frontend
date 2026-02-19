@@ -10,36 +10,35 @@ import {
   FaGoogle,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import toast from "react-hot-toast";
 
-import axios from "axios"; 
+import axios from "axios";
 
 const StudentLogin = () => {
   const navigate = useNavigate(); // ✅ Initialize navigate
   const [showPassword, setShowPassword] = useState(false);
   const [userId, setuserId] = useState("");
   const [password, setPassword] = useState("");
-    const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
-  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT 
+  const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
+  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT
 
   useEffect(() => {
     window.scrollTo(0, 0);
     // Check if user is already logged in
     // If so, redirect to home page
-      if(localStorage.getItem("token") && localStorage.getItem("role")=="student"){
-        toast.error("You are already logged in. Redirecting to Home...");
-        return navigate(`/student/${localStorage.getItem("userId")}/home`);
-      }
+    if (localStorage.getItem("token") && localStorage.getItem("role") == "student") {
+      toast.error("You are already logged in. Redirecting to Home...");
+      return navigate(`/student/${localStorage.getItem("userId")}/home`);
+    }
   }, []);
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
- const loginData = {
+    const loginData = {
       userId: userId,
       password: password,
-      role: "student" 
+      role: "student"
     };
 
     try {
@@ -47,21 +46,21 @@ const StudentLogin = () => {
 
       const response = await axios.post(`${backendUrl}:${backendPort}/auth/login`, loginData);
       const data = response.data;
-     
-        
-        toast.success(`Login Successful! ..`)
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("userId", loginData.userId);
-        localStorage.setItem("role","student")
 
-        // ✅ Redirect to router path
 
-        navigate(`/student/${loginData.userId}${data.router}`);
+      toast.success(`Login Successful! ..`)
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("userId", loginData.userId);
+      localStorage.setItem("role", "student")
 
-      
+      // ✅ Redirect to router path
+
+      navigate(`/student/${loginData.userId}${data.router}`);
+
+
     } catch (err) {
       console.error("Login request failed", err);
-      toast.error(err.response?.data?.error + " "+err.response?.data?.message || "Login failed. Please try again.");
+      toast.error(err.response?.data?.error + " " + err.response?.data?.message || "Login failed. Please try again.");
     }
   };
 

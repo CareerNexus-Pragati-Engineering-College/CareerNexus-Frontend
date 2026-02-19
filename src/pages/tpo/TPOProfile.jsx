@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import NavbarTPODashboard from "../../components/NavbarTPODashboard";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import requestApi from "../../services/request";
 import getuserId from "../../services/getUserId";
 
@@ -11,7 +11,7 @@ const TPOProfile = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const pageMode = query.get("page");
-  
+
   const userId = getuserId();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -19,7 +19,7 @@ const TPOProfile = () => {
   const [imageFile, setImageFile] = useState(null);
 
   const emailfromUrl = query.get("email") || "";
-  
+
 
 
   const [tpo, setTpo] = useState({
@@ -33,11 +33,9 @@ const TPOProfile = () => {
   useEffect(() => {
     if (pageMode === "data") {
       setIsEditing(true);
-      toast.info("You have to fill details", {
-        position: "top-right",
-        autoClose: 3000,
-        className: "custom-careernexus-toast",
-        bodyClassName: "custom-careernexus-body",
+      toast("You have to fill details", {
+        id: "fill-details",
+        icon: 'ℹ️',
       });
     } else if (pageMode === "update") {
       setIsEditing(false);
@@ -49,7 +47,7 @@ const TPOProfile = () => {
             userId: r.userId || userId,
             firstName: r.firstName || "",
             lastName: r.lastName || "",
-          
+
             phone: r.phone || "",
             email: r.email || emailfromUrl || "",
           });
@@ -57,9 +55,7 @@ const TPOProfile = () => {
         .catch((err) => {
           console.error(err);
           toast.error("Failed to fetch TPO data.", {
-            position: "top-right",
-            theme: "colored",
-            style: { backgroundColor: "#dc2626", color: "#fff" },
+            id: "fetch-tpo-error",
           });
         });
     }
@@ -88,10 +84,7 @@ const TPOProfile = () => {
 
       toast.success(
         pageMode === "data" ? "Profile saved!" : "Profile updated!",
-        {
-          position: "top-right",
-          autoClose: 3000,
-        }
+        { id: "profile-save-success" }
       );
 
       setIsEditing(false);
@@ -158,12 +151,12 @@ const TPOProfile = () => {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
-            {[ 
+            {[
               { label: "User ID", name: "userId" },
               { label: "First Name", name: "firstName" },
               { label: "Last Name", name: "lastName" },
               { label: "Email", name: "email" },
-              
+
               { label: "Phone Number", name: "phone" },
             ].map((field) => (
               <div key={field.name}>
@@ -176,11 +169,10 @@ const TPOProfile = () => {
                   value={tpo[field.name]}
                   onChange={handleChange}
                   readOnly={!isEditing}
-                  className={`w-full px-4 py-2 rounded-md border text-[#2C225A] focus:outline-none focus:ring-2 transition ${
-                    isEditing
+                  className={`w-full px-4 py-2 rounded-md border text-[#2C225A] focus:outline-none focus:ring-2 transition ${isEditing
                       ? "border-violet-400 bg-white/90 focus:ring-violet-300"
                       : "border-gray-300 bg-gray-100 cursor-not-allowed"
-                  }`}
+                    }`}
                 />
               </div>
             ))}

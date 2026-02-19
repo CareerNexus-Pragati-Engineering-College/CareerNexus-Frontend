@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom"; // ✅ import useNavigate
-import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import toast from "react-hot-toast";
 import {
   FaEnvelope,
   FaLock,
@@ -15,7 +14,7 @@ import {
 import { motion } from "framer-motion";
 
 
-import axios from "axios"; 
+import axios from "axios";
 
 const StudentSignup = () => {
   const navigate = useNavigate(); // ✅ init navigate
@@ -23,43 +22,43 @@ const StudentSignup = () => {
   const [rollNo, setRollNo] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST 
-  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT 
+  const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
+  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT
 
   useEffect(() => {
     window.scrollTo(0, 0);
     // Check if user is already logged in
     // If so, redirect to home page
-     if(localStorage.getItem("token")){
-            toast.error("You are already logged in. Redirecting to Home...");
-            return navigate(`/student/${localStorage.getItem("userId")}/home`);
-          }
+    if (localStorage.getItem("token")) {
+      toast.error("You are already logged in. Redirecting to Home...");
+      return navigate(`/student/${localStorage.getItem("userId")}/home`);
+    }
   }, []);
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const response = await axios.post(`${backendUrl}:${backendPort}/auth/student/register`, {
-     
-      userId: rollNo, // idhey user Id ...
-      email,
-      password,
+    try {
+      const response = await axios.post(`${backendUrl}:${backendPort}/auth/student/register`, {
+
+        userId: rollNo, // idhey user Id ...
+        email,
+        password,
 
 
-    });
+      });
 
-    toast.success("Registration Successful redirect to login ..")
-    navigate("/student/login");
-  } catch (error) {
-    if (error.response && error.response.data && error.response.data.message) {
-      toast.error(error.response.data.message); // user already exists msg - alert  
-    } else {
-      toast.error("Something went wrong. Please try again."); // alert
+      toast.success("Registration Successful redirect to login ..")
+      navigate("/student/login");
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.message) {
+        toast.error(error.response.data.message); // user already exists msg - alert  
+      } else {
+        toast.error("Something went wrong. Please try again."); // alert
+      }
+      console.error("Signup Error:", error);
     }
-    console.error("Signup Error:", error);
-  }
-};
+  };
 
 
   return (
@@ -99,7 +98,7 @@ const StudentSignup = () => {
 
         {/* 📄 Form */}
         <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
-          
+
 
           <div className="relative">
             <FaIdBadge className="absolute left-3 top-3.5 text-violet-400" />
@@ -143,12 +142,6 @@ const StudentSignup = () => {
             </div>
           </div>
 
-          <div className="flex items-center text-sm text-violet-600 gap-2 pl-1">
-            <label className="flex items-center gap-2 pl-[1px]">
-              <input type="checkbox" className="accent-violet-500" required />
-              <span className="font-poppins">I agree to the terms & policy</span>
-            </label>
-          </div>
 
           <motion.button
             whileTap={{ scale: 0.97 }}

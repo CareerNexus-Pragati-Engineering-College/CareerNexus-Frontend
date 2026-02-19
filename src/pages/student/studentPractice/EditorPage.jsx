@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode'; // Import jwt-decode library
 import CodeEditor from './CodeEditor';
-import { Toaster, toast } from 'react-hot-toast'; // Import Toaster and toast for notifications
-import AnimatedBackground from '../background/AnimatedBackground'; 
+import { toast } from 'react-hot-toast'; // Import toast for notifications
+import AnimatedBackground from '../background/AnimatedBackground';
 
 const EditorPage = () => {
   const { sessionId } = useParams();
@@ -40,7 +40,7 @@ const EditorPage = () => {
     if (window.innerWidth <= MIN_WIDTH_REQUIRED) {
       toast.error(`Please use a screen wider than ${MIN_WIDTH_REQUIRED}px for the best experience. Current width: ${window.innerWidth}px`);
     } else {
-        toast.dismiss(); // Dismiss any previous width warnings if window resizes large enough
+      toast.dismiss(); // Dismiss any previous width warnings if window resizes large enough
     }
 
 
@@ -54,25 +54,25 @@ const EditorPage = () => {
   // Conditional rendering based on window width
   if (windowWidth <= MIN_WIDTH_REQUIRED) {
     return (
-<>
+      <>
 
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-950 text-white p-6 text-center">
-       
-        <Toaster position="top-right" reverseOrder={false} />
-        <h1 className="text-4xl font-bold text-red-500 mb-4">Screen Size Warning</h1>
-        <p className="text-lg text-gray-300 mb-6">
-          This collaborative editor is designed for larger screens.
-        </p>
-        <p className="text-md text-gray-400">
-          Please open this page on a screen with a width greater than {MIN_WIDTH_REQUIRED} pixels for optimal experience.
-          <br />
-          Your current screen width is: <span className="font-semibold text-yellow-400">{windowWidth}px</span>
-        </p>
-       
-        <button onClick={() => navigate('/dashboard')} className="mt-8 px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-semibold transition duration-200">
-          Go to Dashboard
-        </button> 
-      </div>
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-950 text-white p-6 text-center">
+
+
+          <h1 className="text-4xl font-bold text-red-500 mb-4">Screen Size Warning</h1>
+          <p className="text-lg text-gray-300 mb-6">
+            This collaborative editor is designed for larger screens.
+          </p>
+          <p className="text-md text-gray-400">
+            Please open this page on a screen with a width greater than {MIN_WIDTH_REQUIRED} pixels for optimal experience.
+            <br />
+            Your current screen width is: <span className="font-semibold text-yellow-400">{windowWidth}px</span>
+          </p>
+
+          <button onClick={() => navigate('/dashboard')} className="mt-8 px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-semibold transition duration-200">
+            Go to Dashboard
+          </button>
+        </div>
       </>
     );
   }
@@ -80,8 +80,8 @@ const EditorPage = () => {
   // If screen width is sufficient, render the CodeEditor
   return (
     <>
-      <Toaster position="top-right" reverseOrder={false} /> {/* Toaster should be available globally or at a high level */}
-      <AnimatedBackground/>
+
+      <AnimatedBackground />
       <CodeEditor sessionId={sessionId} username={username} />
     </>
   );

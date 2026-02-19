@@ -1,27 +1,27 @@
 import React from "react";
 
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { Navigate, useParams } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
 
   const token = localStorage.getItem("token");
   const storedUserId = localStorage.getItem("userId");
-  const studentRole=localStorage.getItem("role");
+  const studentRole = localStorage.getItem("role");
   const { userId } = useParams();
 
 
   if (!token) {
 
- toast.error("You are not authorized to access this page. Please log in.");
+    toast.error("You are not authorized to access this page. Please log in.", { id: "not-authorized" });
     return <Navigate to="/student/login" replace />;
-   
+
   }
 
-  if (studentRole!="student") {
-    toast.error("You are not authorized to access this page.");
+  if (studentRole != "student") {
+    toast.error("You are not authorized to access this page.", { id: "not-student" });
 
-    return  <Navigate to="/student/login" replace />;
+    return <Navigate to="/student/login" replace />;
   }
 
   return children;
