@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { toast, Toaster } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-// import api from '../services/axios';
+import api from '../../../services/request';
 import EditorHeader from './EditorHeader';
 import MonacoCodeEditor from './MonacoCodeEditor';
 import OutputConsole from './OutputConsole';
@@ -88,15 +88,15 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
 
                 case "CODE_CHANGE_UPDATE":
                     if (msg.user !== username) {
-                        preventEcho.current = true; 
+                        preventEcho.current = true;
                         const newEdit = JSON.parse(msg.content);
                         setEditQueue(prevQueue => [...prevQueue, newEdit]);
                         if (msg.selectedLanguage && msg.selectedLanguage !== selectedLanguage) {
                             setSelectedLanguage(msg.selectedLanguage);
                         }
-                        setLastUpdatedUser(msg.user); 
+                        setLastUpdatedUser(msg.user);
                     } else {
-                        
+
                         setLastUpdatedUser(username);
                     }
                     break;
@@ -118,7 +118,7 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
                     );
                     if (newUsersJoined.length > 0) {
                         newUsersJoined.forEach(user => {
-                            if (user !== username) { 
+                            if (user !== username) {
                                 toast.success(`${user} joined the session!`);
                             }
                         });
@@ -131,7 +131,7 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
                     );
                     if (usersWhoLeft.length > 0) {
                         usersWhoLeft.forEach(user => {
-                            if (user !== username) { 
+                            if (user !== username) {
                                 toast.error(`${user} left the session.`);
                             }
                         });
@@ -381,7 +381,7 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
 
     return (
         <div className="flex flex-col h-screen text-gray-200 p-4 rounded-xl shadow-2xl border border-gray-700 ">
-            <Toaster position="top-right" reverseOrder={false} />
+
 
             {/* Render the Editor Header subcomponent */}
             <EditorHeader
@@ -425,7 +425,7 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
                         <OutputConsole executionOutput={executionOutput} />
                     </div>
 
-                
+
                 </div>
             </div>
         </div>

@@ -5,39 +5,32 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import requestApi from "../../services/request";
 import getUserId from "../../services/getUserId";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast from "react-hot-toast";
 const ApplicationsPage = () => {
   const [postedJobs, setPostedJobs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
-  const userId=getUserId();
+  const userId = getUserId();
   useEffect(() => {
     async function fetchData() {
-        try {
+      try {
         const res = await requestApi.get(`/applications/counts/per-job/by-recruiter/${userId}`);
         if (res && Array.isArray(res.data) && res.data.length > 0) {
-           setPostedJobs(res.data);
-          await toast.success("Applications fetched successfully!",
-            {
-              position: "top-right",
-              autoClose: 500,
-              
-            }
-          );
+          setPostedJobs(res.data);
+          toast.success("Applications fetched successfully!", { id: "fetch-applications" });
         } else if (res && Array.isArray(res.data) && res.data.length ===
-    0) {
+          0) {
           setPostedJobs([]);
-         
-          toast.info("Student not yet applied for Jobs..");
-        } 
-        } catch (error) {
+
+          toast("Student not yet applied for Jobs..", { id: "no-apps", icon: "ℹ️" });
+        }
+      } catch (error) {
         setPostedJobs([]);
         toast.error("Failed to fetch applications. Please try again.");
-        }
       }
-      fetchData();
-   
+    }
+    fetchData();
+
   }, []);
 
   const handleStartRecruitment = (jobId) => {

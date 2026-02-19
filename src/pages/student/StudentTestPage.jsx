@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import requestApi from "../../services/request";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast from "react-hot-toast";
 
 const fallbackQuestions = [
   {
@@ -37,12 +36,12 @@ const StudentTestPage = () => {
         if (res.data && res.data.length > 0) {
           setQuestions(res.data);
         } else {
-          toast.info("No questions found from backend. Showing sample test.");
+          toast("No questions found from backend. Showing sample test.", { icon: "ℹ️" });
           setQuestions(fallbackQuestions);
         }
       })
       .catch(() => {
-        toast.warn("Could not load questions from backend. Showing fallback questions.");
+        toast("Could not load questions from backend. Showing fallback questions.", { icon: "⚠️" });
         setQuestions(fallbackQuestions);
       });
 
@@ -102,7 +101,7 @@ const StudentTestPage = () => {
 
   return (
     <div ref={fullScreenRef} className="flex w-full h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A]">
-      <ToastContainer />
+
       {/* Sidebar */}
       <div className="w-1/5 p-4 border-r border-violet-300 flex flex-col gap-4">
         <div className="flex justify-between items-center">

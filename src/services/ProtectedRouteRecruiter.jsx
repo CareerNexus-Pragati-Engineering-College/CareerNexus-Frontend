@@ -2,7 +2,7 @@
 import React from "react";
 import { Navigate, useParams } from "react-router-dom";
 
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 
 
@@ -17,14 +17,14 @@ const ProtectedRouteRecruiter = ({ children }) => {
 
   if (!token) {
 
-    toast.error("You must log in as a recruiter to access this page.");
+    toast.error("You must log in as a recruiter to access this page.", { id: "recruiter-login" });
     return <Navigate to="/recruiter/login" replace />;
 
   }
 
   if (userId && userId !== storedUserId) {
 
-    toast.error("Invalid recruiter access.");
+    toast.error("Invalid recruiter access.", { id: "invalid-recruiter" });
 
     return <Navigate to="/recruiter/login" replace />;
 

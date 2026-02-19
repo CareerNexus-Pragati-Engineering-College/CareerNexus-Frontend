@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast from "react-hot-toast";
 import requestApi from "../../services/request";
 
 
@@ -122,75 +121,61 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
       try {
         setLoading(true);
         await requestApi.post(`student/${userId}/profile`, payload);
-        toast.success("Profile updated successfully!", {
-          position: "top-right",
-          autoClose: 1200,
-        });
-     
+        toast.success("Profile updated successfully!");
+
         setIsEditing(false);
         setIsModified(false);
         setOriginalData(formData);
-        
-       
+
+
       } catch (err) {
         console.error("Failed to update profile:", err);
-        toast.error("Failed to update profile. Please try again.", {
-          position: "top-right",
-          autoClose: 1200,
-        });
+        toast.error("Failed to update profile. Please try again.");
       }
-      finally{
-        
-         setLoading(false);
+      finally {
+
+        setLoading(false);
       }
       return;
     }
-    else{
-     
+    else {
+
       if (!formData.resume) {
-        toast.error("Please upload your resume.", {
-          position: "top-right",
-          autoClose: 1200,
-        });
+        toast.error("Please upload your resume.");
         setLoading(false);
         return;
       }
-     try{
-      
-      const resumeData = new FormData();
-      resumeData.append("resumeFile", formData.resume);
-      const response=await requestApi.post(`/applications/apply/${userId}/${job.id}`,resumeData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      } 
-      );
-      setLoading(true);
-     
-      const appliedJob = {
-        ...job,
-        applied: true,
-        appliedDate: new Date().toISOString(),
-        status: "Under Review",
-      };
+      try {
 
-    onApply(appliedJob);
-    toast.success("Application submitted successfully!", {
-      position: "top-right",
-      autoClose: 1200,
-      onClose: () => {
-        onClose();
-      },
-    });
+        const resumeData = new FormData();
+        resumeData.append("resumeFile", formData.resume);
+        const response = await requestApi.post(`/applications/apply/${userId}/${job.id}`, resumeData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+        );
+        setLoading(true);
 
-     }
+        const appliedJob = {
+          ...job,
+          applied: true,
+          appliedDate: new Date().toISOString(),
+          status: "Under Review",
+        };
+
+        onApply(appliedJob);
+        toast.success("Application submitted successfully!");
+        setTimeout(() => {
+          onClose();
+        }, 1200);
+
+      }
 
       catch (error) {
         console.error("Failed to apply for job:", error);
-        toast.error("Failed to apply for job. Please try again.", {
-          position: "top-right",
-          autoClose: 1200,
-        });}
+        toast.error("Failed to apply for job. Please try again.");
+      }
 
       finally {
         setLoading(false);
@@ -214,7 +199,7 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-lg w-full max-w-2xl shadow-xl relative overflow-y-auto max-h-[90vh] scrollbar-hide">
-        <ToastContainer />
+
 
         {/* Close button */}
         <button
@@ -232,22 +217,22 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
 
         {/* Application Form */}
         <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4 text-sm">
-          {["FirstName","LastName","userId","Department","Year","Cgpa","Email","Phone","skills","graduationYear"].map((field) => (
+          {["FirstName", "LastName", "userId", "Department", "Year", "Cgpa", "Email", "Phone", "skills", "graduationYear"].map((field) => (
             <div key={field} className="col-span-1">
               <label className="font-medium text-gray-700">
                 {field === "Cgpa"
                   ? "CGPA"
                   : field === "userId"
-                  ? "User ID"
-                  : field === "Email"
-                  ? "Email Address"
-                  : field === "Phone"
-                  ? "Phone Number"
-                  : field === "skills"
-                  ? "Skills (comma separated)"
-                  : field === "graduationYear"
-                  ? "Graduation Year"
-                  : field.replace(/([A-Z])/g, " $1")} {" "}
+                    ? "User ID"
+                    : field === "Email"
+                      ? "Email Address"
+                      : field === "Phone"
+                        ? "Phone Number"
+                        : field === "skills"
+                          ? "Skills (comma separated)"
+                          : field === "graduationYear"
+                            ? "Graduation Year"
+                            : field.replace(/([A-Z])/g, " $1")} {" "}
                 <span className="text-red-500">*</span>
               </label>
               <input

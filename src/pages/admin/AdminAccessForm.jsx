@@ -12,8 +12,7 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import toast from "react-hot-toast";
 
 const AdminAccessForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,26 +27,20 @@ const AdminAccessForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = { userId:username, email:email, password:password, role:role };
+    const payload = { userId: username, email: email, password: password, role: role };
 
     try {
       const response = await axios.post(`http://localhost:8080/auth/${role}/register`, payload);
-      toast.success("User registered successfully!", {
-        position: "top-right",
-        theme: "colored"
-      });
+      toast.success("User registered successfully!");
     } catch (error) {
       console.error("Error registering user:", error.message);
-      toast.error(`Failed to register user.${error.response.data.message}`, {
-        position: "top-right",
-        theme: "colored"
-      });
+      toast.error(`Failed to register user.${error.response.data.message}`);
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#e6d6f9] via-[#f5d0e5] to-[#fbe5ff] flex items-center justify-center px-4 py-16">
-      <ToastContainer />
+
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -130,7 +123,7 @@ const AdminAccessForm = () => {
               <option value="student">Student</option>
               <option value="recruiter">Recruiter</option>
               <option value="tpo">TPO</option>
-             
+
             </select>
           </div>
 

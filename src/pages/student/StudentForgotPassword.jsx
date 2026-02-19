@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { FaLock, FaEye, FaEyeSlash, FaArrowLeft, FaKey } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import toast from "react-hot-toast";
 
 const StudentForgotPassword = () => {
   const [otp, setOtp] = useState("");
@@ -19,7 +18,7 @@ const StudentForgotPassword = () => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-      toast.error("Passwords do not match!");
+      toast.error("Passwords do not match!", { id: "password-mismatch" });
       return;
     }
 
@@ -115,7 +114,7 @@ const StudentForgotPassword = () => {
           </motion.button>
         </form>
 
-        <ToastContainer position="top-center" />
+
       </motion.div>
     </div>
   );
