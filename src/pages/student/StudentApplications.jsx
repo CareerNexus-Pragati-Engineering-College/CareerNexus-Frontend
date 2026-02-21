@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import NavbarStudentDashboard from "../../components/NavbarStudentDashboard";
-import { FaClock, FaMapMarkerAlt, FaBuilding } from "react-icons/fa";
+import { FaClock, FaMapMarkerAlt, FaBuilding, FaArrowLeft } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import requestApi from "../../services/request";
 import getUserId from "../../services/getUserId";
@@ -113,7 +114,16 @@ const StudentApplications = () => {
       >
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-semibold">Your Applications</h2>
+            <div className="flex items-center gap-4">
+              <Link
+                to={`/student/${userId}/home`}
+                className="bg-gray-100 hover:bg-purple-100 text-gray-600 hover:text-purple-700 p-2.5 rounded-full transition-colors flex items-center justify-center shadow-sm"
+                title="Back to Dashboard"
+              >
+                <FaArrowLeft size={18} />
+              </Link>
+              <h2 className="text-2xl font-semibold">Your Applications</h2>
+            </div>
 
             <div className="text-sm">
               <label className="mr-2 font-medium text-gray-600">Sort:</label>

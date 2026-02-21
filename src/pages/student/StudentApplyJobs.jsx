@@ -1,12 +1,13 @@
 // src/pages/student/StudentApplyJobs.jsx
 
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {
   FaBookmark,
   FaRegBookmark,
   FaBuilding,
   FaBolt,
+  FaArrowLeft,
 } from "react-icons/fa";
 import { LuPenLine } from "react-icons/lu";
 import NavbarStudentDashboard from "../../components/NavbarStudentDashboard";
@@ -112,7 +113,16 @@ const StudentApplyJobs = () => {
 
           {/* ------------------ Header ------------------ */}
           <div className="px-1 mb-4 flex justify-between items-center">
-            <h2 className="text-lg font-semibold">Jobs for you</h2>
+            <div className="flex items-center gap-3">
+              <Link
+                to={`/student/${userId}/home`}
+                className="bg-gray-100 hover:bg-purple-100 text-gray-600 hover:text-purple-700 p-2 rounded-full transition-colors flex items-center justify-center shadow-sm"
+                title="Back to Dashboard"
+              >
+                <FaArrowLeft size={16} />
+              </Link>
+              <h2 className="text-lg font-semibold">Jobs for you</h2>
+            </div>
             <button
               onClick={() => setIsPrefModalOpen(true)}
               className="text-purple-700 text-sm flex items-center gap-1"
@@ -128,8 +138,8 @@ const StudentApplyJobs = () => {
                 key={tab}
                 onClick={() => setSelectedTab(tab)}
                 className={`pb-2 border-b-2 font-medium ${selectedTab === tab
-                    ? "border-purple-600 text-purple-700"
-                    : "border-transparent text-gray-500"
+                  ? "border-purple-600 text-purple-700"
+                  : "border-transparent text-gray-500"
                   }`}
               >
                 {tab}
@@ -147,8 +157,8 @@ const StudentApplyJobs = () => {
                   key={job.id}
                   onClick={() => setSelectedJob(job)}
                   className={`cursor-pointer border p-4 rounded-xl flex gap-4 items-start hover:shadow ${selectedJob?.id === job.id
-                      ? "border-purple-600"
-                      : "border-gray-200"
+                    ? "border-purple-600"
+                    : "border-gray-200"
                     }`}
                 >
                   <div className="bg-purple-100 text-purple-700 rounded-lg p-2">
