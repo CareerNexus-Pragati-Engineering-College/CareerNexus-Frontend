@@ -6,8 +6,7 @@ import { FaClock, FaMapMarkerAlt, FaBuilding } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import requestApi from "../../services/request";
 import getUserId from "../../services/getUserId";
-import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import toast from "react-hot-toast";
 
 const dummyApplications = [
   {
@@ -44,7 +43,7 @@ const dummyApplications = [
     appliedResumeUrl: "",
   },
 
- 
+
 ];
 
 
@@ -52,36 +51,30 @@ const StudentApplications = () => {
   const [appliedJobs, setAppliedJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [sortOrder, setSortOrder] = useState("latest");
-  const userId=getUserId()
+  const userId = getUserId()
   const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
-  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT 
+  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT
 
 
   useEffect(() => {
-  async function fetchData() {
-    try {
-    const res = await requestApi.get(`/applications/my-applications/${userId}`);
-    if (res && Array.isArray(res.data) && res.data.length > 0) {
-      setAppliedJobs(res.data);
-      await toast.success("Applications fetched successfully!",
-        {
-          position: "top-right",
-          autoClose: 700,
-          
+    async function fetchData() {
+      try {
+        const res = await requestApi.get(`/applications/my-applications/${userId}`);
+        if (res && Array.isArray(res.data) && res.data.length > 0) {
+          setAppliedJobs(res.data);
+          toast.success("Applications fetched successfully!", { id: "fetch-applications" });
+        } else if (res && Array.isArray(res.data) && res.data.length ===
+          0) {
+          setAppliedJobs([]);
+
+          toast("You have not applied to any jobs yet.", { id: "no-apps", icon: "ℹ️" });
         }
-      );
-    } else if (res && Array.isArray(res.data) && res.data.length ===
-0) {
-      setAppliedJobs([]);
-     
-      toast.info("You have not applied to any jobs yet.");
-    } 
-    } catch (error) {
-    setAppliedJobs([]);
-    toast.error("Failed to fetch applications. Please try again.");
+      } catch (error) {
+        setAppliedJobs([]);
+        toast.error("Failed to fetch applications. Please try again.");
+      }
     }
-  }
-  fetchData();
+    fetchData();
   }, [userId]);
 
   const sortByDate = (order) => {
@@ -113,11 +106,11 @@ const StudentApplications = () => {
       <NavbarStudentDashboard />
 
       <motion.div
-  className="min-h-screen bg-white text-gray-900 font-poppins px-4 pt-24 pb-6"
-  initial={{ opacity: 0, scale: 0.98 }}
-  animate={{ opacity: 1, scale: 1 }}
-  transition={{ duration: 0.4, ease: 'easeOut' }}
->
+        className="min-h-screen bg-white text-gray-900 font-poppins px-4 pt-24 pb-6"
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+      >
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-semibold">Your Applications</h2>
@@ -159,7 +152,7 @@ const StudentApplications = () => {
                             <FaMapMarkerAlt />
                             {locations.join(", ")}
                           </span>
-                         
+
                           <span className="flex items-center gap-1">
                             <FaClock />
                             {new Date(app.applicationDate).toLocaleTimeString([], {
@@ -168,36 +161,36 @@ const StudentApplications = () => {
                             })}
                           </span>
                           <span className="flex items-center gap-1">
-                          
+
                             {new Date(app.applicationDate).toLocaleDateString()}
-                            </span>
-                         
+                          </span>
+
                         </div>
-                         <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500 mt-1">
-                         <p className="flex items-center gap-1 ">
-                           FeedBack: {
-                              app.feedback?(<span>{app.feedback}</span>):(<span>No Feedback Available </span>)
+                        <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500 mt-1">
+                          <p className="flex items-center gap-1 ">
+                            FeedBack: {
+                              app.feedback ? (<span>{app.feedback}</span>) : (<span>No Feedback Available </span>)
                             }
-                            </p>
-                             
-                            </div>
-                            <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500 mt-1">
-                              <p className="flex items-center gap-1 ">
-                              Resume:
-                              {app.appliedResumeUrl ? (
-                                <a
-                                  href={`${backendUrl}:${backendPort}/uploads/resumes${app.appliedResumeUrl}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-blue-600 hover:underline"
-                                >
-                                  View Resume
-                                </a>
-                              ) : (
-                                <span className="text-gray-500">No Resume Uploaded</span>
-                              )}
-                             </p>
-                             </div>
+                          </p>
+
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500 mt-1">
+                          <p className="flex items-center gap-1 ">
+                            Resume:
+                            {app.appliedResumeUrl ? (
+                              <a
+                                href={`${backendUrl}:${backendPort}/uploads/resumes${app.appliedResumeUrl}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 hover:underline"
+                              >
+                                View Resume
+                              </a>
+                            ) : (
+                              <span className="text-gray-500">No Resume Uploaded</span>
+                            )}
+                          </p>
+                        </div>
                       </div>
                     </div>
 

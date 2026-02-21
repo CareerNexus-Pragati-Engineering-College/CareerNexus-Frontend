@@ -14,6 +14,7 @@ import {
 import { RiSuitcaseLine } from "react-icons/ri";
 import requestApi from "../../services/request";
 import getUserId from "../../services/getUserId";
+import toast from "react-hot-toast";
 
 
 
@@ -23,12 +24,11 @@ import getUserId from "../../services/getUserId";
 
 const RecruiterJob = () => {
   const userId = getUserId();
-  const [toast, setToast] = useState({ show: false, message: "", type: "success" });
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
   const [jobPosts, setJobPosts] = useState([]);
   const [job, setJob] = useState({
     job_id: "",
-    
+
     company_name: "",
     job_title: "",
     job_description: "",
@@ -47,14 +47,15 @@ const RecruiterJob = () => {
   const [deleteIndex, setDeleteIndex] = useState(null);
   const jobsPerPage = 5;
 
-function parseLocations (loc) {
-  if (Array.isArray(loc)) return loc;
-  try {
-    
-    return JSON.parse(loc);
-  } catch {
-    return [loc]; 
-  }}
+  function parseLocations(loc) {
+    if (Array.isArray(loc)) return loc;
+    try {
+
+      return JSON.parse(loc);
+    } catch {
+      return [loc];
+    }
+  }
 
 
   useEffect(() => {
@@ -62,7 +63,7 @@ function parseLocations (loc) {
       try {
         const res = await requestApi.get(`/jobs/recruiter/${userId}`);
         setJobPosts(res.data);
-        
+
         if (res.data.length === 0) {
           showToast("No jobs found. Start posting your jobs!");
         }
@@ -75,10 +76,10 @@ function parseLocations (loc) {
             recruitment_process: job.recruitmentProcess || job.recruitment_process,
             salary_package: job.salaryPackage || job.salary_package,
             locations: parseLocations(job.locations) || parseLocations(job.location),
-            application_deadline: job.applicationDeadline || job.application_deadline,  
+            application_deadline: job.applicationDeadline || job.application_deadline,
           }));
         })
-       
+
       } catch {
         showToast("Failed to fetch jobs", "danger");
       }
@@ -86,14 +87,17 @@ function parseLocations (loc) {
     fetchJobs();
   }, []);
 
- useEffect(() => {
+  useEffect(() => {
     window.scrollTo(0, 0);
-   
-  }, [ showModal, showDeleteModal,editIndex, currentPage]);
+
+  }, [showModal, showDeleteModal, editIndex, currentPage]);
 
   const showToast = (message, type = "success") => {
-    setToast({ show: true, message, type });
-    setTimeout(() => setToast((t) => ({ ...t, show: false })), 3000);
+    if (type === "danger" || type === "error") {
+      toast.error(message, { id: "recruiter-job-error" });
+    } else {
+      toast.success(message, { id: "recruiter-job-success" });
+    }
   };
 
   const handlePostJob = async () => {
@@ -116,7 +120,7 @@ function parseLocations (loc) {
       jobDescription: job.job_description,
       recruitmentProcess: job.recruitment_process,
       salaryPackage: job.salary_package,
-      locations:JSON.stringify(job.location),
+      locations: JSON.stringify(job.location),
       applicationDeadline: job.application_deadline,
     };
 
@@ -144,9 +148,9 @@ function parseLocations (loc) {
       console.error("Job post failed:", error);
       showToast("Failed to post job", "danger");
     }
-    
 
-    finally{
+
+    finally {
       window.location.reload()
     }
 
@@ -216,23 +220,7 @@ function parseLocations (loc) {
     <>
       <NavbarRecruiterDashboard />
 
-      {/* Toast */}
-      <AnimatePresence>
-        {toast.show && (
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            className={`fixed bottom-6 right-6 z-50 px-6 py-3 rounded-2xl shadow-xl text-sm font-semibold flex items-center gap-3 ${
-              toast.type === "danger"
-                ? "bg-red-200 border border-red-400 text-red-800"
-                : "bg-green-200 border border-green-400 text-green-800"
-            }`}
-          >
-            {toast.message}
-          </motion.div>
-        )}
-      </AnimatePresence>
+
 
       {/* Success Animation */}
       <AnimatePresence>
@@ -264,7 +252,7 @@ function parseLocations (loc) {
         )}
       </AnimatePresence>
 
-       {/* Main Container */}
+      {/* Main Container */}
       <div className="min-h-screen pt-24 pb-16 px-6 bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-gray-900 flex flex-col items-center font-poppins select-none transition-all duration-500">
         {/* Form Container with animation */}
         <motion.div
@@ -312,7 +300,7 @@ function parseLocations (loc) {
                     <button
                       type="button"
                       onClick={() =>
-                        setJob({ ...job, location:parseLocations(job.location).filter((_, i) => i !== idx) })
+                        setJob({ ...job, location: parseLocations(job.location).filter((_, i) => i !== idx) })
                       }
                       className="hover:text-red-400 text-white font-bold"
                     >
@@ -398,17 +386,17 @@ function parseLocations (loc) {
               transition={{ delay: index * 0.1 }}
               className="relative p-8 rounded-3xl border border-purple-200 bg-white text-purple-900 shadow-lg hover:shadow-2xl transition-shadow cursor-pointer"
             >
-              
+
               <h4 className="text-2xl font-extrabold text-purple-700 mb-2 tracking-wide">
                 {job.job_title || job.jobTitle}
               </h4>
               <p className="text-lg font-semibold text-gray-700 mb-3">
                 {job.company_name || job.companyName}
               </p>
-             <p className="text-sm text-gray-500 mb-2">
-  <span className="font-semibold">Locations:</span>{" "}
-  {parseLocations(job.location || job.locations).join(" , ")}
-</p>
+              <p className="text-sm text-gray-500 mb-2">
+                <span className="font-semibold">Locations:</span>{" "}
+                {parseLocations(job.location || job.locations).join(" , ")}
+              </p>
 
               <p className="text-sm text-gray-500">
                 <span className="font-semibold">Deadline:</span>{" "}
@@ -465,7 +453,7 @@ function parseLocations (loc) {
       {showModal && selectedJob && (
         <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex justify-center items-center p-6">
           <div className="relative max-w-3xl w-full bg-white rounded-3xl shadow-2xl p-10 overflow-y-auto max-h-[90vh]">
-            <button 
+            <button
               onClick={() => setShowModal(false)}
               className="absolute top-6 right-6 text-gray-500 hover:text-gray-700 text-4xl font-semibold transition"
               aria-label="Close modal"
@@ -482,9 +470,9 @@ function parseLocations (loc) {
               <strong>Salary Package: </strong> {selectedJob.salary_package || selectedJob.salaryPackage} LPA
             </p>
             <p className="text-md text-gray-700 mb-3">
-              <strong>Locations: </strong> 
-              
-             {parseLocations(selectedJob.location || selectedJob.locations).join(" , ")}
+              <strong>Locations: </strong>
+
+              {parseLocations(selectedJob.location || selectedJob.locations).join(" , ")}
 
 
             </p>

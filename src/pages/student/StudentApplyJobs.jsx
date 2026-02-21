@@ -12,8 +12,7 @@ import { LuPenLine } from "react-icons/lu";
 import NavbarStudentDashboard from "../../components/NavbarStudentDashboard";
 import QuickApplyModal from "./QuickApplyModal";
 import requestApi from "../../services/request";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast from "react-hot-toast";
 import getUserId from "../../services/getUserId";
 
 
@@ -27,7 +26,7 @@ const StudentApplyJobs = () => {
   const [tempPrefs, setTempPrefs] = useState({ location: "", role: "" });
   const [isPrefModalOpen, setIsPrefModalOpen] = useState(false);
   const [showApplyModal, setShowApplyModal] = useState(false);
-  const userId  = getUserId();
+  const userId = getUserId();
 
 
   const parseLocation = (loc) => {
@@ -47,7 +46,7 @@ const StudentApplyJobs = () => {
     const fetchJobs = async () => {
       try {
         const res = await requestApi.get(`/jobs/${userId}/all`);
-       
+
         const jobsWithSaved = res.data.map((job) => ({
           job_title: job.jobTitle,
           company_name: job.companyName,
@@ -56,22 +55,22 @@ const StudentApplyJobs = () => {
           salary_package: job.salaryPackage,
           location: job.locations,
           application_deadline: job.applicationDeadline.time
-            ? new Date(job.applicationDeadline.time).toLocaleDateString("en-US", {  
+            ? new Date(job.applicationDeadline.time).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
               day: "numeric",
             })
             : job.applicationDeadline,
-         
+
           id: job.id,
-         
+
           saved: false,
           applied: false,
         }));
         setJobs(jobsWithSaved);
         setSelectedJob(jobsWithSaved[0]);
       } catch {
-        toast.error("Failed to fetch jobs");
+        toast.error("Failed to fetch jobs", { id: "fetch-jobs-error" });
       }
     };
     fetchJobs();
@@ -128,11 +127,10 @@ const StudentApplyJobs = () => {
               <button
                 key={tab}
                 onClick={() => setSelectedTab(tab)}
-                className={`pb-2 border-b-2 font-medium ${
-                  selectedTab === tab
+                className={`pb-2 border-b-2 font-medium ${selectedTab === tab
                     ? "border-purple-600 text-purple-700"
                     : "border-transparent text-gray-500"
-                }`}
+                  }`}
               >
                 {tab}
               </button>
@@ -148,11 +146,10 @@ const StudentApplyJobs = () => {
                 <div
                   key={job.id}
                   onClick={() => setSelectedJob(job)}
-                  className={`cursor-pointer border p-4 rounded-xl flex gap-4 items-start hover:shadow ${
-                    selectedJob?.id === job.id
+                  className={`cursor-pointer border p-4 rounded-xl flex gap-4 items-start hover:shadow ${selectedJob?.id === job.id
                       ? "border-purple-600"
                       : "border-gray-200"
-                  }`}
+                    }`}
                 >
                   <div className="bg-purple-100 text-purple-700 rounded-lg p-2">
                     <FaBuilding size={24} />
@@ -160,8 +157,8 @@ const StudentApplyJobs = () => {
                   <div className="flex-1">
                     <h3 className="font-semibold text-sm mb-1">{job.job_title}</h3>
                     <p className="text-xs text-gray-500">{job.company_name}</p>
-                     <p className="text-xs text-gray-800">
-                     Job Id: {job.id}
+                    <p className="text-xs text-gray-800">
+                      Job Id: {job.id}
                     </p>
                     <p className="text-xs text-gray-500">
                       {parseLocation(job.location)}
@@ -194,11 +191,11 @@ const StudentApplyJobs = () => {
                     <FaBuilding size={28} />
                   </div>
                   <div>
-                  
+
                     <h3 className="text-xl font-bold">{selectedJob.job_title}</h3>
                     <p className="text-sm text-gray-600">{selectedJob.company_name}</p>
                     <p className="text-xs text-gray-800">
-                     Job Id: {selectedJob.id}
+                      Job Id: {selectedJob.id}
                     </p>
                     <p className="text-xs text-gray-400">
                       Deadline: {selectedJob.application_deadline}
@@ -275,15 +272,15 @@ const StudentApplyJobs = () => {
                         key === "role"
                           ? [j.job_title]
                           : (() => {
-                              try {
-                                const parsed = JSON.parse(j.location);
-                                return Array.isArray(parsed) ? parsed : [parsed];
-                              } catch {
-                                return Array.isArray(j.location)
-                                  ? j.location
-                                  : [j.location];
-                              }
-                            })()
+                            try {
+                              const parsed = JSON.parse(j.location);
+                              return Array.isArray(parsed) ? parsed : [parsed];
+                            } catch {
+                              return Array.isArray(j.location)
+                                ? j.location
+                                : [j.location];
+                            }
+                          })()
                       )
                     )].map((val) => (
                       <option key={val} value={val}>
@@ -307,20 +304,7 @@ const StudentApplyJobs = () => {
                   setFilters(tempPrefs);
                   localStorage.setItem("jobPreferences", JSON.stringify(tempPrefs));
                   setIsPrefModalOpen(false);
-                  toast.success("Preferences updated successfully!", {
-                  position: "top-right",
-                  autoClose: 2500,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  draggable: true,
-                  className:"!top-[85px] !right-6 !absolute bg-white border border-purple-300 text-purple-800 rounded-xl shadow-lg px-4 py-3 font-medium z-[9999]",bodyClassName: "text-sm",
-                  closeButton: ({ closeToast }) => (
-                  <button
-                  onClick={closeToast}
-                  className="ml-3 text-red-500 hover:text-red-600 text-lg leading-none font-bold" aria-label="Close" >&times;
-                  </button>
-                  ),
-                });
+                  toast.success("Preferences updated successfully!", { id: "prefs-updated" });
                 }}
                 className="bg-purple-700 text-white px-4 py-2 text-sm rounded"
               >
@@ -347,8 +331,7 @@ const StudentApplyJobs = () => {
         />
       )}
 
-      {/* ------------------ Toast Container ------------------ */}
-      <ToastContainer newestOnTop closeOnClick draggable />
+
     </>
   );
 };

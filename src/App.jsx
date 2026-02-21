@@ -1,7 +1,6 @@
 import React from "react";
 import { useLocation, Routes, Route } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { Toaster, ToastBar, toast } from "react-hot-toast";
 import ProtectedRoute from "./services/ProtectedRoute";
 import ProtectedRouteRecruiter from "./services/ProtectedRouteRecruiter";
 
@@ -25,9 +24,9 @@ import StudentPractice from "./pages/student/StudentPractice";
 import TPO from "./pages/tpo/TPO";
 import TPOLogin from "./pages/tpo/TpoLogin";
 import Tpohome from "./pages/tpo/Tpohome";
-import TpoProfile from "./pages/tpo/TpoProfile"; 
-import TPOStudents from "./pages/tpo/TPOStudents"; 
-import TPORecruiters from "./pages/tpo/TPORecruiters";  
+import TpoProfile from "./pages/tpo/TpoProfile";
+import TPOStudents from "./pages/tpo/TPOStudents";
+import TPORecruiters from "./pages/tpo/TPORecruiters";
 
 // 👨‍💼 Recruiter
 import Recruiter from "./pages/recruiter/Recruiter";
@@ -82,15 +81,15 @@ const App = () => {
         <Route path="/student/resources" element={<Resources />} />
         <Route path="/student/practice" element={<StudentPractice />} />
 
-        
+
 
         {/* 🏫 TPO */}
         <Route path="/tpo" element={<TPO />} />
         <Route path="/tpo/login" element={<TPOLogin />} />
         <Route path="/tpo/:userId/home" element={<Tpohome />} />
-        <Route path="/tpo/:userId/profile" element={<TpoProfile />} /> 
+        <Route path="/tpo/:userId/profile" element={<TpoProfile />} />
         <Route path="/tpo/:userid/students" element={<TPOStudents />} />
-        <Route path="/tpo/:userId/recruiters" element={<TPORecruiters />} /> 
+        <Route path="/tpo/:userId/recruiters" element={<TPORecruiters />} />
 
         {/* 👨‍💼 Recruiter */}
         <Route path="/recruiter" element={<Recruiter />} />
@@ -110,7 +109,54 @@ const App = () => {
         <Route path="/admin/AdminAccessForm" element={<AdminAccessForm />} />
       </Routes>
 
-      <ToastContainer />
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 2500,
+          style: {
+            background: '#fff',
+            color: '#333',
+            padding: '16px',
+            borderRadius: '12px',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+            fontSize: '14px',
+            fontWeight: '500',
+          },
+          success: {
+            iconTheme: {
+              primary: '#A855F7',
+              secondary: '#fff',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: '#EF4444',
+              secondary: '#fff',
+            },
+          },
+        }}
+      >
+        {(t) => (
+          <ToastBar toast={t}>
+            {({ icon, message }) => (
+              <>
+                {icon}
+                {message}
+                {t.type !== 'loading' && (
+                  <button
+                    onClick={() => toast.dismiss(t.id)}
+                    className="ml-2 hover:bg-gray-100 rounded-full w-6 h-6 flex items-center justify-center transition-colors text-gray-400 hover:text-gray-600 focus:outline-none"
+                    aria-label="Close"
+                  >
+                    ×
+                  </button>
+                )}
+              </>
+            )}
+          </ToastBar>
+        )}
+      </Toaster>
     </>
   );
 };

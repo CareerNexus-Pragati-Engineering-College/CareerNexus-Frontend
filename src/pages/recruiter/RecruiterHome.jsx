@@ -1,8 +1,12 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaUserTie, FaCheckCircle, FaClock, FaClipboardList, FaArrowRight } from "react-icons/fa";
 import NavbarRecruiterDashboard from "../../components/NavbarRecruiterDashboard";
+import requestApi from "../../services/request";
+import getUserId from "../../services/getUserId";
+import toast from "react-hot-toast";
+
 import {
   FaUniversity,
   FaSchool,
@@ -10,36 +14,50 @@ import {
   FaBuilding,
   FaBriefcase,
   FaGraduationCap,
-  FaIndustry, 
+  FaIndustry,
 } from "react-icons/fa";
 
 const visitedColleges = [
-  { id: 1, name: "IIT Delhi", icon: <FaUniversity size={50} className="text-violet-600" /> },
-  { id: 2, name: "NIT Trichy", icon: <FaLandmark size={50} className="text-violet-600" /> },
-  { id: 3, name: "BITS Pilani", icon: <FaGraduationCap size={50} className="text-violet-600" /> },
-  { id: 4, name: "VIT Vellore", icon: <FaSchool size={50} className="text-violet-600" /> },
-  { id: 5, name: "SRM Chennai", icon: <FaBuilding size={50} className="text-violet-600" /> },
-  { id: 6, name: "Amity Noida", icon: <FaIndustry size={50} className="text-violet-600" /> },
-  { id: 7, name: "IIIT Hyderabad", icon: <FaBriefcase size={50} className="text-violet-600" /> },
-];
-
-const trackerStats = [
-  { title: "Interviews Conducted", value: 30 },
-  { title: "Candidates Shortlisted", value: 12 },
-  { title: "Feedback Submitted", value: 27 },
+  { id: 1, name: "IIT Delhi", icon: <FaUniversity size={50} className="text-indigo-600" /> },
+  { id: 2, name: "NIT Trichy", icon: <FaLandmark size={50} className="text-indigo-600" /> },
+  { id: 3, name: "BITS Pilani", icon: <FaGraduationCap size={50} className="text-indigo-600" /> },
+  { id: 4, name: "VIT Vellore", icon: <FaSchool size={50} className="text-indigo-600" /> },
+  { id: 5, name: "SRM Chennai", icon: <FaBuilding size={50} className="text-indigo-600" /> },
+  { id: 6, name: "Amity Noida", icon: <FaIndustry size={50} className="text-indigo-600" /> },
+  { id: 7, name: "IIIT Hyderabad", icon: <FaBriefcase size={50} className="text-indigo-600" /> },
 ];
 
 const placementNews = [
-  "IIT Bombay placements begin Aug 1",
-  "NIT Trichy hosting virtual placement drive",
-  "BITS Pilani shortlists released",
-  "IIT Delhi interviews wrap up successfully",
-  "IIIT Hyderabad to host recruiters on July 25",
+  "IIT Bombay placements begin Aug 1 • ",
+  "NIT Trichy hosting virtual placement drive • ",
+  "BITS Pilani shortlists released • ",
+  "IIT Delhi interviews wrap up successfully • ",
+  "IIIT Hyderabad to host recruiters on July 25 • ",
 ];
 
 const RecruiterDashboard = () => {
   const scrollRef = useRef(null);
-  const scrollAmount = 220;
+  const scrollAmount = 300;
+  const [recruiter, setRecruiter] = useState({ firstName: "Recruiter" });
+  const [loading, setLoading] = useState(true);
+  const userId = getUserId();
+
+  useEffect(() => {
+    if (userId) {
+      requestApi.get(`/recruiter/${userId}/profile`)
+        .then((response) => {
+          if (response.data) {
+            setRecruiter(response.data);
+          }
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching recruiter data:", error);
+          // Fallback to default if fetch fails
+          setLoading(false);
+        });
+    }
+  }, [userId]);
 
   const scrollLeft = () => {
     scrollRef.current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
@@ -48,143 +66,134 @@ const RecruiterDashboard = () => {
     scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
   };
 
+  const trackerStats = [
+    { title: "Interviews Conducted", value: 30, icon: <FaUserTie className="text-blue-500" />, color: "border-blue-200" },
+    { title: "Candidates Shortlisted", value: 12, icon: <FaCheckCircle className="text-emerald-500" />, color: "border-emerald-200" },
+    { title: "Feedback Pending", value: 5, icon: <FaClock className="text-amber-500" />, color: "border-amber-200" },
+    { title: "Active Postings", value: 8, icon: <FaClipboardList className="text-purple-500" />, color: "border-purple-200" },
+  ];
+
   return (
-    <>
+    <div className="min-h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] font-outfit">
       <NavbarRecruiterDashboard />
 
-      <motion.div
-        className="min-h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A] font-poppins flex flex-col items-center px-4 sm:px-6 pt-24 pb-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+      <motion.main
+        className="pt-28 pb-12 px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        {/* ✨ Hero Section */}
-        <section className="w-full max-w-7xl min-h-[60vh] flex flex-col md:flex-row items-center justify-between gap-8 mb-16 px-4 sm:px-6 lg:px-8">
+        {/* ✨ Hero Section - Centered and Clean */}
+        <div className="text-center max-w-4xl mx-auto mb-20">
           <motion.div
-            className="flex-1 text-left max-w-2xl"
-            initial={{ opacity: 0, x: -40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+            className="space-y-8"
           >
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#2F2F5B] mb-4 drop-shadow-md tracking-wide leading-tight">
-              Welcome to Your Dashboard, Recruiter
+            <h1 className="text-5xl md:text-7xl font-extrabold text-[#2F2F5B] leading-[1.1] tracking-tight">
+              Welcome to Your <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
+                Dashboard, {recruiter.firstName}
+              </span>
             </h1>
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-[#4b436f] mb-4 leading-relaxed max-w-xl">
-              Review candidates, manage interviews, and make impactful hiring decisions with ease.
+            <p className="text-lg md:text-xl text-[#5C5C80] max-w-2xl mx-auto leading-relaxed">
+              Simplify your recruitment process. Manage postings, track candidates, and build your dream team with our intuitive tools.
             </p>
-            <p className="text-xl sm:text-2xl md:text-3xl text-[#8c73cc] font-medium drop-shadow-md mt-2">
-              Let’s find the right talent!
-            </p>
-          </motion.div>
-
-          <motion.div
-            className="flex-1 max-w-md w-full"
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-          >
-            <div className="bg-white/40 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-violet-200/50 shadow-xl text-center">
-              <h2 className="text-xl sm:text-2xl font-bold text-violet-700 mb-4">Candidate Shortlist</h2>
-              <p className="text-sm sm:text-base text-[#4b436f] mb-5">Review top candidates and schedule interviews.</p>
-              <div className="space-y-2 mb-4 text-left">
-                {[{ name: "Pranay", role: "Frontend Developer" },
-                  { name: "Akshay", role: "Data Analyst" },
-                  { name: "Shruti", role: "Backend Developer" },
-                  { name: "Ravi", role: "AI Engineer" },
-                ].map((candidate, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between bg-white/60 border border-violet-100 p-2 rounded-lg shadow-sm hover:bg-white/80 transition"
-                  >
-                    <div>
-                      <h3 className="text-sm sm:text-base font-semibold text-[#2C225A]">{candidate.name}</h3>
-                      <span className="text-xs sm:text-sm text-violet-500 font-medium">{candidate.role}</span>
-                    </div>
-                    <button className="px-3 py-1 bg-gradient-to-r from-violet-500 to-indigo-600 text-white rounded-full text-xs sm:text-sm font-medium shadow-md hover:scale-105 transition">
-                      Schedule
-                    </button>
-                  </div>
-                ))}
-              </div>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link
+                to={`/recruiter/${userId}/jobpostings`}
+                className="px-10 py-4 bg-indigo-600 text-white rounded-2xl font-bold shadow-xl shadow-indigo-100 hover:bg-indigo-700 hover:scale-[1.05] transition-all flex items-center gap-3"
+              >
+                Create New Posting <FaArrowRight size={14} />
+              </Link>
+              <Link
+                to={`/recruiter/${userId}/applications`}
+                className="px-10 py-4 bg-white border border-gray-100 text-[#2F2F5B] rounded-2xl font-bold shadow-md hover:shadow-lg hover:bg-gray-50 transition-all"
+              >
+                Manage Applications
+              </Link>
             </div>
           </motion.div>
-        </section>
+        </div>
 
-        {/* 🏫 Colleges Visited */}
-        <section className="relative w-full max-w-7xl mb-20">
-          <h2 className="text-2xl sm:text-3xl font-semibold text-[#6B4ECF] mb-10 text-center drop-shadow-md">
-            Colleges Visited
-          </h2>
-
-          <button
-            onClick={scrollLeft}
-            className="absolute top-1/2 left-2 transform -translate-y-1/2 z-10 bg-white/80 p-2 rounded-full shadow-lg hover:scale-110 transition"
-          >
-            <FaChevronLeft className="text-[#6B4ECF] w-5 h-5" />
-          </button>
-          <button
-            onClick={scrollRight}
-            className="absolute top-1/2 right-2 transform -translate-y-1/2 z-10 bg-white/80 p-2 rounded-full shadow-lg hover:scale-110 transition"
-          >
-            <FaChevronRight className="text-[#6B4ECF] w-5 h-5" />
-          </button>
-
-          <div
-            ref={scrollRef}
-            className="flex gap-8 overflow-x-auto scroll-smooth scrollbar-hide px-4"
-          >
-            {visitedColleges.map((college) => (
-              <Link
-                key={college.id}
-                to={`/recruiter/college/${college.id}`}
-                className="bg-white/60 border border-violet-200/40 backdrop-blur-xl p-5 sm:p-7 rounded-2xl shadow-lg flex flex-col items-center justify-center min-w-[180px] transform transition-all duration-300 hover:scale-110 hover:shadow-[0_0_24px_rgba(139,92,246,0.5)] hover:bg-white/80 cursor-pointer"
-              >
-                <div className="mb-3 sm:mb-4">{college.icon}</div>
-                <span className="text-base sm:text-lg font-medium text-[#2C225A] text-center">
-                  {college.name}
-                </span>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        {/* 📊 Interview Tracker */}
-        <section className="w-full max-w-6xl mb-16">
-          <h2 className="text-xl sm:text-2xl font-semibold text-[#6B4ECF] mb-6 text-center">
-            Interview Tracker
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        {/* 📊 Stats Section */}
+        <section className="mb-24">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {trackerStats.map((stat, index) => (
               <motion.div
                 key={index}
-                className="bg-white/50 border border-violet-200/50 p-4 sm:p-6 rounded-xl shadow-md flex flex-col items-center text-center hover:shadow-xl hover:scale-105 transition-transform"
-                whileHover={{ scale: 1.03 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className={`bg-white/80 backdrop-blur-md p-8 rounded-3xl border ${stat.color} shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all group`}
               >
-                <span className="text-2xl sm:text-3xl font-bold text-[#6B4ECF]">{stat.value}</span>
-                <p className="text-xs sm:text-sm text-[#2C225A] mt-2">{stat.title}</p>
+                <div className="flex justify-between items-start mb-4">
+                  <div className="p-3 rounded-2xl bg-white shadow-sm ring-1 ring-black/5 group-hover:scale-110 transition-transform">
+                    {stat.icon}
+                  </div>
+                </div>
+                <h3 className="text-4xl font-black text-[#2F2F5B] mb-1">{stat.value}</h3>
+                <p className="text-sm font-medium text-[#5C5C80]">{stat.title}</p>
               </motion.div>
             ))}
           </div>
         </section>
 
-        {/* 📰 Placement News */}
-        <section className="w-full max-w-6xl mb-16 overflow-hidden">
-          <h2 className="text-xl sm:text-2xl font-semibold text-[#6B4ECF] mb-6 text-center">
-            Latest Campus News
-          </h2>
-          <motion.div className="flex gap-4 sm:gap-8 animate-marquee">
-            {placementNews.concat(placementNews).map((news, index) => (
-              <div
-                key={index}
-                className="bg-white/60 border border-violet-200/40 rounded-xl shadow-md p-3 sm:p-4 min-w-[200px] sm:min-w-[250px] whitespace-nowrap text-center text-xs sm:text-base text-[#2C225A] font-medium"
-              >
-                {news}
+        {/* 🛠️ Modern Quick Access Hub */}
+        <section className="mb-12">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-bold text-[#2F2F5B]">Management Hub</h2>
+            <div className="h-0.5 flex-1 bg-gray-200/50 mx-6 rounded-full"></div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <motion.div
+              whileHover={{ y: -5 }}
+              className="bg-white/40 backdrop-blur-sm border border-white p-8 rounded-[2rem] hover:bg-white/80 transition-all duration-300"
+            >
+              <div className="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center mb-6">
+                <FaBriefcase className="text-indigo-600 text-2xl" />
               </div>
-            ))}
-          </motion.div>
+              <h3 className="text-xl font-bold text-[#2F2F5B] mb-2">Job Postings</h3>
+              <p className="text-[#5C5C80] text-sm mb-6">Review your active roles and edit job requirements on the fly.</p>
+              <Link to={`/recruiter/${userId}/jobpostings`} className="text-indigo-600 font-bold text-sm flex items-center gap-2 hover:gap-3 transition-all">
+                View Roles <FaArrowRight size={12} />
+              </Link>
+            </motion.div>
+
+            <motion.div
+              whileHover={{ y: -5 }}
+              className="bg-white/40 backdrop-blur-sm border border-white p-8 rounded-[2rem] hover:bg-white/80 transition-all duration-300"
+            >
+              <div className="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center mb-6">
+                <FaClipboardList className="text-purple-600 text-2xl" />
+              </div>
+              <h3 className="text-xl font-bold text-[#2F2F5B] mb-2">Application Tracking</h3>
+              <p className="text-[#5C5C80] text-sm mb-6">Check the status of all applicants and filter by their performance scores.</p>
+              <Link to={`/recruiter/${userId}/applications`} className="text-purple-600 font-bold text-sm flex items-center gap-2 hover:gap-3 transition-all">
+                Check Progress <FaArrowRight size={12} />
+              </Link>
+            </motion.div>
+
+            <motion.div
+              whileHover={{ y: -5 }}
+              className="bg-white/40 backdrop-blur-sm border border-white p-8 rounded-[2rem] hover:bg-white/80 transition-all duration-300"
+            >
+              <div className="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mb-6">
+                <FaCheckCircle className="text-emerald-600 text-2xl" />
+              </div>
+              <h3 className="text-xl font-bold text-[#2F2F5B] mb-2">Interview History</h3>
+              <p className="text-[#5C5C80] text-sm mb-6">Access feedback logs and past candidate evaluations in one place.</p>
+              <div className="text-emerald-600 font-bold text-sm flex items-center gap-2 cursor-not-allowed opacity-60">
+                Reports Coming Soon <FaArrowRight size={12} />
+              </div>
+            </motion.div>
+          </div>
         </section>
-      </motion.div>
-    </>
+      </motion.main>
+    </div>
   );
 };
 

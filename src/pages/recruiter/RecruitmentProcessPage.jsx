@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import NavbarRecruiterDashboard from "../../components/NavbarRecruiterDashboard";
-import { FaClock, FaFileUpload, FaClipboardList, FaArrowLeft , FaCheckCircle} from "react-icons/fa";
+import { FaClock, FaFileUpload, FaClipboardList, FaArrowLeft, FaCheckCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
 import requestApi from "../../services/request";
 import getuserId from "../../services/getUserId";
+import toast from "react-hot-toast";
 
 const RecruitmentProcessPage = () => {
   const [selectedRound, setSelectedRound] = useState("");
@@ -12,29 +13,29 @@ const RecruitmentProcessPage = () => {
   const [endTime, setEndTime] = useState("");
   const [questionFile, setQuestionFile] = useState(null);
   const [answerFile, setAnswerFile] = useState(null);
-  const [loading, setLoading] = useState(false); 
-  const userId= getuserId(); 
+  const [loading, setLoading] = useState(false);
+  const userId = getuserId();
 
   //const { username, jobId } = useParams(); 
   const navigate = useNavigate();
 
- 
+
 
   const handleFileUpload = (e, type) => {
     const file = e.target.files[0];
     if (file && file.type !== "application/pdf") {
-        alert("Please upload a PDF file.");
-        e.target.value = ''; // Clear the input
-        if (type === "question") setQuestionFile(null);
-        else setAnswerFile(null);
-        return;
+      toast.error("Please upload a PDF file.", { id: "pdf-warning" });
+      e.target.value = ''; // Clear the input
+      if (type === "question") setQuestionFile(null);
+      else setAnswerFile(null);
+      return;
     }
     if (file && file.size > 5 * 1024 * 1024) { // Max 5MB file size example
-        alert("File size exceeds 5MB limit.");
-        e.target.value = ''; // Clear the input
-        if (type === "question") setQuestionFile(null);
-        else setAnswerFile(null);
-        return;
+      toast.error("File size exceeds 5MB limit.", { id: "size-warning" });
+      e.target.value = ''; // Clear the input
+      if (type === "question") setQuestionFile(null);
+      else setAnswerFile(null);
+      return;
     }
 
     if (type === "question") setQuestionFile(file);
@@ -43,7 +44,7 @@ const RecruitmentProcessPage = () => {
 
   const handleSubmit = async () => { // <--- Make handleSubmit async
     if (!selectedRound || !startTime || !endTime || !questionFile || !answerFile) { // Check jobId too
-      alert("Please fill in all fields, upload both files, and ensure recruiter ID/job ID are available.");
+      toast.error("Please fill in all fields, upload both files, and ensure recruiter ID/job ID are available.", { id: "missing-fields" });
       return;
     }
 
@@ -52,38 +53,38 @@ const RecruitmentProcessPage = () => {
     try {
       const formData = new FormData();
 
-     console.log("Selected Round:", selectedRound);
+      console.log("Selected Round:", selectedRound);
       const roundDetails = {
         createdByUserId: userId,
-        jobPostId:1,     
+        jobPostId: 1,
         roundName: selectedRound,
-        startTime: startTime,            
-        endTime: endTime,      
-        min_marks: 0,        
-       
+        startTime: startTime,
+        endTime: endTime,
+        min_marks: 0,
+
       };
 
-      
+
       formData.append("roundDetails", new Blob([JSON.stringify(roundDetails)], { type: "application/json" }));
 
-     
+
       formData.append("questionPdf", questionFile);
       formData.append("answerPdf", answerFile);
 
-     
+
       const response = await requestApi.post(
-        `exam/recruiter/mcq/assessment`, 
+        `exam/recruiter/mcq/assessment`,
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data"
           },
-         
+
         }
       );
 
-    
-      alert("Recruitment round configured successfully!");
+
+      toast.success("Recruitment round configured successfully!", { id: "round-success" });
       console.log("API Response:", response.data);
       setSelectedRound("");
       setStartTime("");
@@ -93,7 +94,7 @@ const RecruitmentProcessPage = () => {
 
     } catch (error) {
       console.error("Error configuring round:", error);
-      alert("Failed to configure recruitment round: " + (error.response?.data || error.message));
+      toast.error("Failed to configure recruitment round: " + (error.response?.data || error.message), { id: "round-error" });
     } finally {
       setLoading(false); // <--- Set loading false after API call
     }
@@ -181,47 +182,47 @@ const RecruitmentProcessPage = () => {
           </motion.div>
 
           {/* Right: Upload PDFs / Minimum Marks */}
-<motion.div
-  initial={{ opacity: 0, x: 20 }}
-  animate={{ opacity: 1, x: 0 }}
-  transition={{ duration: 0.4 }}
-  className="bg-purple-50 p-6 rounded-xl shadow-md"
->
-  <div className="space-y-4">
-    {/* Upload Questions PDF (unchanged) */}
-    <div>
-      <label className="flex items-center text-sm font-semibold text-gray-700 mb-2 gap-2">
-        <FaFileUpload className="text-purple-600" />
-        Upload Questions (PDF)
-      </label>
-      <input
-        type="file"
-        accept=".pdf"
-        onChange={(e) => handleFileUpload(e, "question")}
-        className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm"
-      />
-      {questionFile && (
-        <p className="text-green-600 text-sm mt-1">{questionFile.name}</p>
-      )}
-    </div>
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4 }}
+            className="bg-purple-50 p-6 rounded-xl shadow-md"
+          >
+            <div className="space-y-4">
+              {/* Upload Questions PDF (unchanged) */}
+              <div>
+                <label className="flex items-center text-sm font-semibold text-gray-700 mb-2 gap-2">
+                  <FaFileUpload className="text-purple-600" />
+                  Upload Questions (PDF)
+                </label>
+                <input
+                  type="file"
+                  accept=".pdf"
+                  onChange={(e) => handleFileUpload(e, "question")}
+                  className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm"
+                />
+                {questionFile && (
+                  <p className="text-green-600 text-sm mt-1">{questionFile.name}</p>
+                )}
+              </div>
 
-    {/* Minimum Marks input (replaces Upload Answers) */}
-    <div>
-      <label className="flex items-center text-sm font-semibold text-gray-700 mb-2 gap-2">
-        <FaCheckCircle className="text-purple-600" />
-        Minimum Marks
-      </label>
-      <input
-        type="number"
-        min="0"
-        value={answerFile || ""} 
-        onChange={(e) => setAnswerFile(e.target.value)}
-        placeholder="Enter minimum marks"
-        className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-      />
-    </div>
-  </div>
-</motion.div>
+              {/* Minimum Marks input (replaces Upload Answers) */}
+              <div>
+                <label className="flex items-center text-sm font-semibold text-gray-700 mb-2 gap-2">
+                  <FaCheckCircle className="text-purple-600" />
+                  Minimum Marks
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  value={answerFile || ""}
+                  onChange={(e) => setAnswerFile(e.target.value)}
+                  placeholder="Enter minimum marks"
+                  className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+            </div>
+          </motion.div>
 
         </div>
 
