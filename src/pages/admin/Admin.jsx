@@ -16,24 +16,32 @@ import NavbarAdmin from "../../components/NavbarAdminDashboard"; // ✅ using Na
 
 const tpoFeatures = [
   {
-    icon: <FaFileAlt className="text-4xl text-violet-400 mb-4" />,
+    icon: <FaFileAlt />,
     title: "Candidate Management",
     desc: "Manage student applications and resumes with efficiency.",
+    color: "from-blue-500/20 to-indigo-500/20",
+    iconColor: "text-blue-500",
   },
   {
-    icon: <FaChartBar className="text-4xl text-violet-400 mb-4" />,
+    icon: <FaChartBar />,
     title: "Analytics Dashboard",
     desc: "Track placement statistics and department progress in real time.",
+    color: "from-purple-500/20 to-pink-500/20",
+    iconColor: "text-purple-500",
   },
   {
-    icon: <FaBell className="text-4xl text-violet-400 mb-4" />,
+    icon: <FaBell />,
     title: "Notifications",
     desc: "Send updates and alerts to students instantly.",
+    color: "from-amber-500/20 to-orange-500/20",
+    iconColor: "text-amber-500",
   },
   {
-    icon: <FaUserTie className="text-4xl text-violet-400 mb-4" />,
+    icon: <FaUserTie />,
     title: "TPO Dashboard",
     desc: "Monitor activities and streamline placement operations.",
+    color: "from-emerald-500/20 to-teal-500/20",
+    iconColor: "text-emerald-500",
   },
 ];
 
@@ -43,16 +51,16 @@ const Admin = () => {
   }, []);
 
   return (
-    <div className="bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A] scroll-smooth font-poppins">
-       {/* 🆕 Navbar with "Add" Button */}
+    <div className="bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A] scroll-smooth font-outfit">
+      {/* 🆕 Navbar with "Add" Button */}
       <NavbarAdmin
-       // extraButton={{
-          //label: "Add",
-          //to: "/admin/add",
-          //icon: <FaPlus className="text-base" />,
-       // }}
+      // extraButton={{
+      //label: "Add",
+      //to: "/admin/add",
+      //icon: <FaPlus className="text-base" />,
+      // }}
       />
-      
+
       {/* 🔙 Back to Main Home */}
       <div className="fixed top-[90px] left-3 z-50 hidden md:block">
         <motion.div
@@ -62,7 +70,7 @@ const Admin = () => {
         >
           <NavLink
             to="/"
-            className="flex items-center gap-2 text-sm text-violet-600 hover:text-violet-100 bg-white/30 hover:bg-violet-600/70 px-4 py-2 rounded-full shadow-md hover:shadow-[0_0_18px_rgba(130,90,255,0.6)] transition-all font-semibold backdrop-blur-md"
+            className="flex items-center gap-2 text-sm text-violet-600 hover:text-white bg-white/40 hover:bg-violet-600 px-4 py-2 rounded-full shadow-lg hover:shadow-[0_0_18px_rgba(130,90,255,0.4)] transition-all font-semibold backdrop-blur-md border border-white/20 font-outfit"
           >
             <FaHome className="text-base" />
             Back to Home
@@ -82,10 +90,18 @@ const Admin = () => {
           transition={{ duration: 1 }}
           className="max-w-xl"
         >
-          <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
-            Welcome To Admin Portal
+          <motion.span
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="bg-violet-100 text-violet-600 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4 inline-block shadow-sm border border-violet-200"
+          >
+            Administrator Control
+          </motion.span>
+          <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-6 text-[#2F2F5B] font-outfit tracking-tight">
+            Welcome To <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-indigo-600">Admin Portal</span>
           </h1>
-          <div className="text-2xl sm:text-3xl font-semibold mb-6 text-[#B497FF] drop-shadow-md">
+          <div className="text-2xl sm:text-3xl font-semibold mb-6 text-[#9266FF] drop-shadow-sm font-outfit">
             <Typewriter
               options={{
                 strings: [
@@ -98,22 +114,9 @@ const Admin = () => {
               }}
             />
           </div>
-          <p className="text-[#3f3f5c] mb-8 text-sm sm:text-base">
-            CareerNexus empowers Admins to oversee and control TPO-level placement activities across the institution.
+          <p className="text-[#5C5C80] mb-8 text-sm sm:text-base leading-relaxed max-w-lg font-outfit">
+            CareerNexus empowers Admins to oversee and control TPO-level placement activities across the institution with precision and ease.
           </p>
-
-          <NavLink
-            to="/admin/add"
-            className="inline-flex items-center gap-2 text-white font-semibold px-6 py-3 rounded-full
-             bg-gradient-to-r from-[#b892ff] to-[#411686]
-             shadow-[0_0_5px_#b892ff] hover:shadow-[0_0_10px_#b892ff,0_0_20px_#411686]
-             transition-all duration-300 transform hover:scale-105 cursor-pointer group"
-          >
-            Add More
-            <span className="transform transition-transform duration-300 group-hover:translate-x-1">
-              <FaPlus />
-            </span>
-          </NavLink>
         </motion.div>
 
         {/* 📷 Image */}
@@ -138,46 +141,75 @@ const Admin = () => {
         id="admin-features"
         className="min-h-screen bg-gradient-to-b from-[#E4EBFE] to-[#F8E5EB] py-20 px-6 sm:px-10 md:px-24"
       >
-        <h2 className="text-4xl font-bold text-center text-[#6B4ECF] mb-16 font-orbitron">
-          Admin Features
-        </h2>
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <motion.span
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="text-sm font-bold uppercase tracking-widest text-indigo-600 mb-4 block font-outfit"
+          >
+            Management Tools
+          </motion.span>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-4xl md:text-5xl font-extrabold text-[#2F2F5B] mb-6 font-outfit">
+              Powerful <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-indigo-600">Admin Features</span>
+            </h2>
+          </motion.div>
+        </div>
 
-        <div className="max-w-6xl mx-auto grid gap-12 grid-cols-1 md:grid-cols-2">
+        <div className="max-w-6xl mx-auto grid gap-8 grid-cols-1 md:grid-cols-2">
           {tpoFeatures.map((feature, index) => (
             <motion.div
               key={feature.title}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: index * 0.2 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="bg-white/30 backdrop-blur-lg p-6 rounded-3xl shadow-lg hover:scale-[1.03] transition-all text-center border border-violet-200/30 hover:shadow-[0_0_25px_rgba(130,90,255,0.3)] cursor-pointer"
+              className="group relative bg-white/60 backdrop-blur-xl border border-white/40 p-10 rounded-[2.5rem] shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_-10px_rgba(130,90,255,0.2)]"
             >
-              <div className="flex justify-center mb-4">
-                <div className="bg-violet-100/40 p-4 rounded-full shadow-md">
+              {/* Animated Background Glow */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-40 transition-opacity duration-500 rounded-[2.5rem]`}></div>
+
+              <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-6">
+                <div className={`text-4xl ${feature.iconColor} p-5 bg-white rounded-3xl shadow-sm border border-gray-100 group-hover:scale-110 transition-transform duration-500`}>
                   {feature.icon}
                 </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-[#2F2F5B] mb-3 font-outfit group-hover:text-indigo-700 transition-colors duration-300">
+                    {feature.title}
+                  </h3>
+                  <p className="text-[#5C5C80] leading-relaxed font-outfit text-base">
+                    {feature.desc}
+                  </p>
+                </div>
               </div>
-              <h3 className="text-2xl font-semibold text-violet-700 mb-2 font-orbitron">
-                {feature.title}
-              </h3>
-              <p className="text-[#4b436f] leading-relaxed text-sm sm:text-base">
-                {feature.desc}
-              </p>
             </motion.div>
           ))}
         </div>
       </section>
 
       {/* 📘 About Section */}
-      <section id="admin-about" className="py-20 px-6 bg-gradient-to-b from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A]">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-[#6B4ECF] mb-4 font-orbitron">
-            About Admin Portal
+      <section id="admin-about" className="py-24 px-6 bg-transparent">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="max-w-4xl mx-auto text-center bg-white/40 backdrop-blur-xl border border-white/40 p-12 rounded-[2.5rem] shadow-xl"
+        >
+          <h2 className="text-4xl font-extrabold text-[#2F2F5B] mb-6 font-outfit">
+            About <span className="text-violet-600">Admin Portal</span>
           </h2>
-          <p className="text-[#4b436f] text-sm sm:text-base">
+          <p className="text-[#5C5C80] text-lg leading-relaxed font-outfit">
             The CareerNexus Admin portal provides higher-level access for managing TPOs, overseeing placement strategy, and enhancing placement success across all departments.
           </p>
-        </div>
+        </motion.div>
       </section>
 
       {/* 📍 Footer */}
@@ -190,7 +222,7 @@ const Admin = () => {
         </div>
       </footer>
 
-     
+
     </div>
   );
 };

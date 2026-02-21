@@ -35,7 +35,7 @@ const NavbarAdmin = () => {
             alt="CareerNexus Logo"
             className="h-10 w-10 drop-shadow-[0_0_12px_rgba(165,100,255,0.6)]"
           />
-          <span className="text-white text-2xl font-poppins font-semibold tracking-wider drop-shadow-[0_0_8px_rgba(165,100,255,0.6)]">
+          <span className="text-white text-2xl font-outfit font-semibold tracking-wider drop-shadow-[0_0_8px_rgba(165,100,255,0.6)]">
             CareerNexus
           </span>
         </NavLink>
@@ -44,19 +44,19 @@ const NavbarAdmin = () => {
         <div className="hidden md:flex items-center space-x-6 text-white text-base">
           <NavLink
             to="/admin"
-            className="flex items-center gap-2 hover:text-violet-400 transition"
+            className="flex items-center gap-2 hover:text-violet-400 transition font-outfit"
           >
             <FaHome className="text-lg text-violet-400" />
             Home
           </NavLink>
           <NavLink
             to="/admin/AdminAccessForm"
-            className=" flex items-center gap-2 bg-white/10 text-white hover:text-violet-400 transition "
+            className="flex items-center gap-2 hover:text-violet-400 transition font-outfit"
           >
             <FaUsers className="text-lg text-violet-400" />
             Add Users
           </NavLink>
-         {/* 🔹 Profile Dropdown */}
+          {/* 🔹 Profile Dropdown */}
           <div className="relative">
             <button
               className="flex items-center text-white hover:text-violet-400 focus:outline-none"
@@ -67,15 +67,16 @@ const NavbarAdmin = () => {
 
             {showDropdown && (
               <div className="absolute right-0 mt-2 w-40 bg-[#1b1433] border border-violet-500/30 rounded-lg shadow-xl p-2 z-50">
-                
+
                 <button
                   className="flex items-center w-full px-3 py-2 text-red-500 hover:text-red-400 transition rounded-md mt-1"
                   onClick={async () => {
                     setShowDropdown(false);
-                  logout(); // Call the logout function
-                 
-                      navigate("/tpo/login"); }}
-                    
+                    logout(); // Call the logout function
+
+                    navigate("/tpo/login");
+                  }}
+
                 >
                   <FaSignOutAlt className="mr-2 text-lg" />
                   Logout
@@ -99,15 +100,15 @@ const NavbarAdmin = () => {
         <div className="md:hidden bg-[#0f0c1d] px-6 pb-6 space-y-4 text-white text-base">
           <NavLink
             to="/admin"
-            className="flex items-center gap-2 hover:text-violet-400 transition"
+            className="flex items-center gap-2 hover:text-violet-400 transition font-outfit"
             onClick={() => setIsOpen(false)}
           >
             <FaHome className="text-lg text-violet-400" />
             Home
           </NavLink>
-           <NavLink
-            to="admin/AdminAccessForm"
-            className="flex items-center gap-2 hover:text-violet-400 transition"
+          <NavLink
+            to="/admin/AdminAccessForm"
+            className="flex items-center gap-2 hover:text-violet-400 transition font-outfit"
             onClick={() => setIsOpen(false)}
           >
             <FaUsers className="text-lg text-violet-400" />
