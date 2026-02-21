@@ -34,7 +34,7 @@ const ApplicationsPage = () => {
   }, []);
 
   const handleStartRecruitment = (jobId) => {
-    navigate(`/recruiter/${userId}/recruitment-process`);
+    navigate(`/recruiter/${userId}/recruitment-process/${jobId}`);
   };
 
   // Safely filter jobs by title (handling undefined values)
@@ -96,7 +96,7 @@ const ApplicationsPage = () => {
 
                 {/* Start Recruitment Button */}
                 <motion.button
-                  onClick={() => handleStartRecruitment(job.id)}
+                  onClick={() => handleStartRecruitment(job.jobId)}
                   whileHover={{ scale: 1.05, boxShadow: "0 0 12px rgba(165,100,255,0.7)" }}
                   whileTap={{ scale: 0.97 }}
                   className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl shadow-md transition font-medium whitespace-nowrap"

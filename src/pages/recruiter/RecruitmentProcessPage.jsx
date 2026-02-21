@@ -12,11 +12,11 @@ const RecruitmentProcessPage = () => {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [questionFile, setQuestionFile] = useState(null);
-  const [answerFile, setAnswerFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const userId = getuserId();
+  const [min_marks, setmin_marks] = useState(0);
 
-  //const { username, jobId } = useParams(); 
+  const { username, jobId } = useParams(); 
   const navigate = useNavigate();
 
 
@@ -43,7 +43,7 @@ const RecruitmentProcessPage = () => {
   };
 
   const handleSubmit = async () => { // <--- Make handleSubmit async
-    if (!selectedRound || !startTime || !endTime || !questionFile || !answerFile) { // Check jobId too
+    if (!selectedRound || !startTime || !endTime || !questionFile || !min_marks) { // Check jobId too
       toast.error("Please fill in all fields, upload both files, and ensure recruiter ID/job ID are available.", { id: "missing-fields" });
       return;
     }
@@ -56,11 +56,11 @@ const RecruitmentProcessPage = () => {
       console.log("Selected Round:", selectedRound);
       const roundDetails = {
         createdByUserId: userId,
-        jobPostId: 1,
+        jobPostId: jobId,
         roundName: selectedRound,
         startTime: startTime,
         endTime: endTime,
-        min_marks: 0,
+        min_marks: min_marks,
 
       };
 
@@ -69,7 +69,7 @@ const RecruitmentProcessPage = () => {
 
 
       formData.append("questionPdf", questionFile);
-      formData.append("answerPdf", answerFile);
+
 
 
       const response = await requestApi.post(
@@ -90,7 +90,7 @@ const RecruitmentProcessPage = () => {
       setStartTime("");
       setEndTime("");
       setQuestionFile(null);
-      setAnswerFile(null);
+
 
     } catch (error) {
       console.error("Error configuring round:", error);
@@ -215,8 +215,8 @@ const RecruitmentProcessPage = () => {
                 <input
                   type="number"
                   min="0"
-                  value={answerFile || ""}
-                  onChange={(e) => setAnswerFile(e.target.value)}
+                  value={min_marks || ""}
+                  onChange={(e) => setmin_marks(Number(e.target.value))}
                   placeholder="Enter minimum marks"
                   className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
