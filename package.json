@@ -34,6 +34,7 @@
     "swiper": "^11.2.8",
     "swiper-react": "^1.0.0",
     "tsparticles": "^1.43.1",
+    "tsparticles-slim": "^2.12.0",
     "typewriter-effect": "^2.22.0",
     "xlsx": "^0.18.5"
   },
