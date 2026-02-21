@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import NavbarStudentDashboard from "../../components/NavbarStudentDashboard";
 import { useParams } from "react-router-dom";
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import getUserId from "../../services/getUserId"; // Function to get user ID
 import requestApi from "../../services/request";
 
@@ -29,18 +29,18 @@ const placementNews = [
 
 const StudentHome = () => {
   const Companies = [
-  { userId: 1, company: "Google", img_loc: "/images/google.png" },
-  { userId: 2, company: "Microsoft", img_loc: "/images/microsoft.png" },
-  { userId: 3, company: "Amazon", img_loc: "/images/amazon.png" },
-  { userId: 4, company: "Infosys", img_loc: "/images/infosys.png" },
-  { userId: 5, company: "TCS", img_loc: "/images/tcs.png" },
-  { userId: 6, company: "Wipro", img_loc: "/images/wipro.png" },
-  { userId: 7, company: "Accenture", img_loc: "/images/accenture.png" },
-  { userId: 8, company: "HCL", img_loc: "/images/hcl.png" },
-  { userId: 9, company: "Tech Mahindra", img_loc: "/images/techmahindra.png" },
-];
- const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
-  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT 
+    { userId: 1, company: "Google", img_loc: "/images/google.png" },
+    { userId: 2, company: "Microsoft", img_loc: "/images/microsoft.png" },
+    { userId: 3, company: "Amazon", img_loc: "/images/amazon.png" },
+    { userId: 4, company: "Infosys", img_loc: "/images/infosys.png" },
+    { userId: 5, company: "TCS", img_loc: "/images/tcs.png" },
+    { userId: 6, company: "Wipro", img_loc: "/images/wipro.png" },
+    { userId: 7, company: "Accenture", img_loc: "/images/accenture.png" },
+    { userId: 8, company: "HCL", img_loc: "/images/hcl.png" },
+    { userId: 9, company: "Tech Mahindra", img_loc: "/images/techmahindra.png" },
+  ];
+  const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
+  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT
   const scrollRef = useRef(null);
   const [visitedCompanies, setVisitedCompanies] = useState([]);
   const scrollAmount = 220; // Adjust this for the scroll jump per click
@@ -52,14 +52,14 @@ const StudentHome = () => {
     scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
   };
 
-useEffect(() => {
-   const data= requestApi.get(`/student/companies-visited`);
-  data.then((response) => {
+  useEffect(() => {
+    const data = requestApi.get(`/student/companies-visited`);
+    data.then((response) => {
       const companies = response.data;
       console.log(companies);
       setVisitedCompanies(companies || Companies);
     });
-    
+
 
 
   }, []);
@@ -124,8 +124,8 @@ useEffect(() => {
                   </div>
                 ))}
               </div>
-              
-              
+
+
             </div>
           </motion.div>
         </section>
@@ -160,7 +160,7 @@ useEffect(() => {
                 className="bg-white/60 border border-violet-200/40 backdrop-blur-xl p-5 sm:p-7 rounded-2xl shadow-lg flex flex-col items-center justify-center min-w-[180px] transform transition-all duration-300 hover:scale-110 hover:shadow-[0_0_24px_rgba(139,92,246,0.5)] hover:bg-white/80 cursor-pointer"
               >
                 <img
-                  src={`${backendUrl}:${backendPort}/uploads/images${ company.img_loc}`|| company.img_loc}
+                  src={`${backendUrl}:${backendPort}/uploads/images${company.img_loc}` || company.img_loc}
                   alt={"Company Logo"}
                   className="h-20 w-20 sm:h-24 sm:w-24 mb-3 sm:mb-4 object-contain drop-shadow-sm"
                 />
@@ -203,7 +203,7 @@ useEffect(() => {
         </section>
       </motion.div>
     </>
-    
+
   );
 };
 

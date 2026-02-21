@@ -10,29 +10,48 @@ import {
   FaChartLine,
   FaBell,
   FaUserGraduate,
+  FaCheckCircle,
+  FaShieldAlt,
+  FaStar
 } from "react-icons/fa";
 import NavbarStudent from "../../components/NavbarStudent";
 
 const studentFeatures = [
   {
-    icon: <FaFileAlt className="text-4xl text-violet-400 mb-4" />,
+    icon: <FaFileAlt />,
     title: "Resume Builder",
     desc: "Create and update your resumes effortlessly with professional templates.",
+    color: "indigo",
+    bg: "bg-indigo-50",
+    text: "text-indigo-600",
+    shadow: "shadow-indigo-200"
   },
   {
-    icon: <FaUserGraduate className="text-4xl text-violet-400 mb-4" />,
+    icon: <FaUserGraduate />,
     title: "Application Tracker",
     desc: "Track your job applications and manage your progress clearly.",
+    color: "violet",
+    bg: "bg-violet-50",
+    text: "text-violet-600",
+    shadow: "shadow-violet-200"
   },
   {
-    icon: <FaBell className="text-4xl text-violet-400 mb-4" />,
+    icon: <FaBell />,
     title: "Live Updates",
     desc: "Get real-time updates on interview schedules and announcements.",
+    color: "pink",
+    bg: "bg-pink-50",
+    text: "text-pink-600",
+    shadow: "shadow-pink-200"
   },
   {
-    icon: <FaChartLine className="text-4xl text-violet-400 mb-4" />,
+    icon: <FaChartLine />,
     title: "Student Dashboard",
     desc: "Access your performance analytics, test scores, and placement stats.",
+    color: "emerald",
+    bg: "bg-emerald-50",
+    text: "text-emerald-600",
+    shadow: "shadow-emerald-200"
   },
 ];
 
@@ -131,34 +150,47 @@ const Student = () => {
       {/* 🚀 Features Section */}
       <section
         id="student-features"
-        className="min-h-screen py-20 bg-gradient-to-b from-[#E4EBFE] to-[#F8E5EB]"
+        className="py-32 relative overflow-hidden bg-gradient-to-b from-[#E4EBFE]/50 to-[#F8E5EB]/50"
       >
-        <div className="container mx-auto px-4 sm:px-8 lg:px-16">
-          <h2 className="text-4xl font-bold text-center text-[#6B4ECF] mb-16 font-orbitron">
-            Student Features
-          </h2>
+        <div className="container mx-auto px-6 sm:px-10 lg:px-20 relative z-10">
+          <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
+            <div className="max-w-xl">
+              <div className="text-indigo-600 font-extrabold text-xs uppercase tracking-[0.3em] mb-4 flex items-center gap-2">
+                <span className="w-8 h-1 bg-indigo-600 rounded-full"></span>
+                Powerful Toolkit
+              </div>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#2F2F5B] leading-[1.1] tracking-tighter font-outfit">Student Features</h2>
+            </div>
+            <p className="text-slate-600 font-medium text-lg leading-relaxed max-w-sm">
+              Tools designed to simplify your journey and maximize your placement potential. Everything you need, right at your fingertips.
+            </p>
+          </div>
 
-          <div className="grid gap-12 grid-cols-1 md:grid-cols-2">
+          <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
             {studentFeatures.map((feature, index) => (
               <motion.div
                 key={feature.title}
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: index * 0.2 }}
                 viewport={{ once: true }}
-                className="bg-white/30 backdrop-blur-lg p-6 rounded-3xl shadow-lg hover:scale-[1.03] transition-all text-center border border-violet-200/30 hover:shadow-[0_0_25px_rgba(130,90,255,0.3)] cursor-pointer"
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ y: -10 }}
+                className="bg-white/60 backdrop-blur-xl border border-white/80 p-8 xl:p-10 rounded-[3rem] hover:bg-white hover:shadow-[0_40px_80px_rgba(130,90,255,0.15)] transition-all duration-500 group relative overflow-hidden"
               >
-                <div className="flex justify-center mb-4">
-                  <div className="bg-violet-100/40 p-4 rounded-full shadow-md">
-                    {feature.icon}
-                  </div>
+                <div className={`w-16 h-16 ${feature.bg} rounded-3xl flex items-center justify-center mb-8 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-lg ${feature.shadow}`}>
+                  {React.cloneElement(feature.icon, { size: 28, className: feature.text })}
                 </div>
-                <h3 className="text-2xl font-semibold text-violet-700 mb-2 font-orbitron">
+                <h3 className="text-2xl font-black text-[#2F2F5B] mb-4 tracking-tight group-hover:text-indigo-700 transition-colors font-outfit">
                   {feature.title}
                 </h3>
-                <p className="text-[#4b436f] leading-relaxed text-sm sm:text-base">
+                <p className="text-slate-500 leading-relaxed font-semibold text-sm mb-8">
                   {feature.desc}
                 </p>
+
+                {/* Decorative background element */}
+                <div className={`absolute -bottom-10 -right-10 opacity-[0.03] text-9xl ${feature.text} group-hover:scale-110 group-hover:-rotate-12 transition-transform duration-700 pointer-events-none`}>
+                  {feature.icon}
+                </div>
               </motion.div>
             ))}
           </div>
@@ -166,21 +198,29 @@ const Student = () => {
       </section>
 
       {/* 💼 About Section */}
-      <section
-        id="student-about"
-        className="py-20 bg-gradient-to-b from-[#F8E5EB] to-[#E4EBFE]"
-      >
-        <div className="container mx-auto px-4 sm:px-8 lg:px-16">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold text-[#6B4ECF] mb-4 font-orbitron">
+      <section id="student-about" className="py-24 px-6 bg-gradient-to-b from-[#F8E5EB] to-[#E4EBFE]">
+        <div className="container mx-auto">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="max-w-4xl mx-auto bg-white/30 backdrop-blur-2xl border border-white/60 p-12 md:p-16 rounded-[3rem] shadow-2xl text-center relative overflow-hidden group"
+          >
+            <div className="absolute top-0 right-0 w-32 h-32 bg-violet-400/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+
+            <h2 className="text-4xl md:text-5xl font-black text-[#6B4ECF] mb-8 font-outfit">
               About Student Portal
             </h2>
-            <p className="text-[#4b436f] leading-relaxed text-sm sm:text-base">
-              The CareerNexus student portal is a smart solution tailored for student placement preparation.
-              From resumes to updates to personal progress tracking, we provide everything in one powerful
-              dashboard.
+            <p className="text-[#5C5C80] text-lg md:text-xl leading-relaxed mb-8 font-outfit">
+              The CareerNexus student portal is a smart solution tailored for student placement preparation. From resumes to updates to personal progress tracking, we provide everything in one powerful dashboard.
             </p>
-          </div>
+            <div className="flex flex-wrap justify-center gap-6 font-outfit">
+              <div className="bg-white/60 px-6 py-3 rounded-full text-sm font-bold text-[#2F2F5B] shadow-sm border border-white/80">Streamlined</div>
+              <div className="bg-white/60 px-6 py-3 rounded-full text-sm font-bold text-[#2F2F5B] shadow-sm border border-white/80">Real-Time Tracker</div>
+              <div className="bg-white/60 px-6 py-3 rounded-full text-sm font-bold text-[#2F2F5B] shadow-sm border border-white/80">Goal Oriented</div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
