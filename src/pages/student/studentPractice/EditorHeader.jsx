@@ -1,96 +1,91 @@
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    faWifi, faCircleNodes, faCodeBranch, faUsers, faShareNodes, faCopy, faCheck,
-    faLanguage, faPalette, faRightFromBracket, faPlay, faSpinner,
-    faUser // Make sure faUser is imported
-} from '@fortawesome/free-solid-svg-icons';
-import toast from 'react-hot-toast'; // Ensure toast is imported if used directly here, though it's typically used in parent
+  faLanguage,
+  faPalette,
+  faPlay,
+  faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
 
 const EditorHeader = ({
-    sessionId,
-    username,
-    connectionStatus,
-    isCopied,
-    activeUsers,
-    selectedLanguage,
-    selectedTheme,
-    availableLanguages,
-    availableThemes,
-    handleCopySessionId,
-    handleLanguageChange,
-    handleThemeChange,
-    handleRunCode,
-    handleLeaveSession,
-    isExecuting,
-    getStatusColor,
-    current_added_user, // Prop is received but primarily used for toasts in parent (CodeEditor.jsx)
-    lastUpdatedUser // New prop to display the last user who made a change
+  selectedLanguage,
+  selectedTheme,
+  handleLanguageChange,
+  handleThemeChange,
+  handleRunCode,
+  isExecuting,
 }) => {
-    
-    return (
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 pb-3 border-b border-gray-700 gap-y-2">
-            
+  const availableLanguages = [
+    { name: "JavaScript", value: "javascript" },
+    { name: "Java", value: "java" },
+    { name: "Python", value: "python" },
+    { name: "C++", value: "cpp" },
+    { name: "C", value: "c" },
+  ];
 
-            {/* Controls and Info Badges */}
-            <div className="flex items-center space-x-4 flex-wrap justify-start sm:justify-end gap-2">
-                {/* Language Selector */}
-                <div className="flex items-center bg-gray-800 px-3 py-1 rounded-full text-sm border border-gray-700">
-                    <FontAwesomeIcon icon={faLanguage} className="mr-2 text-green-400" />
-                    <select
-                        value={selectedLanguage}
-                        onChange={handleLanguageChange}
-                        className="bg-transparent text-gray-300 outline-none focus:ring-0 focus:border-transparent cursor-pointer"
-                    >
-                        {availableLanguages.map(lang => (
-                            <option key={lang.value} value={lang.value} className="bg-gray-800 text-white">
-                                {lang.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+  const availableThemes = [
+    { name: "VS Dark", value: "vs-dark" },
+    { name: "VS Light", value: "vs-light" },
+  ];
 
-                {/* Theme Selector */}
-                <div className="flex items-center bg-gray-800 px-3 py-1 rounded-full text-sm border border-gray-700">
-                    <FontAwesomeIcon icon={faPalette} className="mr-2 text-orange-400" />
-                    <select
-                        value={selectedTheme}
-                        onChange={handleThemeChange}
-                        className="bg-transparent text-gray-300 outline-none focus:ring-0 focus:border-transparent cursor-pointer"
-                    >
-                        {availableThemes.map(theme => (
-                            <option key={theme.value} value={theme.value} className="bg-gray-800 text-white">
-                                {theme.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+  return (
+    <div className="flex justify-between items-center p-4">
 
-                
-                
+      <h1 className="text-2xl font-bold text-green-400">
+        Coding Practice
+      </h1>
 
-             
+      <div className="flex items-center gap-4">
 
-               
-
-                {/* Run Code Button */}
-                <button
-                    onClick={handleRunCode}
-                    disabled={isExecuting}
-                    className="flex items-center bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-full text-sm transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                    title="Run the current code"
-                >
-                    {isExecuting ? (
-                        <FontAwesomeIcon icon={faSpinner} spin className="mr-2" />
-                    ) : (
-                        <FontAwesomeIcon icon={faPlay} className="mr-2" />
-                    )}
-                    Run Code
-                </button>
-
-            </div>
+        {/* Language */}
+        <div className="flex items-center gap-2 bg-gray-800 px-3 py-1 rounded">
+          <FontAwesomeIcon icon={faLanguage} />
+          <select
+            value={selectedLanguage}
+            onChange={handleLanguageChange}
+            className="bg-transparent outline-none"
+          >
+            {availableLanguages.map((lang) => (
+              <option key={lang.value} value={lang.value}>
+                {lang.name}
+              </option>
+            ))}
+          </select>
         </div>
-    );
+
+        {/* Theme */}
+        <div className="flex items-center gap-2 bg-gray-800 px-3 py-1 rounded">
+          <FontAwesomeIcon icon={faPalette} />
+          <select
+            value={selectedTheme}
+            onChange={handleThemeChange}
+            className="bg-transparent outline-none"
+          >
+            {availableThemes.map((theme) => (
+              <option key={theme.value} value={theme.value}>
+                {theme.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Run Button */}
+        <button
+          onClick={handleRunCode}
+          disabled={isExecuting}
+          className="bg-green-600 px-4 py-1 rounded hover:bg-green-700"
+        >
+          {isExecuting ? (
+            <FontAwesomeIcon icon={faSpinner} spin />
+          ) : (
+            <>
+              <FontAwesomeIcon icon={faPlay} /> Run
+            </>
+          )}
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default EditorHeader;
