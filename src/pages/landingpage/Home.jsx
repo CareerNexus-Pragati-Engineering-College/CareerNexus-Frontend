@@ -188,62 +188,82 @@ const Home = () => {
       </section>
 
       {/* 💼 About Section */}
-      <section id="about" className="py-20 bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE]">
-        <div className="container mx-auto px-4 sm:px-8 lg:px-16">
+      <section id="about" className="py-24 px-6 bg-gradient-to-b from-[#F8E5EB] to-[#E4EBFE]">
+        <div className="container mx-auto">
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="max-w-4xl mx-auto text-center"
+            className="max-w-4xl mx-auto bg-white/30 backdrop-blur-2xl border border-white/60 p-12 md:p-16 rounded-[3rem] shadow-2xl text-center relative overflow-hidden group"
           >
-            <h2 className="text-4xl font-bold text-[#6B4ECF] mb-4 font-outfit">About CareerNexus</h2>
-            <p className="text-[#4E4376] leading-relaxed text-sm sm:text-base font-outfit">
-              CareerNexus is your all-in-one placement preparation tool — helping you manage
-              applications, deadlines, analytics, and tasks with ease.
+            <div className="absolute top-0 right-0 w-32 h-32 bg-violet-400/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+
+            <h2 className="text-4xl md:text-5xl font-black text-[#6B4ECF] mb-8 font-outfit">
+              About CareerNexus
+            </h2>
+            <p className="text-[#5C5C80] text-lg md:text-xl leading-relaxed mb-8 font-outfit">
+              CareerNexus is your all-in-one placement preparation tool — helping you manage applications, deadlines, analytics, and tasks with ease. We bridge the gap between talent and opportunity through a seamless, data-driven experience designed for student success.
             </p>
+            <div className="flex flex-wrap justify-center gap-6 font-outfit">
+              <div className="bg-white/60 px-6 py-3 rounded-full text-sm font-bold text-[#2F2F5B] shadow-sm border border-white/80">Efficient</div>
+              <div className="bg-white/60 px-6 py-3 rounded-full text-sm font-bold text-[#2F2F5B] shadow-sm border border-white/80">Data-Driven</div>
+              <div className="bg-white/60 px-6 py-3 rounded-full text-sm font-bold text-[#2F2F5B] shadow-sm border border-white/80">User-Centric</div>
+            </div>
           </motion.div>
         </div>
       </section>
 
       {/* 📬 Contact Section */}
-      <section id="contact" className="py-20 bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE]">
+      <section id="contact" className="py-16 bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE]">
         <div className="container mx-auto px-4 sm:px-8 lg:px-16">
+          <div className="max-w-3xl mx-auto text-center mb-10">
+            <motion.h2
+              className="text-4xl md:text-5xl font-black text-[#2F2F5B] mb-4 font-outfit"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              Let's Connect
+            </motion.h2>
+            <p className="text-[#5C5C80] text-lg font-outfit">
+              Simple questions? Big ideas? We're here for both.
+            </p>
+          </div>
+
           <motion.div
-            initial={{ opacity: 0, y: 60 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="max-w-2xl mx-auto text-center"
+            className="max-w-xl mx-auto bg-white/40 backdrop-blur-xl border border-white/60 p-8 md:p-10 rounded-[2.5rem] shadow-2xl"
           >
-            <h2 className="text-4xl font-bold text-[#6B4ECF] mb-8 font-outfit">Contact Us</h2>
-
-            <div className="bg-white/30 border border-violet-300/40 rounded-xl backdrop-blur-lg shadow-xl p-6 sm:p-8 space-y-4 transition-all">
-              <form className="space-y-4">
-                <input
-                  type="text"
-                  placeholder="Your Name"
-                  className="w-full p-3 bg-white/60 text-[#4E4376] placeholder-gray-500 rounded-md border border-violet-200 focus:ring-2 focus:ring-violet-400 focus:outline-none font-outfit"
-                />
-                <input
-                  type="email"
-                  placeholder="Your Email"
-                  className="w-full p-3 bg-white/60 text-[#4E4376] placeholder-gray-500 rounded-md border border-violet-200 focus:ring-2 focus:ring-violet-400 focus:outline-none font-outfit"
-                />
-                <textarea
-                  placeholder="Your Message"
-                  rows="5"
-                  className="w-full p-3 bg-white/60 text-[#4E4376] placeholder-gray-500 rounded-md border border-violet-200 focus:ring-2 focus:ring-violet-400 focus:outline-none font-outfit"
-                ></textarea>
-
-                <button
-                  type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 text-white font-semibold px-6 py-3 rounded-full bg-gradient-to-r from-[#b892ff] to-[#411686] shadow-[0_0_5px_#b892ff] hover:shadow-[0_0_10px_#b892ff,0_0_20px_#411686] transition-all duration-300 transform hover:scale-105 cursor-pointer"
-                >
-                  Send Message
-                </button>
-              </form>
-            </div>
+            <form className="space-y-5">
+              <input
+                type="text"
+                placeholder="Name"
+                className="w-full p-4 bg-white/60 text-[#4E4376] placeholder-gray-500 rounded-2xl border border-white/80 focus:ring-2 focus:ring-violet-400 focus:outline-none transition-all font-outfit"
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                className="w-full p-4 bg-white/60 text-[#4E4376] placeholder-gray-500 rounded-2xl border border-white/80 focus:ring-2 focus:ring-violet-400 focus:outline-none transition-all font-outfit"
+              />
+              <textarea
+                placeholder="Your Message..."
+                rows="4"
+                className="w-full p-4 bg-white/60 text-[#4E4376] placeholder-gray-500 rounded-2xl border border-white/80 focus:ring-2 focus:ring-violet-400 focus:outline-none transition-all font-outfit resize-none"
+              ></textarea>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                type="submit"
+                className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#b892ff] to-[#411686] text-white font-black text-lg shadow-lg hover:shadow-xl transition-all font-outfit"
+              >
+                Send Message
+              </motion.button>
+            </form>
           </motion.div>
         </div>
       </section>

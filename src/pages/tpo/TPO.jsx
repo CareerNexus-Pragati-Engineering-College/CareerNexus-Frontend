@@ -16,24 +16,32 @@ import NavbarTPO from "../../components/NavbarTPO";
 
 const tpoFeatures = [
   {
-    icon: <FaFileAlt className="text-4xl text-violet-400 mb-4" />,
+    icon: <FaFileAlt className="text-4xl text-violet-500" />,
     title: "Candidate Management",
-    desc: "Manage student applications and resumes with efficiency.",
+    desc: "Seamlessly manage student profiles, resumes, and applications with high-performance tracking tools.",
+    gradient: "from-violet-500/10 to-transparent",
+    borderColor: "group-hover:border-violet-400",
   },
   {
-    icon: <FaChartBar className="text-4xl text-violet-400 mb-4" />,
+    icon: <FaChartBar className="text-4xl text-indigo-500" />,
     title: "Analytics Dashboard",
-    desc: "Track placement statistics and department progress in real time.",
+    desc: "Gain deep insights into placement statistics, department progress, and company trends in real-time.",
+    gradient: "from-indigo-500/10 to-transparent",
+    borderColor: "group-hover:border-indigo-400",
   },
   {
-    icon: <FaBell className="text-4xl text-violet-400 mb-4" />,
-    title: "Notifications",
-    desc: "Send updates and alerts to students instantly.",
+    icon: <FaBell className="text-4xl text-purple-500" />,
+    title: "Smart Notifications",
+    desc: "Broadcast instant updates, interview schedules, and critical alerts directly to students' dashboards.",
+    gradient: "from-purple-500/10 to-transparent",
+    borderColor: "group-hover:border-purple-400",
   },
   {
-    icon: <FaUserTie className="text-4xl text-violet-400 mb-4" />,
-    title: "TPO Dashboard",
-    desc: "Monitor activities and streamline placement operations.",
+    icon: <FaUserTie className="text-4xl text-fuchsia-500" />,
+    title: "TPO Command Center",
+    desc: "Empower your administration with a centralized hub for all campus placement operations and data.",
+    gradient: "from-fuchsia-500/10 to-transparent",
+    borderColor: "group-hover:border-fuchsia-400",
   },
 ];
 
@@ -43,7 +51,7 @@ const TPO = () => {
   }, []);
 
   return (
-    <div className="bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A] scroll-smooth font-poppins">
+    <div className="bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A] scroll-smooth font-poppins overflow-x-hidden">
 
       {/* 🔙 Back to Main Home */}
       <div className="fixed top-[90px] left-3 z-50 hidden md:block">
@@ -132,49 +140,83 @@ const TPO = () => {
       {/* 🔧 TPO Features */}
       <section
         id="tpo-features"
-        className="min-h-screen bg-gradient-to-b from-[#E4EBFE] to-[#F8E5EB] py-20 px-6 sm:px-10 md:px-24"
+        className="py-24 relative overflow-hidden bg-gradient-to-b from-[#E4EBFE] to-[#F8E5EB]"
       >
-        <h2 className="text-4xl font-bold text-center text-[#6B4ECF] mb-16 font-orbitron">
-          TPO Features
-        </h2>
-
-        <div className="max-w-6xl mx-auto grid gap-12 grid-cols-1 md:grid-cols-2">
-          {tpoFeatures.map((feature, index) => (
-            <motion.div
-              key={feature.title}
-              initial={{ opacity: 0, y: 40 }}
+        <div className="container mx-auto px-6 sm:px-10 md:px-24 relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-20">
+            <motion.span
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: index * 0.2 }}
+              transition={{ duration: 0.5 }}
               viewport={{ once: true }}
-              className="bg-white/30 backdrop-blur-lg p-6 rounded-3xl shadow-lg hover:scale-[1.03] transition-all text-center border border-violet-200/30 hover:shadow-[0_0_25px_rgba(130,90,255,0.3)] cursor-pointer"
+              className="text-xs font-black uppercase tracking-[0.3em] text-violet-600 mb-4 block font-outfit"
             >
-              <div className="flex justify-center mb-4">
-                <div className="bg-violet-100/40 p-4 rounded-full shadow-md">
-                  {feature.icon}
+              Efficiency Redefined
+            </motion.span>
+            <motion.h2
+              className="text-4xl md:text-5xl font-black text-[#2F2F5B] mb-6 font-outfit"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              Powerful Tools for <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-indigo-600">Administrative Excellence</span>
+            </motion.h2>
+          </div>
+
+          <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+            {tpoFeatures.map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className={`group relative bg-white/30 backdrop-blur-xl border border-white/40 p-8 rounded-[2rem] shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:bg-white/60 ${feature.borderColor} border-opacity-30`}
+              >
+                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[2rem]`}></div>
+
+                <div className="relative z-10">
+                  <div className="mb-6 p-4 bg-white/80 rounded-2xl w-fit shadow-sm group-hover:scale-110 transition-transform duration-500 group-hover:rotate-3">
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-[#2F2F5B] mb-4 font-outfit group-hover:text-violet-700 transition-colors duration-300">
+                    {feature.title}
+                  </h3>
+                  <p className="text-[#5C5C80] text-sm leading-relaxed font-outfit">
+                    {feature.desc}
+                  </p>
                 </div>
-              </div>
-              <h3 className="text-2xl font-semibold text-violet-700 mb-2 font-orbitron">
-                {feature.title}
-              </h3>
-              <p className="text-[#4b436f] leading-relaxed text-sm sm:text-base">
-                {feature.desc}
-              </p>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* 📘 About Section */}
-      <section id="tpo-about" className="py-20 px-6 bg-gradient-to-b from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A]">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-[#6B4ECF] mb-4 font-orbitron">
-            About TPO Portal
-          </h2>
-          <p className="text-[#4b436f] text-sm sm:text-base">
-            The CareerNexus TPO portal is tailored for Training & Placement Officers
-            to simplify recruitment coordination, monitor analytics, and streamline
-            placement operations.
-          </p>
+      <section id="tpo-about" className="py-24 px-6 bg-gradient-to-b from-[#F8E5EB] to-[#E4EBFE]">
+        <div className="container mx-auto">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="max-w-4xl mx-auto bg-white/30 backdrop-blur-2xl border border-white/60 p-12 md:p-16 rounded-[3rem] shadow-2xl text-center relative overflow-hidden group"
+          >
+            <div className="absolute top-0 right-0 w-32 h-32 bg-violet-400/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+
+            <h2 className="text-4xl md:text-5xl font-black text-[#6B4ECF] mb-8 font-outfit">
+              About TPO Portal
+            </h2>
+            <p className="text-[#5C5C80] text-lg md:text-xl leading-relaxed mb-8 font-outfit">
+              The CareerNexus TPO portal is a transformation of the modern recruitment workflow. Built for Training & Placement Officers to simplify coordination, provide deep analytics, and create a seamless bridge between institutions and industry leaders.
+            </p>
+            <div className="flex flex-wrap justify-center gap-6 font-outfit">
+              <div className="bg-white/60 px-6 py-3 rounded-full text-sm font-bold text-[#2F2F5B] shadow-sm border border-white/80">Efficient</div>
+              <div className="bg-white/60 px-6 py-3 rounded-full text-sm font-bold text-[#2F2F5B] shadow-sm border border-white/80">Data-Driven</div>
+              <div className="bg-white/60 px-6 py-3 rounded-full text-sm font-bold text-[#2F2F5B] shadow-sm border border-white/80">User-Centric</div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
