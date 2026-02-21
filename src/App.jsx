@@ -102,7 +102,7 @@ const App = () => {
         <Route path="/recruiter/:userId/profile" element={<RecruiterProfile />} />
         <Route path="/recruiter/:userId/jobpostings" element={<RecruiterJob />} />
         <Route path="/recruiter/:userId/applications" element={<ApplicationsPage />} />
-        <Route path="/recruiter/:userId/recruitment-process" element={<RecruitmentProcessPage />} />
+        <Route path="/recruiter/:userId/recruitment-process/:jobId" element={<RecruitmentProcessPage />} />
 
         {/* 🛠️ Admin */}
         <Route path="/admin" element={<Admin />} />
