@@ -10,12 +10,12 @@ import getUserId from "../../services/getUserId";
 const StudentCodingExam = () => {
     const { userId, assessmentId } = useParams();
     const navigate = useNavigate();
-    
+
     const [assessment, setAssessment] = useState(null);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [loading, setLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    
+
     // Store code for each question: { questionId: { code: string, language: string } }
     const [answers, setAnswers] = useState({});
 
@@ -24,13 +24,13 @@ const StudentCodingExam = () => {
             try {
                 const res = await requestApi.get(`/coding-exam/${assessmentId}/start`);
                 setAssessment(res.data);
-                
+
                 // Initialize answers
                 const initialAnswers = {};
                 res.data.questions.forEach(q => {
-                    initialAnswers[q.id] = { 
-                        code: q.title.toLowerCase().includes("java") ? "" : "// Write your code here...", 
-                        language: "javascript" 
+                    initialAnswers[q.id] = {
+                        code: q.title.toLowerCase().includes("java") ? "" : "// Write your code here...",
+                        language: "javascript"
                     };
                 });
                 setAnswers(initialAnswers);
@@ -64,7 +64,7 @@ const StudentCodingExam = () => {
 
     const handleSubmitExam = async () => {
         if (!window.confirm("Are you sure you want to submit your assessment? You cannot make changes after this.")) return;
-        
+
         setIsSubmitting(true);
         try {
             const submissions = Object.keys(answers).map(qId => ({
@@ -111,7 +111,7 @@ const StudentCodingExam = () => {
                 {/* Progress Indicators */}
                 <div className="hidden md:flex items-center gap-2">
                     {assessment.questions.map((_, idx) => (
-                        <div 
+                        <div
                             key={idx}
                             onClick={() => setCurrentQuestionIndex(idx)}
                             className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold cursor-pointer transition-all
@@ -123,7 +123,7 @@ const StudentCodingExam = () => {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <button 
+                    <button
                         onClick={handleSubmitExam}
                         disabled={isSubmitting}
                         className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 hover:shadow-lg transition disabled:opacity-50"
@@ -136,7 +136,7 @@ const StudentCodingExam = () => {
             {/* Main Content Area */}
             <main className="flex-1 overflow-hidden relative">
                 <AnimatePresence mode="wait">
-                    <motion.div 
+                    <motion.div
                         key={currentQuestionIndex}
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -149,7 +149,7 @@ const StudentCodingExam = () => {
                           However, CodeEditor captures code state internally. 
                           We need a way to 'sync' our 'answers' state with CodeEditor.
                         */}
-                        <CodeEditor 
+                        <CodeEditor
                             sessionId={`exam-${assessmentId}-${currentQuestion.id}`} // Unique session per question
                             username={userId}
                             question={currentQuestion}
@@ -163,7 +163,7 @@ const StudentCodingExam = () => {
 
             {/* Bottom Question Controls */}
             <footer className="h-14 bg-[#16112a] border-t border-gray-800 flex items-center justify-between px-6">
-                <button 
+                <button
                     disabled={currentQuestionIndex === 0}
                     onClick={() => setCurrentQuestionIndex(prev => prev - 1)}
                     className="text-gray-400 flex items-center gap-2 hover:text-white disabled:opacity-20 transition"
@@ -175,7 +175,7 @@ const StudentCodingExam = () => {
                     <FaAward /> {currentQuestion.points} Points
                 </div>
 
-                <button 
+                <button
                     disabled={currentQuestionIndex === assessment.questions.length - 1}
                     onClick={() => setCurrentQuestionIndex(prev => prev + 1)}
                     className="text-gray-400 flex items-center gap-2 hover:text-white disabled:opacity-20 transition"
