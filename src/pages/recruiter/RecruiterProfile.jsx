@@ -20,8 +20,8 @@ const RecruiterProfile = () => {
   const [imageFile, setImageFile] = useState(null);
   const emailfromUrl = query.get("email");
   const userIdFromUrl = query.get("userId");
-  const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
-  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT
+  const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST;
+  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT;
 
   const [recruiter, setRecruiter] = useState({
     userId: "",
@@ -46,36 +46,36 @@ const RecruiterProfile = () => {
 
       toast("You have to fill details", {
         id: "fill-details",
-        icon: 'ℹ️',
+        icon: "ℹ️",
       });
     } else if (pageMode === "update") {
       setIsEditing(false);
       const data = requestApi.get(`/recruiter/${userId}/profile`);
-      data.then((response) => {
-        const recruiterData = response.data;
-        setRecruiter({
-          firstName: recruiterData.firstName || "",
-          lastName: recruiterData.lastName || "",
-          userId: recruiterData.userId || userIdFromUrl || userId,
-          designation: recruiterData.designation,
-          email: emailfromUrl || recruiterData.email || "",
-          phone: recruiterData.phone || "",
-          company: recruiterData.company || "",
-
+      data
+        .then((response) => {
+          const recruiterData = response.data;
+          setRecruiter({
+            firstName: recruiterData.firstName || "",
+            lastName: recruiterData.lastName || "",
+            userId: recruiterData.userId || userIdFromUrl || userId,
+            designation: recruiterData.designation,
+            email: emailfromUrl || recruiterData.email || "",
+            phone: recruiterData.phone || "",
+            company: recruiterData.company || "",
+          });
+          setProfileImage(`${recruiterData.img_loc}`);
+        })
+        .catch((error) => {
+          console.error("Error fetching recruiter data:", error);
+          toast.error(
+            "Failed to fetch recruiter data. Please try again later.",
+            { id: "fetch-error" },
+          );
         });
-        setProfileImage(`${backendUrl}:${backendPort}/uploads/images${recruiterData.img_loc}`);
-
-
-      }
-      ).catch((error) => {
-        console.error("Error fetching recruiter data:", error);
-        toast.error("Failed to fetch recruiter data. Please try again later.", { id: "fetch-error" });
-      })
     }
   }, [pageMode, userId, navigate]);
 
   if (!pageMode) {
-
     return (
       <div className="h-screen flex items-center justify-center text-red-500 text-xl">
         ❌ Invalid access: query param 'page' is missing.
@@ -106,28 +106,32 @@ const RecruiterProfile = () => {
         phone: recruiter.phone,
         userId: recruiter.userId || userIdFromUrl,
         email: emailfromUrl || "",
-
-      }
+      };
       const formData = new FormData();
-      console.log(imageFile)
-      formData.append("data", new Blob([JSON.stringify(payload)], { type: "application/json" }));
+      console.log(imageFile);
+      formData.append(
+        "data",
+        new Blob([JSON.stringify(payload)], { type: "application/json" }),
+      );
       if (imageFile) {
         formData.append("imageFile", imageFile);
       }
 
-      const data = await requestApi.post(`/recruiter/${userId}/profile`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      const data = await requestApi.post(
+        `/recruiter/${userId}/profile`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         },
-      });
-
-
+      );
 
       toast.success(
         pageMode === "data"
           ? "Profile saved successfully!"
           : "Profile updated successfully!",
-        { id: "profile-save-success" }
+        { id: "profile-save-success" },
       );
 
       setIsEditing(false);
@@ -138,7 +142,9 @@ const RecruiterProfile = () => {
         }, 2000);
       }
     } catch (error) {
-      toast.error(error.message || "Failed to save profile", { id: "save-error" });
+      toast.error(error.message || "Failed to save profile", {
+        id: "save-error",
+      });
     }
   };
 
@@ -213,10 +219,11 @@ const RecruiterProfile = () => {
                   value={recruiter[field.name]}
                   onChange={handleChange}
                   readOnly={!isEditing}
-                  className={`w-full px-4 py-2 rounded-md border text-[#2C225A] focus:outline-none focus:ring-2 transition ${isEditing
+                  className={`w-full px-4 py-2 rounded-md border text-[#2C225A] focus:outline-none focus:ring-2 transition ${
+                    isEditing
                       ? "border-violet-400 bg-white/80 focus:ring-violet-300"
                       : "border-gray-300 bg-gray-100 cursor-not-allowed"
-                    }`}
+                  }`}
                 />
               </div>
             ))}
