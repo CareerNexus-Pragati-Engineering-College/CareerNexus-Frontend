@@ -61,40 +61,6 @@ const RecruiterJob = () => {
   }
 
 
-  useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const res = await requestApi.get(`/jobs/recruiter`);
-        setJobPosts(res.data);
-
-        if (res.data.length === 0) {
-          showToast("No jobs found. Start posting your jobs!");
-        }
-        setJobPosts((prev) => {
-          return prev.map((job) => ({
-            ...job,
-            company_name: job.companyName || job.company_name,
-            job_title: job.jobTitle || job.job_title,
-            job_description: job.jobDescription || job.job_description,
-            recruitment_process: job.recruitmentProcess || job.recruitment_process,
-            salary_package: job.salaryPackage || job.salary_package,
-            locations: parseLocations(job.locations) || parseLocations(job.location),
-            application_deadline: job.applicationDeadline || job.application_deadline,
-          }));
-        })
-
-      } catch {
-        showToast("Failed to fetch jobs", "danger");
-      }
-    };
-    fetchJobs();
-  }, []);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-
-  }, [showModal, showDeleteModal, editIndex, currentPage]);
-
   const showToast = (message, type = "success") => {
     if (type === "danger" || type === "error") {
       toast.error(message, { id: "recruiter-job-error" });
@@ -102,6 +68,37 @@ const RecruiterJob = () => {
       toast.success(message, { id: "recruiter-job-success" });
     }
   };
+
+  const fetchJobs = async () => {
+    try {
+      const res = await requestApi.get(`/jobs/recruiter`);
+      const mappedJobs = res.data.map((job) => ({
+        ...job,
+        company_name: job.companyName || job.company_name,
+        job_title: job.jobTitle || job.job_title,
+        job_description: job.jobDescription || job.job_description,
+        recruitment_process: job.recruitmentProcess || job.recruitment_process,
+        salary_package: job.salaryPackage || job.salary_package,
+        locations: parseLocations(job.locations) || parseLocations(job.location),
+        application_deadline: job.applicationDeadline || job.application_deadline,
+      }));
+      setJobPosts(mappedJobs);
+
+      if (mappedJobs.length === 0) {
+        showToast("No jobs found. Start posting your jobs!");
+      }
+    } catch {
+      showToast("Failed to fetch jobs", "danger");
+    }
+  };
+
+  useEffect(() => {
+    fetchJobs();
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [showModal, showDeleteModal, editIndex, currentPage]);
 
   const handlePostJob = async () => {
     const isEditing = editIndex !== null;
@@ -131,17 +128,14 @@ const RecruiterJob = () => {
       if (isEditing) {
         const jobId = filteredJobs[editIndex + (currentPage - 1) * jobsPerPage].id;
         const res = await requestApi.put(`/jobs/${jobId}`, payload);
-        if (res.status === 200) {
-          const updated = [...jobPosts];
-          const realIndex = jobPosts.findIndex((j) => j.id === jobId);
-          updated[realIndex] = { ...res.data };
-          setJobPosts(updated);
+        if (res.status === 200 || res.status === 201) {
+          await fetchJobs();
           showToast("Job updated successfully!");
         }
       } else {
         const res = await requestApi.post(`/jobs/post`, payload);
-        if (res.status === 200) {
-          setJobPosts([res.data, ...jobPosts]);
+        if (res.status === 200 || res.status === 201) {
+          await fetchJobs();
           showToast("Job posted successfully!");
           setShowSuccessAnimation(true);
           setTimeout(() => setShowSuccessAnimation(false), 2000);
