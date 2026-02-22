@@ -25,7 +25,7 @@ import StudentCodingExam from "./pages/student/StudentCodingExam";
 // 🏫 TPO
 import TPO from "./pages/tpo/TPO";
 import TPOLogin from "./pages/tpo/TpoLogin";
-// import Tpohome from "./pages/tpo/Tpohome";
+import Tpohome from "./pages/tpo/Tpohome";
 import TpoProfile from "./pages/tpo/TPOProfile";
 import TPOStudents from "./pages/tpo/TPOStudents";
 import TPORecruiters from "./pages/tpo/TPORecruiters";

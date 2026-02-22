@@ -2,10 +2,10 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import NavbarRecruiterDashboard from "../../components/NavbarRecruiterDashboard";
 import toast from "react-hot-toast";
 import requestApi from "../../services/request";
 import getuserId from "../../services/getUserId";
+import { FaArrowLeft, FaUserEdit, FaSave, FaCamera, FaUser, FaPhoneAlt, FaBuilding, FaIdBadge, FaEnvelope } from "react-icons/fa";
 
 const RecruiterProfile = () => {
   const navigate = useNavigate();
@@ -20,8 +20,6 @@ const RecruiterProfile = () => {
   const [imageFile, setImageFile] = useState(null);
   const emailfromUrl = query.get("email");
   const userIdFromUrl = query.get("userId");
-  const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST;
-  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT;
 
   const [recruiter, setRecruiter] = useState({
     userId: "",
@@ -30,21 +28,18 @@ const RecruiterProfile = () => {
     company: "",
     designation: "",
     phone: "",
+    email: emailfromUrl || "",
   });
 
   useEffect(() => {
     if (pageMode === "data") {
       setIsEditing(true);
-      setRecruiter({
+      setRecruiter(prev => ({
+        ...prev,
         userId: userIdFromUrl || userId,
-        firstName: "",
-        lastName: "",
-        company: "",
-        designation: "",
-        phone: "",
-      });
+      }));
 
-      toast("You have to fill details", {
+      toast("Please complete your profile details.", {
         id: "fill-details",
         icon: "ℹ️",
       });
@@ -58,12 +53,14 @@ const RecruiterProfile = () => {
             firstName: recruiterData.firstName || "",
             lastName: recruiterData.lastName || "",
             userId: recruiterData.userId || userIdFromUrl || userId,
-            designation: recruiterData.designation,
+            designation: recruiterData.designation || "",
             email: emailfromUrl || recruiterData.email || "",
             phone: recruiterData.phone || "",
             company: recruiterData.company || "",
           });
-          setProfileImage(`${recruiterData.img_loc}`);
+          if (recruiterData.img_loc) {
+            setProfileImage(`${recruiterData.img_loc}`);
+          }
         })
         .catch((error) => {
           console.error("Error fetching recruiter data:", error);
@@ -73,7 +70,7 @@ const RecruiterProfile = () => {
           );
         });
     }
-  }, [pageMode, userId, navigate]);
+  }, [pageMode, userId, navigate, emailfromUrl, userIdFromUrl]);
 
   if (!pageMode) {
     return (
@@ -90,10 +87,12 @@ const RecruiterProfile = () => {
   const handleEditToggle = () => setIsEditing(true);
 
   const handleSave = async () => {
-    const allFilled = Object.values(recruiter).every((v) => v.trim() !== "");
+    // Only check required fields, we won't strictly enforce but check basics
+    const requiredFields = ['firstName', 'lastName', 'company', 'designation', 'phone'];
+    const allFilled = requiredFields.every((key) => recruiter[key] && recruiter[key].trim() !== "");
 
     if (!allFilled) {
-      toast.error("You have to fill all details", { id: "fill-all-details" });
+      toast.error("Please fill all required details", { id: "fill-all-details" });
       return;
     }
 
@@ -105,19 +104,22 @@ const RecruiterProfile = () => {
         designation: recruiter.designation,
         phone: recruiter.phone,
         userId: recruiter.userId || userIdFromUrl,
-        email: emailfromUrl || "",
+        email: emailfromUrl || recruiter.email,
       };
+
       const formData = new FormData();
-      console.log(imageFile);
       formData.append(
         "data",
         new Blob([JSON.stringify(payload)], { type: "application/json" }),
       );
       if (imageFile) {
         formData.append("imageFile", imageFile);
+      } else {
+        // Appending empty blob if expected backend logic
+        formData.append("imageFile", new Blob([], { type: "application/octet-stream" }), "empty.png");
       }
 
-      const data = await requestApi.post(
+      await requestApi.post(
         `/recruiter/profile`,
         formData
       );
@@ -145,116 +147,163 @@ const RecruiterProfile = () => {
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
-    console.log(file);
     if (file) {
       setImageFile(file);
       setProfileImage(URL.createObjectURL(file));
     }
   };
 
+  const InputField = ({ label, name, type = "text", disabled = false, icon = null }) => (
+    <div className="flex flex-col">
+      <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">{label}</label>
+      {isEditing ? (
+        <div className="relative">
+          {icon && <div className="absolute left-3.5 top-3 text-gray-400">{icon}</div>}
+          <input
+            type={type}
+            name={name}
+            value={recruiter[name] || ""}
+            onChange={handleChange}
+            disabled={disabled}
+            className={`w-full ${icon ? 'pl-10' : 'px-4'} pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 transition-all shadow-sm ${disabled ? 'bg-gray-50 text-gray-500 cursor-not-allowed' : ''}`}
+            placeholder={`Enter ${label}...`}
+          />
+        </div>
+      ) : (
+        <div className="flex items-center gap-2 text-gray-800 font-medium text-[15px] pt-1 pb-2 border-b border-gray-100/50">
+          {icon && <span className="text-gray-400">{icon}</span>}
+          {recruiter[name] || <span className="text-gray-400 font-normal italic">Not specified</span>}
+        </div>
+      )}
+    </div>
+  );
+
   return (
-    <>
-      <NavbarRecruiterDashboard />
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 font-outfit py-8 sm:py-12 px-4 sm:px-6 lg:px-8 flex justify-center">
 
-      <button
-        onClick={() => navigate(`/recruiter/${userId}/home`)}
-        className="fixed top-20 left-4 z-50 bg-gradient-to-r from-violet-500 to-indigo-600 text-white px-4 py-2 rounded-xl shadow-md hover:scale-105 transition"
-      >
-        ← Back
-      </button>
-
-      <div className="min-h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] pt-24 pb-16 flex justify-center font-poppins px-4">
-        <motion.div
-          className="w-full max-w-3xl bg-white/30 backdrop-blur-md border border-violet-200/30 p-6 rounded-2xl shadow-xl"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+      {/* Absolute Header Navigation */}
+      <div className="absolute top-0 left-0 w-full p-4 sm:p-6 z-50">
+        <button
+          onClick={() => navigate(`/recruiter/${userId}/home`)}
+          className="flex items-center gap-2 px-5 py-2.5 bg-white/60 hover:bg-white/90 border border-purple-100/50 hover:border-purple-300 rounded-full text-gray-600 hover:text-purple-700 font-semibold shadow-sm transition-all duration-300 backdrop-blur-md group"
         >
-          <div className="flex flex-col items-center mb-6">
-            <img
-              src={profileImage}
-              alt="Profile"
-              className="h-28 w-28 rounded-full border-4 border-white shadow-lg object-cover"
-            />
-            {isEditing && (
-              <div className="mt-2">
-                <label className="cursor-pointer text-sm text-violet-700 hover:underline">
-                  Change Photo
+          <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" /> Back to Dashboard
+        </button>
+      </div>
+
+      {/* Main Container: Split Layout */}
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-6xl mt-16 flex flex-col lg:flex-row gap-6 sm:gap-8"
+      >
+
+        {/* Left Sidebar (Sticky) */}
+        <div className="w-full lg:w-1/3 flex flex-col gap-6">
+          <div className="bg-white/80 backdrop-blur-xl border border-white rounded-[2rem] shadow-xl p-8 flex flex-col items-center relative overflow-hidden lg:sticky lg:top-24">
+
+            {/* Background Accent */}
+            <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-purple-500 to-indigo-500"></div>
+
+            {/* Profile Image */}
+            <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-white relative z-10 mt-10 group cursor-pointer transition-transform hover:scale-105">
+              <img src={profileImage} alt="Profile" className="w-full h-full rounded-full object-cover" />
+
+              {isEditing && (
+                <label className="absolute inset-0 bg-black/40 rounded-full flex flex-col items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                  <FaCamera size={24} className="mb-1" />
+                  <span className="text-[10px] font-semibold uppercase tracking-wider">Change</span>
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={handleImageUpload}
                     className="hidden"
+                    onChange={handleImageUpload}
                   />
                 </label>
-              </div>
-            )}
-          </div>
+              )}
+              {isEditing && profileImage === "/images/profile.png" && (
+                <div className="absolute bottom-0 right-0 p-2 bg-purple-600 rounded-full text-white border-2 border-white shadow-md">
+                  <FaCamera size={14} />
+                </div>
+              )}
+            </div>
 
-          <h2 className="text-2xl font-bold text-center text-[#2C225A] mb-6 drop-shadow-sm">
-            Recruiter Profile
-          </h2>
+            {/* Details */}
+            <div className="text-center mt-5 mb-6 w-full relative z-10">
+              <h1 className="text-2xl font-bold text-gray-900 mb-1">
+                {recruiter.firstName || recruiter.lastName ? `${recruiter.firstName} ${recruiter.lastName}` : "Recruiter Name"}
+              </h1>
+              <p className="text-purple-600 font-semibold text-sm bg-purple-50 inline-block px-3 py-1 rounded-full border border-purple-100 mb-2">
+                User ID: {recruiter.userId || "N/A"}
+              </p>
+              <p className="text-gray-500 text-sm">{recruiter.designation || "Recruiter"}</p>
+              <p className="text-gray-500 text-sm font-medium mt-1">{recruiter.company || "Company"}</p>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
-            {[
-              { label: "User ID", name: "userId" },
-              { label: "First Name", name: "firstName" },
-              { label: "Last Name", name: "lastName" },
-              { label: "Company Name", name: "company" },
-              { label: "Designation", name: "designation" },
-              { label: "Phone Number", name: "phone" },
-            ].map((field) => (
-              <div key={field.name}>
-                <label className="block text-sm text-[#2C225A] mb-1 font-medium">
-                  {field.label}
-                </label>
-                <input
-                  type="text"
-                  name={field.name}
-                  value={recruiter[field.name]}
-                  onChange={handleChange}
-                  readOnly={!isEditing}
-                  className={`w-full px-4 py-2 rounded-md border text-[#2C225A] focus:outline-none focus:ring-2 transition ${
-                    isEditing
-                      ? "border-violet-400 bg-white/80 focus:ring-violet-300"
-                      : "border-gray-300 bg-gray-100 cursor-not-allowed"
-                  }`}
-                />
-              </div>
-            ))}
-          </div>
+            {/* Edit/Save Button */}
+            <button
+              onClick={() => isEditing ? handleSave() : handleEditToggle()}
+              className={`w-full mt-2 flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold shadow-md transition-all duration-300 ${isEditing
+                ? "bg-green-500 hover:bg-green-600 text-white shadow-green-200/50"
+                : "bg-gray-900 hover:bg-gray-800 text-white shadow-gray-200/50"
+                }`}
+            >
+              {isEditing ? <><FaSave /> Save Profile</> : <><FaUserEdit /> Edit Profile Details</>}
+            </button>
 
-          <div className="flex justify-end mt-8 gap-4">
-            {isEditing ? (
-              <>
-                <button
-                  onClick={handleSave}
-                  className="px-4 py-2 bg-gradient-to-r from-violet-500 to-indigo-600 text-white rounded-md hover:scale-105 transition"
-                >
-                  Save
-                </button>
-                {pageMode === "update" && (
-                  <button
-                    onClick={() => setIsEditing(false)}
-                    className="px-4 py-2 border border-gray-400 text-gray-700 rounded-md hover:bg-gray-100 transition"
-                  >
-                    Cancel
-                  </button>
-                )}
-              </>
-            ) : (
+            {isEditing && pageMode === "update" && (
               <button
-                onClick={handleEditToggle}
-                className="px-5 py-2 bg-gradient-to-r from-violet-500 to-indigo-600 text-white rounded-md shadow hover:scale-105 transition"
+                onClick={() => setIsEditing(false)}
+                className="w-full mt-3 py-3 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-100 transition font-medium"
               >
-                Edit Profile
+                Cancel
               </button>
             )}
           </div>
-        </motion.div>
-      </div>
-    </>
+        </div>
+
+        {/* Right Content Area (Scrollable Info) */}
+        <div className="w-full lg:w-2/3 flex flex-col gap-6 sm:gap-8">
+
+          {/* Section 1: Personal Details */}
+          <div className="bg-white/80 backdrop-blur-xl border border-white rounded-[2rem] shadow-xl p-8 sm:p-10">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center text-purple-600 shadow-sm border border-white">
+                <FaUser size={20} />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-800">Personal Details</h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+              <InputField label="User ID" name="userId" disabled={true} icon={<FaIdBadge />} />
+              <div className="hidden md:block"></div>
+              <InputField label="First Name" name="firstName" />
+              <InputField label="Last Name" name="lastName" />
+              <InputField label="Email Address" name="email" type="email" icon={<FaEnvelope />} disabled={pageMode === "update"} />
+              <InputField label="Phone Number" name="phone" type="tel" icon={<FaPhoneAlt />} />
+            </div>
+          </div>
+
+          {/* Section 2: Professional Details */}
+          <div className="bg-white/80 backdrop-blur-xl border border-white rounded-[2rem] shadow-xl p-8 sm:p-10">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-100 to-rose-100 flex items-center justify-center text-pink-600 shadow-sm border border-white">
+                <FaBuilding size={20} />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-800">Professional Details</h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+              <InputField label="Company Name" name="company" icon={<FaBuilding />} />
+              <InputField label="Designation" name="designation" icon={<FaIdBadge />} />
+            </div>
+          </div>
+
+        </div>
+
+      </motion.div>
+    </div>
   );
 };
-
 export default RecruiterProfile;
