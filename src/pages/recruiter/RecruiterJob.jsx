@@ -15,7 +15,7 @@ import { RiSuitcaseLine } from "react-icons/ri";
 import requestApi from "../../services/request";
 import getUserId from "../../services/getUserId";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 
 
@@ -26,6 +26,7 @@ import { FaArrowLeft } from "react-icons/fa";
 
 const RecruiterJob = () => {
   const userId = getUserId();
+  const navigate = useNavigate();
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
   const [jobPosts, setJobPosts] = useState([]);
   const [job, setJob] = useState({
@@ -146,28 +147,22 @@ const RecruiterJob = () => {
           setTimeout(() => setShowSuccessAnimation(false), 2000);
         }
       }
+
+      setJob({
+        company_name: "",
+        job_title: "",
+        job_description: "",
+        recruitment_process: "",
+        salary_package: "",
+        location: [],
+        newLocation: "",
+        application_deadline: "",
+      });
+      setEditIndex(null);
     } catch (error) {
       console.error("Job post failed:", error);
       showToast("Failed to post job", "danger");
     }
-
-
-    finally {
-      window.location.reload()
-    }
-
-
-    setJob({
-      company_name: "",
-      job_title: "",
-      job_description: "",
-      recruitment_process: "",
-      salary_package: "",
-      location: [],
-      newLocation: "",
-      application_deadline: "",
-    });
-    setEditIndex(null);
   };
 
   const handleEdit = (index) => {
@@ -223,6 +218,14 @@ const RecruiterJob = () => {
       <NavbarRecruiterDashboard />
 
 
+      <div className="absolute top-20 left-0 w-full p-4 sm:p-6 z-50 pointer-events-none">
+        <button
+          onClick={() => navigate(`/recruiter/${userId}/home`)}
+          className="flex items-center gap-2 px-5 py-2.5 bg-white/60 hover:bg-white/90 border border-purple-100/50 hover:border-purple-300 rounded-full text-gray-600 hover:text-purple-700 font-semibold shadow-sm transition-all duration-300 backdrop-blur-md group pointer-events-auto"
+        >
+          <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" /> Back to Dashboard
+        </button>
+      </div>
 
       {/* Success Animation */}
       <AnimatePresence>
@@ -265,13 +268,6 @@ const RecruiterJob = () => {
         >
           {/* Form Header */}
           <div className="flex items-center justify-center relative mb-8 mt-2">
-            <Link
-              to={`/recruiter/${userId}/home`}
-              className="absolute left-0 group flex items-center justify-center w-10 h-10 bg-white border border-gray-200 hover:border-purple-300 rounded-full text-gray-500 hover:text-purple-600 shadow-sm hover:shadow transition-all duration-300"
-              title="Back to Dashboard"
-            >
-              <FaArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
-            </Link>
             <h2 className="text-4xl font-extrabold text-purple-700 text-center tracking-wide drop-shadow-lg flex items-center justify-center gap-3">
               <RiSuitcaseLine className="text-purple-600 text-5xl drop-shadow-sm" />
               Post a Job
@@ -372,6 +368,26 @@ const RecruiterJob = () => {
             >
               {editIndex !== null ? "Update Job" : "Post Job"}
             </motion.button>
+            {editIndex !== null && (
+              <button
+                onClick={() => {
+                  setEditIndex(null);
+                  setJob({
+                    company_name: "",
+                    job_title: "",
+                    job_description: "",
+                    recruitment_process: "",
+                    salary_package: "",
+                    location: [],
+                    newLocation: "",
+                    application_deadline: "",
+                  });
+                }}
+                className="ml-4 px-8 py-3.5 rounded-2xl border border-gray-300 text-gray-600 hover:bg-gray-100 font-semibold transition"
+              >
+                Cancel
+              </button>
+            )}
           </div>
         </motion.div>
 
