@@ -56,8 +56,8 @@ const StudentSignup = () => {
   const inputClasses = "w-full pl-11 pr-10 py-3.5 rounded-xl bg-white/80 border border-purple-100 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all shadow-sm";
 
   return (
-    <>
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex items-center justify-center px-4 py-16 font-outfit">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 font-outfit">
+      <div className="flex-grow flex items-center justify-center px-4 py-16">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -175,7 +175,7 @@ const StudentSignup = () => {
       </div>
 
       {/* 📍 Footer */}
-      <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8">
+      <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-auto">
         <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2 font-outfit">
           <p className="text-sm sm:text-base opacity-90">
             &copy; {new Date().getFullYear()} CareerNexus. All rights reserved.
@@ -183,7 +183,7 @@ const StudentSignup = () => {
           <p className="text-xs opacity-60">Your one-stop placement tracker</p>
         </div>
       </footer>
-    </>
+    </div>
   );
 };
 

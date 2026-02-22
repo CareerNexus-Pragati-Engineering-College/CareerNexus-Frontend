@@ -103,12 +103,12 @@ const StudentApplyJobs = () => {
   });
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen bg-white text-gray-900 font-poppins">
       {/* ------------------ Navbar ------------------ */}
       <NavbarStudentDashboard />
 
       {/* ------------------ Main Container ------------------ */}
-      <div className="min-h-screen bg-white text-gray-900 font-poppins px-4 pt-24 pb-6">
+      <div className="flex-grow px-4 pt-24 pb-6 w-full">
         <div className="max-w-7xl mx-auto">
 
           {/* ------------------ Header ------------------ */}
@@ -342,7 +342,7 @@ const StudentApplyJobs = () => {
       )}
 
       {/* 📍 Footer */}
-      <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-10">
+      <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-auto">
         <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2 font-outfit">
           <p className="text-sm sm:text-base opacity-90">
             &copy; {new Date().getFullYear()} CareerNexus. All rights reserved.
@@ -350,7 +350,7 @@ const StudentApplyJobs = () => {
           <p className="text-xs opacity-60">Your one-stop placement tracker</p>
         </div>
       </footer>
-    </>
+    </div>
   );
 };
 

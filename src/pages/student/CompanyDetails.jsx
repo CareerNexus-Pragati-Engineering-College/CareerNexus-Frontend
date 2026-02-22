@@ -38,10 +38,10 @@ const CompanyDetails = () => {
   }
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A] font-poppins">
       <NavbarStudentDashboard />
       <motion.div
-        className="min-h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A] font-poppins flex flex-col px-4 sm:px-6 pt-24 pb-10"
+        className="flex-grow flex flex-col px-4 sm:px-6 pt-24 pb-10 w-full"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
@@ -179,7 +179,7 @@ const CompanyDetails = () => {
       </motion.div>
 
       {/* 📍 Footer */}
-      <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-10">
+      <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-auto">
         <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2 font-outfit">
           <p className="text-sm sm:text-base opacity-90">
             &copy; {new Date().getFullYear()} CareerNexus. All rights reserved.
@@ -187,7 +187,7 @@ const CompanyDetails = () => {
           <p className="text-xs opacity-60">Your one-stop placement tracker</p>
         </div>
       </footer>
-    </>
+    </div>
   );
 };
 
