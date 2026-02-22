@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom"; // ✅ Added useNavigate
+import { NavLink, useNavigate } from "react-router-dom";
 import {
-  FaEnvelope,
+  FaUser,
   FaLock,
   FaEye,
   FaEyeSlash,
@@ -11,21 +11,18 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
-
 import axios from "axios";
 
 const StudentLogin = () => {
-  const navigate = useNavigate(); // ✅ Initialize navigate
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [userId, setuserId] = useState("");
   const [password, setPassword] = useState("");
-  const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
-  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT
+  const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST;
+  const backendPort = import.meta.env.VITE_APP_BACKEND_PORT;
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    // Check if user is already logged in
-    // If so, redirect to home page
     if (localStorage.getItem("token") && localStorage.getItem("role") == "student") {
       toast.error("You are already logged in. Redirecting to Home...");
       return navigate(`/student/${localStorage.getItem("userId")}/home`);
@@ -42,43 +39,37 @@ const StudentLogin = () => {
     };
 
     try {
-
-
       const response = await axios.post(`${backendUrl}:${backendPort}/auth/login`, loginData);
       const data = response.data;
 
-
-      toast.success(`Login Successful! ..`)
+      toast.success(`Login Successful! ..`);
       localStorage.setItem("token", data.token);
       localStorage.setItem("userId", loginData.userId);
-      localStorage.setItem("role", "student")
-
-      // ✅ Redirect to router path
+      localStorage.setItem("role", "student");
 
       navigate(`/student/${loginData.userId}${data.router}`);
-
-
     } catch (err) {
       console.error("Login request failed", err);
       toast.error(err.response?.data?.error + " " + err.response?.data?.message || "Login failed. Please try again.");
     }
   };
 
+  const inputClasses = "w-full pl-11 pr-10 py-3.5 rounded-xl bg-white/80 border border-purple-100 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all shadow-sm";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#e6d6f9] via-[#f5d0e5] to-[#fbe5ff] flex items-center justify-center px-4 py-16">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex items-center justify-center px-4 py-16 font-outfit">
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6 }}
-        className="w-full max-w-md bg-white/30 backdrop-blur-2xl border border-violet-300/40 p-8 rounded-3xl shadow-[0_0_40px_rgba(165,100,255,0.2)] text-[#2a104d] relative"
+        initial={{ opacity: 0, scale: 0.95, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="w-full max-w-md bg-white/70 backdrop-blur-2xl border border-white/80 p-8 sm:p-10 rounded-[2rem] shadow-2xl relative"
       >
         {/* 🔙 Back Button */}
         <NavLink
           to="/student"
-          className="absolute top-4 left-4 flex items-center gap-2 text-violet-600 hover:text-indigo-700 text-sm transition-all"
+          className="absolute top-6 left-6 flex items-center gap-2 px-4 py-2 bg-white/50 hover:bg-white/90 border border-purple-100/50 hover:border-purple-300 rounded-full text-gray-600 hover:text-purple-700 text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-300 backdrop-blur-md group z-50"
         >
-          <FaArrowLeft />
+          <FaArrowLeft className="group-hover:-translate-x-1 transition-transform duration-300" />
           Back
         </NavLink>
 
@@ -87,89 +78,91 @@ const StudentLogin = () => {
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="w-14 h-14 bg-gradient-to-br from-violet-500 to-pink-400 rounded-full flex items-center justify-center mb-4 text-white shadow-[0_0_15px_rgba(165,100,255,0.4)] text-2xl"
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="w-16 h-16 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center mb-5 text-white shadow-xl shadow-purple-500/30 text-3xl"
           >
             <FaUserGraduate />
           </motion.div>
-          <h2 className="text-3xl font-poppins font-bold text-center text-violet-700">
+          <h2 className="text-3xl font-bold text-center bg-gradient-to-r from-purple-800 to-indigo-800 bg-clip-text text-transparent">
             Welcome Back
           </h2>
-          <p className="text-sm text-violet-800 mt-1 text-center">
-            Sign in to <span className="font-semibold">CareerNexus</span>
+          <p className="text-sm text-gray-500 mt-2 text-center font-medium">
+            Sign in to <span className="text-purple-600 font-semibold">CareerNexus</span>
           </p>
         </div>
 
         {/* 📄 Form */}
         <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
           <div className="relative">
-            <FaEnvelope className="absolute left-3 top-3.5 text-violet-400" />
+            <FaUser className="absolute left-4 top-[1.1rem] text-purple-400 text-lg" />
             <input
               type="text"
-              placeholder="Enter UserId"
+              placeholder="Enter User ID (Roll No)"
               value={userId}
               onChange={(e) => setuserId(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-md bg-white/70 border border-violet-200 text-violet-900 placeholder-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className={inputClasses}
               required
             />
           </div>
 
           <div className="relative">
-            <FaLock className="absolute left-3 top-3.5 text-violet-400" />
+            <FaLock className="absolute left-4 top-[1.1rem] text-purple-400 text-lg" />
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full pl-10 pr-10 py-2 rounded-md bg-white/70 border border-violet-200 text-violet-900 placeholder-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className={inputClasses}
               required
             />
             <div
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-3.5 text-violet-500 hover:text-violet-700 cursor-pointer"
+              className="absolute right-4 top-[1.1rem] text-gray-400 hover:text-purple-600 cursor-pointer transition-colors text-lg"
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-sm text-violet-600 gap-2 pl-1">
-            <label className="flex items-center gap-2 pl-[1px]">
-              <input type="checkbox" className="accent-violet-500" />
-              <span className="font-poppins">Remember me</span>
+          <div className="flex items-center justify-between text-sm text-gray-600 gap-2 px-1">
+            <label className="flex items-center gap-2 cursor-pointer group">
+              <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500 transition-all cursor-pointer" />
+              <span className="font-medium group-hover:text-purple-600 transition-colors">Remember me</span>
             </label>
-            <NavLink to="/student/forgot-password" className="hover:underline text-violet-500 font-poppins">
+            <NavLink to="/student/forgot-password" className="text-purple-600 hover:text-purple-800 font-semibold hover:underline transition-all">
               Forgot password?
             </NavLink>
           </div>
 
           <motion.button
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             type="submit"
-            className="w-full bg-gradient-to-r from-violet-500 to-pink-500 hover:from-pink-500 hover:to-violet-500 text-white py-2 rounded-md font-semibold shadow-[0_0_20px_rgba(165,100,255,0.5)] hover:shadow-[0_0_30px_rgba(165,100,255,0.7)] transition-all duration-300"
+            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-3.5 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 mt-4 text-lg"
           >
-            Sign In →
+            Sign In
           </motion.button>
 
-          <div className="flex items-center gap-4 text-violet-500 text-sm mt-2">
-            <div className="flex-grow border-t border-violet-300" />
+          <div className="flex items-center gap-4 text-gray-400 text-sm mt-4 font-medium">
+            <div className="flex-grow border-t border-gray-200" />
             or
-            <div className="flex-grow border-t border-violet-300" />
+            <div className="flex-grow border-t border-gray-200" />
           </div>
 
           <motion.button
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             type="button"
-            className="w-full flex items-center justify-center gap-3 bg-white/60 hover:bg-white/80 border border-white/30 py-2 rounded-md transition text-violet-700"
+            className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-50 border border-gray-200 py-3.5 rounded-xl transition-all text-gray-700 font-semibold shadow-sm"
           >
-            <FaGoogle />
+            <FaGoogle className="text-red-500 text-lg" />
             Sign in with Google
           </motion.button>
 
-          <p className="text-center text-sm text-violet-700 mt-4 font-poppins">
+          <p className="text-center text-sm text-gray-600 mt-6 font-medium">
             Don’t have an account?{" "}
             <NavLink
               to="/student/signup"
-              className="text-violet-600 font-medium hover:underline"
+              className="text-purple-600 font-bold hover:underline"
             >
               Sign up
             </NavLink>

@@ -4,7 +4,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import getUserId from "../../services/getUserId";
 import {
-  FaEnvelope,
+  FaUser,
   FaLock,
   FaGoogle,
   FaEye,
@@ -14,71 +14,65 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 
-
 const TpoLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [userId, setuserId] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
+  const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST;
   const backendPort = import.meta.env.VITE_APP_BACKEND_PORT;
-
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    // Check if user is already logged in
-    // If so, redirect to home page
     if (localStorage.getItem("token") && localStorage.getItem("role") == "tpo") {
       toast("You are already logged in. Redirecting to Home...", { id: "already-logged-in", icon: "ℹ️" });
       return navigate(`/tpo/${getUserId()}/home`);
     }
   }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!userId || !password) {
-      toast.error("Please enter both email and password.", { id: "missing-fields" });
+      toast.error("Please enter both User ID and password.", { id: "missing-fields" });
       return;
     }
-    // Simulate login action
-    // You can replace this with your actual login API call
     const payload = { userId: userId, password: password, role: "tpo" };
     try {
       const response = await axios.post(`${backendUrl}:${backendPort}/auth/login`, payload);
       toast.success(`Login successful! ${response.data?.msg} `);
-      console.log(response)
+      console.log(response);
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("userId", userId);
-      localStorage.setItem("role", response.data.role)
-      // Redirect to the appropriate route based on the response
+      localStorage.setItem("role", response.data.role);
+
       if (response.data.role == "admin") {
         navigate(`/admin`);
         return;
       }
 
       navigate(`/tpo/${userId}${response.data.router}`);
-
-
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error logging in:", error);
-      toast.error(`Login failed: ${error.response.data.message}`);
+      toast.error(`Login failed: ${error.response?.data?.message}`);
     }
   };
 
+  const inputClasses = "w-full pl-11 pr-10 py-3.5 rounded-xl bg-white/80 border border-purple-100 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all shadow-sm";
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#e6d6f9] via-[#f5d0e5] to-[#fbe5ff] flex items-center justify-center px-4 py-16">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex items-center justify-center px-4 py-16 font-outfit">
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6 }}
-        className="w-full max-w-md bg-white/30 backdrop-blur-2xl border border-violet-300/40 p-8 rounded-3xl shadow-[0_0_40px_rgba(165,100,255,0.2)] text-[#2a104d] relative font-poppins"
+        initial={{ opacity: 0, scale: 0.95, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="w-full max-w-md bg-white/70 backdrop-blur-2xl border border-white/80 p-8 sm:p-10 rounded-[2rem] shadow-2xl relative"
       >
         {/* 🔙 Back Button */}
         <NavLink
           to="/tpo"
-          className="absolute top-4 left-4 flex items-center gap-2 text-violet-600 hover:text-indigo-700 text-sm transition-all"
+          className="absolute top-6 left-6 flex items-center gap-2 px-4 py-2 bg-white/50 hover:bg-white/90 border border-purple-100/50 hover:border-purple-300 rounded-full text-gray-600 hover:text-purple-700 text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-300 backdrop-blur-md group z-50"
         >
-          <FaArrowLeft />
+          <FaArrowLeft className="group-hover:-translate-x-1 transition-transform duration-300" />
           Back
         </NavLink>
 
@@ -87,81 +81,83 @@ const TpoLogin = () => {
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="w-14 h-14 bg-gradient-to-br from-violet-500 to-pink-400 rounded-full flex items-center justify-center mb-4 text-white shadow-[0_0_15px_rgba(165,100,255,0.4)] text-2xl"
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="w-16 h-16 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center mb-5 text-white shadow-xl shadow-purple-500/30 text-3xl"
           >
             <FaUserTie />
           </motion.div>
-          <h2 className="text-3xl font-bold text-center text-violet-700">
+          <h2 className="text-3xl font-bold text-center bg-gradient-to-r from-purple-800 to-indigo-800 bg-clip-text text-transparent">
             Welcome TPO
           </h2>
-          <p className="text-sm text-violet-800 mt-1 text-center">
-            Sign in to <span className="font-semibold">CareerNexus</span>
+          <p className="text-sm text-gray-500 mt-2 text-center font-medium">
+            Sign in to <span className="text-purple-600 font-semibold">CareerNexus</span>
           </p>
         </div>
 
         {/* 📄 Form */}
         <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
           <div className="relative">
-            <FaUserTie className="absolute left-3 top-3.5 text-violet-400" />
+            <FaUser className="absolute left-4 top-[1.1rem] text-purple-400 text-lg" />
             <input
               type="text"
               placeholder="Enter User ID"
               value={userId}
               onChange={(e) => setuserId(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-md bg-white/70 border border-violet-200 text-violet-900 placeholder-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className={inputClasses}
               required
             />
           </div>
 
           <div className="relative">
-            <FaLock className="absolute left-3 top-3.5 text-violet-400" />
+            <FaLock className="absolute left-4 top-[1.1rem] text-purple-400 text-lg" />
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full pl-10 pr-10 py-2 rounded-md bg-white/70 border border-violet-200 text-violet-900 placeholder-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className={inputClasses}
               required
             />
             <div
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-3.5 text-violet-500 hover:text-violet-700 cursor-pointer"
+              className="absolute right-4 top-[1.1rem] text-gray-400 hover:text-purple-600 cursor-pointer transition-colors text-lg"
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-sm text-violet-600 gap-2 pl-1">
-            <label className="flex items-center gap-2 pl-[1px]">
-              <input type="checkbox" className="accent-violet-500" />
-              <span className="font-poppins">Remember me</span>
+          <div className="flex items-center justify-between text-sm text-gray-600 gap-2 px-1">
+            <label className="flex items-center gap-2 cursor-pointer group">
+              <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500 transition-all cursor-pointer" />
+              <span className="font-medium group-hover:text-purple-600 transition-colors">Remember me</span>
             </label>
-            <a href="#" className="hover:underline text-violet-500 font-poppins">
+            <a href="#" className="text-purple-600 hover:text-purple-800 font-semibold hover:underline transition-all">
               Forgot password?
             </a>
           </div>
 
           <motion.button
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             type="submit"
-            className="w-full bg-gradient-to-r from-violet-500 to-pink-500 hover:from-pink-500 hover:to-violet-500 text-white py-2 rounded-md font-semibold shadow-[0_0_20px_rgba(165,100,255,0.5)] hover:shadow-[0_0_30px_rgba(165,100,255,0.7)] transition-all duration-300"
+            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-3.5 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 mt-4 text-lg"
           >
-            Sign In →
+            Sign In
           </motion.button>
 
-          <div className="flex items-center gap-4 text-violet-500 text-sm mt-2">
-            <div className="flex-grow border-t border-violet-300" />
+          <div className="flex items-center gap-4 text-gray-400 text-sm mt-4 font-medium">
+            <div className="flex-grow border-t border-gray-200" />
             or
-            <div className="flex-grow border-t border-violet-300" />
+            <div className="flex-grow border-t border-gray-200" />
           </div>
 
           <motion.button
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             type="button"
-            className="w-full flex items-center justify-center gap-3 bg-white/60 hover:bg-white/80 border border-white/30 py-2 rounded-md transition text-violet-700"
+            className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-50 border border-gray-200 py-3.5 rounded-xl transition-all text-gray-700 font-semibold shadow-sm"
           >
-            <FaGoogle />
+            <FaGoogle className="text-red-500 text-lg" />
             Sign in with Google
           </motion.button>
         </form>

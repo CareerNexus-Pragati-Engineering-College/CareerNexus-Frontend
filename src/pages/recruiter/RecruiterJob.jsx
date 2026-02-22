@@ -15,6 +15,8 @@ import { RiSuitcaseLine } from "react-icons/ri";
 import requestApi from "../../services/request";
 import getUserId from "../../services/getUserId";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
 
 
 
@@ -262,10 +264,19 @@ const RecruiterJob = () => {
           className="w-full max-w-6xl rounded-3xl bg-white/90 shadow-2xl border border-purple-100 p-12 flex flex-col gap-8"
         >
           {/* Form Header */}
-          <h2 className="text-4xl font-extrabold text-purple-700 mb-8 text-center tracking-wide drop-shadow-lg flex items-center justify-center gap-3">
-            <RiSuitcaseLine className="text-purple-600 text-5xl drop-shadow-sm" />
-            Post a Job
-          </h2>
+          <div className="flex items-center justify-center relative mb-8 mt-2">
+            <Link
+              to={`/recruiter/${userId}/home`}
+              className="absolute left-0 group flex items-center justify-center w-10 h-10 bg-white border border-gray-200 hover:border-purple-300 rounded-full text-gray-500 hover:text-purple-600 shadow-sm hover:shadow transition-all duration-300"
+              title="Back to Dashboard"
+            >
+              <FaArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
+            </Link>
+            <h2 className="text-4xl font-extrabold text-purple-700 text-center tracking-wide drop-shadow-lg flex items-center justify-center gap-3">
+              <RiSuitcaseLine className="text-purple-600 text-5xl drop-shadow-sm" />
+              Post a Job
+            </h2>
+          </div>
 
           {/* Form Inputs */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -508,6 +519,16 @@ const RecruiterJob = () => {
           </div>
         </div>
       )}
+
+      {/* 📍 Footer */}
+      <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-10">
+        <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2 font-outfit">
+          <p className="text-sm sm:text-base opacity-90">
+            &copy; {new Date().getFullYear()} CareerNexus. All rights reserved.
+          </p>
+          <p className="text-xs opacity-60">Your one-stop placement tracker</p>
+        </div>
+      </footer>
     </>
   );
 };
