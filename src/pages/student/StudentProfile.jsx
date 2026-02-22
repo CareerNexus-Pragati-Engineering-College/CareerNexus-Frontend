@@ -1,135 +1,50 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
-import { useParams } from "react-router-dom";
 import getuserId from "../../services/getUserId";
 import requestApi from "../../services/request";
 
-
-
 import {
-  FaCheckCircle,
-  FaTrophy,
-  FaBolt,
-  FaThumbsUp,
-  FaMedal,
+  FaArrowLeft,
+  FaUserEdit,
+  FaSave,
+  FaGithub,
+  FaLinkedin,
+  FaHackerrank,
+  FaLaptopCode,
+  FaLink,
+  FaPlus,
+  FaTimes,
+  FaUser,
+  FaGraduationCap,
+  FaCode,
+  FaEnvelope,
+  FaPhoneAlt,
+  FaCamera
 } from "react-icons/fa";
 
-//parse data from jsonstringfy daata from backend
 function parseArray(value) {
   if (!value) return [];
-  try {
-    const parsed = JSON.parse(value);
-
-    return Array.isArray(parsed) ? parsed : [];
-  } catch (err) {
-    console.error("Failed to parse array:", err);
-    return [];
+  if (Array.isArray(value)) return value;
+  if (typeof value === "string") {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (err) {
+      return [];
+    }
   }
+  return [];
 }
 
-
-const useInView = (offset = 150) => {
-  const ref = useRef(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const checkPosition = () => {
-      if (!ref.current) return;
-      const top = ref.current.getBoundingClientRect().top;
-      if (top < window.innerHeight - offset) setInView(true);
-    };
-    window.addEventListener("scroll", checkPosition);
-    checkPosition();
-    return () => window.removeEventListener("scroll", checkPosition);
-  }, [offset]);
-  return [ref, inView];
-};
-
-const RibbonBadge = ({ rank }) => {
-  const colorClasses = {
-    Bronze: "text-amber-700",
-    Silver: "text-slate-400",
-    Gold: "text-yellow-500",
-  };
-  const medalColorClass = colorClasses[rank] || "text-neutral-500";
-  return (
-    <motion.div
-      className="relative group flex flex-col items-center"
-      initial={{ scale: 0 }}
-      whileInView={{ scale: 1 }}
-      whileHover={{ scale: 1.1 }}
-      transition={{ type: "spring", stiffness: 200, damping: 10 }}
-    >
-      <div className="relative w-16 h-16 flex items-center justify-center">
-        <FaMedal className={`absolute w-16 h-16 ${medalColorClass} drop-shadow-md`} />
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-[shine_2s_infinite]" />
-        <div className="pointer-events-none absolute top-0 left-0 w-full h-full overflow-hidden">
-          {[...Array(3)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-2 h-2 bg-yellow-200 rounded-full opacity-80 shadow-lg"
-              style={{ top: `${Math.random() * 70}%`, left: `${Math.random() * 70}%` }}
-              animate={{ opacity: [0, 1, 0], scale: [0.5, 1.3, 0.5] }}
-              transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.4 }}
-            />
-          ))}
-        </div>
-      </div>
-      <span className="absolute opacity-0 group-hover:opacity-100 -translate-x-1/2 left-1/2 -bottom-8 bg-black/70 text-white text-xs px-2 py-1 rounded-full">
-        {rank + "Achievement"}
-      </span>
-    </motion.div>
-  );
-};
-
-const StatSection = ({ title, solved, total, rank, buttonLabel }) => {
-  const percent = Math.min(100, Math.round((solved / total) * 100));
-  const sparkThreshold = 10;
-  return (
-    <motion.div
-      className="relative bg-white/70 backdrop-blur-md border border-[#6B4ECF]/40 rounded-2xl p-4 sm:p-6 text-[#2C225A] shadow-md hover:shadow-xl transition"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7 }}
-    >
-      <div className="flex justify-between items-center mb-3">
-        <h3 className="text-lg sm:text-xl font-semibold text-[#6B4ECF]">{title}</h3>
-        <RibbonBadge rank={rank} />
-      </div>
-      <div className="flex items-center gap-3 mb-2">
-        <div className="relative flex-1 bg-[#E4EBFE]/60 border border-[#6B4ECF]/40 rounded-full h-4 overflow-hidden">
-          <motion.div
-            className="h-4 bg-[#A855F7] rounded-full"
-            style={{ width: `${percent}%` }}
-            initial={{ width: 0 }}
-            whileInView={{ width: `${percent}%` }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
-          >
-            {percent >= sparkThreshold && (
-              <motion.div
-                className="absolute right-0 top-0 h-4 w-1 bg-yellow-400 shadow-[0_0_12px_#facc15]"
-                initial={{ opacity: 0, scaleY: 0 }}
-                animate={{ opacity: 1, scaleY: [0.8, 1.4, 1.2] }}
-                transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
-                style={{ transformOrigin: "top center" }}
-              />
-            )}
-          </motion.div>
-        </div>
-        <span className="text-xs sm:text-sm font-bold text-[#6B4ECF] bg-white border border-[#6B4ECF]/50 px-2 py-1 rounded-full">
-          {percent}%
-        </span>
-      </div>
-      <div className="flex flex-col sm:flex-row sm:justify-between gap-2 items-center text-sm text-[#4b436f] mt-2">
-        <button className="bg-[#6B4ECF] hover:bg-[#5939b8] text-white px-3 py-1.5 rounded-full transition w-full sm:w-auto shadow-md">
-          {buttonLabel}
-        </button>
-        <span>{solved} / {total}</span>
-      </div>
-    </motion.div>
-  );
-};
+const SUGGESTED_SKILLS = [
+  "Java", "Python", "C++", "C", "JavaScript", "TypeScript",
+  "React.js", "Node.js", "Express.js", "Next.js", "HTML", "CSS",
+  "Tailwind CSS", "MongoDB", "SQL", "PostgreSQL",
+  "Git", "Docker", "AWS", "Machine Learning", "Data Structures",
+  "React Native", "Spring Boot", "Firebase"
+];
 
 const StudentProfile = () => {
   const navigate = useNavigate();
@@ -140,55 +55,14 @@ const StudentProfile = () => {
   const emailfromUrl = new URLSearchParams(location.search).get("email");
   const userIdFromUrl = userId || new URLSearchParams(location.search).get("userId");
   const isDataMode = pageParam === "data";
-  useEffect(() => {
-    // Redirect if ?page=update but userId is missing in URL
-    if (pageParam === "update" && !userId) {
-      toast.error("User ID missing in URL for update mode", {
-        id: "missing-id",
-      });
-      // Redirect to login or home after short delay
-      setTimeout(() => navigate("/student/login"), 1500);
-    }
-    else if (pageParam === "update" && userId) {
-      // If in update mode, set student data from backend 
-      const data = requestApi.get(`/student/${userId}/profile`);
-
-      data.then((response) => {
-        const studentData = response.data;
-
-        setStudent({
-          FirstName: studentData?.firstName || "",
-          LastName: studentData?.lastName || "",
-          userId: studentData?.userId || userIdFromUrl || userId || "",
-          Department: studentData?.department || "",
-          Year: studentData?.year || "",
-          Cgpa: studentData?.cgpa || "",
-          Email: emailfromUrl || studentData?.email || "",
-          Phone: studentData?.phone || "",
-          skills: parseArray(studentData?.skills) || [],
-          graduationYear
-            : studentData?.graduationYear || "",
-
-        });
-
-        setSkills(parseArray(studentData?.skills) || []);
-        setProfileLinks(parseArray(studentData?.urls) || []);
-      }
-      ).catch((error) => {
-        console.error("Error fetching student data:", error);
-        toast.error("Failed to fetch student data. Please try again later.", {
-          id: "fetch-error",
-        });
-      })
-    }
-  }, [pageParam, userId, navigate]);
 
   const [isEditing, setIsEditing] = useState(isDataMode);
+  const [profilePic, setProfilePic] = useState(null);
   const [newSkill, setNewSkill] = useState("");
   const [skills, setSkills] = useState([]);
-  const [profileLinks, setProfileLinks] = useState([]); // Array of { platform, url }
+  const [profileLinks, setProfileLinks] = useState([]);
   const [newLink, setNewLink] = useState({ platform: "", url: "" });
-  const [leetcodeStats, setLeetcodeStats] = useState(null);
+
   const [student, setStudent] = useState({
     FirstName: "",
     LastName: "",
@@ -198,52 +72,139 @@ const StudentProfile = () => {
     Cgpa: "",
     Email: "",
     Phone: "",
-    skills: " ",
     graduationYear: "",
   });
 
   useEffect(() => {
-    if (isDataMode) {
-      toast("You have to fill details", {
-        id: "fill-details",
-        icon: 'ℹ️',
-      });
-      setStudent({ ...student, userId: userIdFromUrl || userId, Email: emailfromUrl || "" });
+    if (pageParam === "update" && !userId) {
+      toast.error("User ID missing in URL.", { id: "missing-id" });
+      setTimeout(() => navigate("/student/login"), 1500);
+    } else if (userId) {
+      requestApi.get(`/student/${userId}/profile`)
+        .then((response) => {
+          const data = response.data;
+          setStudent({
+            FirstName: data?.firstName || "",
+            LastName: data?.lastName || "",
+            userId: data?.userId || userIdFromUrl || userId || "",
+            Department: data?.department || "",
+            Year: data?.year || "",
+            Cgpa: data?.cgpa || "",
+            Email: emailfromUrl || data?.email || "",
+            Phone: data?.phone || "",
+            graduationYear: data?.graduationYear || "",
+          });
+          setSkills(parseArray(data?.skills) || []);
+          const parsedLinks = parseArray(data?.urls);
+          setProfileLinks(
+            parsedLinks.filter(
+              (link) =>
+                link &&
+                typeof link === "object" &&
+                link.platform &&
+                link.url
+            )
+          );
+          const storedPic = localStorage.getItem(`profilePic_${userId}`);
+          if (storedPic) setProfilePic(storedPic);
+        })
+        .catch((error) => {
+          console.error("Error fetching student data:", error);
+          toast.error("Failed to load profile data.");
+        });
     }
+  }, [pageParam, userId, navigate]);
 
-    // If not in data mode, set default student data
-    //fetch("https://leetcode-stats-api.herokuapp.com/22a31a0525")
-    //.then(res => res.json())
-    //.then(data => setLeetcodeStats(data));
+  useEffect(() => {
+    if (isDataMode) {
+      toast("Please complete your profile details.", { icon: 'ℹ️' });
+      setStudent(s => ({ ...s, userId: userIdFromUrl || userId, Email: emailfromUrl || "" }));
+    }
   }, [isDataMode]);
 
-
   const handleInputChange = e => {
-    //here added technique to save skills in student object
     const { name, value } = e.target;
-    setStudent(prev => ({ ...prev, [name]: value, skills: skills }));
+    setStudent(prev => ({ ...prev, [name]: value }));
+  };
 
-
+  const handleProfilePicChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfilePic(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const addSkill = () => {
     const s = newSkill.trim();
-    if (s && skills.length < 10 && !skills.includes(s)) {
+    if (s && skills.length < 15 && !skills.includes(s)) {
       setSkills(prev => [...prev, s]);
-      setStudent(prev => ({ ...prev, skills: skills }));
       setNewSkill("");
     }
   };
 
-  const removeSkill = skill =>
-    setSkills(prev => prev.filter(s => s !== skill));
+  const removeSkill = skill => {
+    setSkills(skills.filter(s => s !== skill));
+  };
+
+  const handleAddLink = () => {
+    if (!newLink.platform) {
+      toast.error("Please select a platform first.");
+      return;
+    }
+
+    let urlStr = newLink.url.trim();
+    if (!urlStr) {
+      toast.error("Please enter a valid URL.");
+      return;
+    }
+
+    // Auto prepend https if missing
+    if (!/^https?:\/\//i.test(urlStr)) {
+      urlStr = "https://" + urlStr;
+    }
+
+    let parsedUrl;
+    try {
+      parsedUrl = new URL(urlStr);
+    } catch (err) {
+      toast.error("Invalid URL format.");
+      return;
+    }
+
+    const hostname = parsedUrl.hostname.toLowerCase();
+
+    const platformDomainMap = {
+      GitHub: "github.com",
+      LinkedIn: "linkedin.com",
+      HackerRank: "hackerrank.com",
+      LeetCode: "leetcode.com",
+      Portfolio: null // Portfolio can be any valid URL
+    };
+
+    const expectedDomain = platformDomainMap[newLink.platform];
+
+    if (expectedDomain && !hostname.includes(expectedDomain)) {
+      toast.error(`Please enter a valid ${newLink.platform} URL.`);
+      return;
+    }
+
+    if (profileLinks.some(l => l.platform === newLink.platform)) {
+      toast.error(`${newLink.platform} is already added.`);
+      return;
+    }
+
+    setProfileLinks([...profileLinks, { platform: newLink.platform, url: parsedUrl.href }]);
+    setNewLink({ platform: "", url: "" });
+  };
 
   const handleSave = async () => {
-    const isEmpty = Object.values(student).some(value => value === "" || value === null);
+    const isEmpty = Object.values(student).some(val => val === "" || val === null);
     if (isEmpty || profileLinks.length === 0) {
-      toast.error("Please fill all fields and add profile links.", {
-        id: "fill-fields",
-      });
+      toast.error("Please fill all fields and add at least one link.");
       return;
     }
 
@@ -261,270 +222,317 @@ const StudentProfile = () => {
         graduationYear: student.graduationYear,
         urls: JSON.stringify(profileLinks),
       };
-      console.log(payload);
-      const data = await requestApi.post(`/student/${userId}/profile`, payload);
-      toast.success("Data saved successfully!", {
-        id: "save-success",
-      });
-    } catch (error) {
-      toast.error("Failed to save data. Please try again.", {
-        id: "save-error",
-      });
 
-    }
-    setIsEditing(false);
-    if (isDataMode) {
-      setTimeout(() => navigate(`/student/${userId}/home`), 1200);
+      await requestApi.post(`/student/${userId}/profile`, payload);
+
+      if (profilePic && userId) {
+        localStorage.setItem(`profilePic_${userId}`, profilePic);
+      }
+
+      toast.success("Profile saved successfully!");
+      setIsEditing(false);
+
+      if (isDataMode) {
+        setTimeout(() => navigate(`/student/${userId}/home`), 1200);
+      }
+    } catch (error) {
+      console.error("Error saving profile:", error);
+      toast.error("Failed to save profile.");
     }
   };
 
+  const getPlatformIcon = (platform) => {
+    switch (platform) {
+      case 'GitHub': return <FaGithub />;
+      case 'LinkedIn': return <FaLinkedin className="text-[#0A66C2]" />;
+      case 'HackerRank': return <FaHackerrank className="text-[#00EA64]" />;
+      case 'LeetCode': return <FaLaptopCode className="text-[#FFA116]" />;
+      default: return <FaLink className="text-gray-500" />;
+    }
+  };
+
+  const InputField = ({ label, name, type = "text", disabled = false, icon = null }) => (
+    <div className="flex flex-col">
+      <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">{label}</label>
+      {isEditing ? (
+        <div className="relative">
+          {icon && <div className="absolute left-3.5 top-3 text-gray-400">{icon}</div>}
+          <input
+            type={type}
+            name={name}
+            value={student[name] || ""}
+            onChange={handleInputChange}
+            disabled={disabled}
+            className={`w-full ${icon ? 'pl-10' : 'px-4'} pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 transition-all shadow-sm ${disabled ? 'bg-gray-50 text-gray-500 cursor-not-allowed' : ''}`}
+            placeholder={`Enter ${label}...`}
+          />
+        </div>
+      ) : (
+        <div className="flex items-center gap-2 text-gray-800 font-medium text-[15px] pt-1 pb-2 border-b border-gray-100/50">
+          {icon && <span className="text-gray-400">{icon}</span>}
+          {student[name] || <span className="text-gray-400 font-normal italic">Not specified</span>}
+        </div>
+      )}
+    </div>
+  );
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A] p-4 relative">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 font-outfit py-8 sm:py-12 px-4 sm:px-6 lg:px-8 flex justify-center">
 
-      <button
-        onClick={() => navigate(`/student/${userId}/home`)}
-        className="fixed top-4 left-4 px-3 py-1.5 rounded-xl text-white bg-gradient-to-r from-[#8B5CF6] to-[#6D28D9] shadow-md hover:scale-105 transition"
-      >
-        ← Back
-      </button>
-
-      <div className="max-w-5xl mx-auto pt-24 pb-12 space-y-10">
-        {/* Student Info Card */}
-        <motion.section
-          initial={{ opacity: 0, scale: 0.8, rotateX: 15 }}
-          animate={{ opacity: 1, scale: 1, rotateX: 0 }}
-          transition={{ type: "spring", stiffness: 100, damping: 10 }}
-          className="relative group bg-white/70 backdrop-blur-xl border border-[#6B4ECF]/30 rounded-3xl shadow-2xl p-6 sm:p-8 transform-gpu transition-all hover:shadow-2xl hover:scale-[1.02]"
-          style={{ perspective: "1000px" }}
+      {/* Absolute Header Navigation */}
+      <div className="absolute top-0 left-0 w-full p-4 sm:p-6 z-50">
+        <button
+          onClick={() => navigate(`/student/${userId}/home`)}
+          className="flex items-center gap-2 px-5 py-2.5 bg-white/60 hover:bg-white/90 border border-purple-100/50 hover:border-purple-300 rounded-full text-gray-600 hover:text-purple-700 font-semibold shadow-sm transition-all duration-300 backdrop-blur-md group"
         >
-          {/* Floating spark shapes */}
-          <div className="absolute top-0 left-0 w-4 h-4 bg-[#A855F7]/50 blur-xl rounded-full animate-ping opacity-60"></div>
-          <div className="absolute bottom-0 right-0 w-6 h-6 bg-[#9333EA]/50 blur-xl rounded-full animate-pulse opacity-40"></div>
+          <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" /> Back to Dashboard
+        </button>
+      </div>
 
-          {/* Profile Avatar */}
-          <div className="flex justify-center mb-6">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 border-4 border-[#6B4ECF]/40 rounded-full overflow-hidden shadow-xl ring-2 ring-white transition-transform hover:scale-105">
-              {/* Placeholder image */}
-              <img
-                src="/images/profile.png"
-                alt="Profile"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
+      {/* Main Container: Split Layout (Model 3 Version) */}
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-6xl mt-16 flex flex-col lg:flex-row gap-6 sm:gap-8"
+      >
 
-          {/* Header */}
-          <h2 className="text-2xl sm:text-3xl font-bold text-[#6B4ECF] mb-6 text-center tracking-wide drop-shadow-sm">
-            Your Profile
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 text-[#4b436f]">
-            {Object.entries(student).filter(([key]) => key !== "skills").map(([key, value]) => (
+        {/* Left Sidebar (Sticky) */}
+        <div className="w-full lg:w-1/3 flex flex-col gap-6">
+          <div className="bg-white/80 backdrop-blur-xl border border-white rounded-[2rem] shadow-xl p-8 flex flex-col items-center relative overflow-hidden lg:sticky lg:top-24">
 
-              <div key={key} className="flex flex-col">
-                <label className="text-xs font-medium text-[#6B4ECF]/70 mb-1 capitalize">{key}</label>
-                {isEditing ? (
+            {/* Background Accent */}
+            <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-purple-500 to-indigo-500"></div>
+
+            {/* Profile Image (With Logic from Model 4) */}
+            <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-white relative z-10 mt-10 group cursor-pointer transition-transform hover:scale-105">
+              <img src={profilePic || "/images/profile.png"} alt="Profile" className="w-full h-full rounded-full object-cover" />
+
+              {isEditing && (
+                <label className="absolute inset-0 bg-black/40 rounded-full flex flex-col items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                  <FaCamera size={24} className="mb-1" />
+                  <span className="text-[10px] font-semibold uppercase tracking-wider">Change</span>
                   <input
-                    required={isDataMode}
-                    name={key}
-                    value={value}
-                    onChange={handleInputChange}
-                    className="bg-white/70 border border-[#6B4ECF]/50 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#6B4ECF]/50 shadow-sm"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleProfilePicChange}
                   />
+                </label>
+              )}
+              {isEditing && !profilePic && (
+                <div className="absolute bottom-0 right-0 p-2 bg-purple-600 rounded-full text-white border-2 border-white shadow-md">
+                  <FaCamera size={14} />
+                </div>
+              )}
+            </div>
+
+            {/* Details */}
+            <div className="text-center mt-5 mb-6 w-full relative z-10">
+              <h1 className="text-2xl font-bold text-gray-900 mb-1">
+                {student.FirstName || student.LastName ? `${student.FirstName} ${student.LastName}` : "Student Name"}
+              </h1>
+              <p className="text-purple-600 font-semibold text-sm bg-purple-50 inline-block px-3 py-1 rounded-full border border-purple-100 mb-2">
+                {student.userId || "Roll Number"}
+              </p>
+              <p className="text-gray-500 text-sm">{student.Department || "Department"}</p>
+            </div>
+
+            {/* Professional Links (In Sidebar) */}
+            <div className="w-full border-t border-gray-100 pt-6">
+              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 text-center">Profiles & Links</h3>
+              <div className="flex flex-col gap-3">
+                {profileLinks.length > 0 ? (
+                  profileLinks.map((link, index) => (
+                    <div key={index} className="flex items-center justify-between group">
+                      <a
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 text-gray-600 hover:text-purple-600 transition-colors bg-gray-50/50 hover:bg-purple-50/50 px-4 py-2.5 rounded-xl border border-gray-100 flex-1 justify-center"
+                      >
+                        <span className="text-lg">{getPlatformIcon(link.platform)}</span>
+                        <span className="text-sm font-medium">{link.platform}</span>
+                      </a>
+                      {isEditing && (
+                        <button onClick={() => setProfileLinks(profileLinks.filter((_, i) => i !== index))} className="text-gray-400 hover:text-red-500 ml-2 p-2">
+                          <FaTimes />
+                        </button>
+                      )}
+                    </div>
+                  ))
                 ) : (
-                  <span className="font-medium bg-white/50 px-2 py-1.5 rounded-md border border-[#6B4ECF]/20 shadow-inner">
-                    {value}
-                  </span>
+                  <p className="text-gray-400 text-xs italic text-center">No links configured.</p>
                 )}
               </div>
-            ))}
 
-
-          </div>
-
-
-
-
-          {/* Skills Section */}
-          <div className="bg-white/50 border border-[#6B4ECF]/30 rounded-2xl p-4 mb-6 transform-gpu transition hover:scale-[1.01] shadow-inner">
-            <h3 className="text-[#6B4ECF] font-semibold mb-2 tracking-wide">Skills</h3>
-            {isEditing && (
-              <div className="flex flex-col sm:flex-row gap-2 mb-4">
-                <input
-                  value={newSkill}
-                  onChange={(e) => setNewSkill(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && addSkill()}
-                  className="flex-1 bg-white/70 border border-[#6B4ECF]/40 rounded-lg px-3 py-1.5 text-[#2C225A] focus:outline-none focus:ring focus:ring-[#6B4ECF]/50 shadow-sm"
-                  placeholder="Add skill & press Enter"
-                />
-                <button
-                  onClick={addSkill}
-                  className="bg-[#6B4ECF] text-white px-4 py-1.5 rounded-lg hover:bg-[#5939b8] transition shadow-md hover:shadow-lg"
-                >
-                  Add
-                </button>
-              </div>
-            )}
-            <div className="flex flex-wrap gap-2">
-              {skills.map((s) => (
-                <motion.span
-                  key={s}
-                  whileHover={{ scale: 1.1 }}
-                  className="bg-[#E4EBFE] border border-[#6B4ECF]/40 text-[#6B4ECF] px-3 py-1 rounded-full flex items-center gap-2 shadow-sm"
-                >
-                  {s}
-                  {isEditing && (
-                    <button onClick={() => removeSkill(s)} className="text-red-500 hover:text-red-600 font-bold">
-                      ×
-                    </button>
-                  )}
-                </motion.span>
-              ))}
-            </div>
-          </div>
-          {isEditing && (
-            <div className="bg-white/50 border border-[#6B4ECF]/30 rounded-2xl p-2.5 mb-4">
-              <h3 className="text-[#6B4ECF] font-semibold mb-1 tracking-wide">Add Profile Links (Max 4)</h3>
-              <div className="flex flex-col sm:flex-row gap-2 mb-2">
-                <select
-                  value={newLink.platform}
-                  onChange={(e) => setNewLink({ ...newLink, platform: e.target.value })}
-                  className="flex-1 bg-white/70 border border-[#6B4ECF]/40 rounded-lg px-3 py-1 text-[#2C225A]"
-                >
-                  <option value="">Select Platform</option>
-                  <option value="GitHub">GitHub</option>
-                  <option value="LinkedIn">LinkedIn</option>
-                  <option value="HackerRank">HackerRank</option>
-                  <option value="LeetCode">LeetCode</option>
-                </select>
-                <input
-                  type="url"
-                  placeholder="Paste link"
-                  value={newLink.url}
-                  onChange={(e) => setNewLink({ ...newLink, url: e.target.value })}
-                  className="flex-1 bg-white/70 border border-[#6B4ECF]/40 rounded-lg px-3 py-1 text-[#2C225A]"
-                />
-                <button
-                  onClick={() => {
-                    if (
-                      newLink.platform &&
-                      newLink.url &&
-                      !profileLinks.some(link => link.platform === newLink.platform) &&
-                      profileLinks.length < 4
-                    ) {
-                      setProfileLinks([...profileLinks, newLink]);
-                      setNewLink({ platform: "", url: "" });
-                    }
-                  }}
-                  className="bg-[#6B4ECF] text-white px-3 py-1 rounded-lg hover:bg-[#5939b8]"
-                >
-                  Add
-                </button>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {profileLinks.map((link, index) => (
-                  <div
-                    key={index}
-                    className="bg-[#E4EBFE] border border-[#6B4ECF]/40 text-[#6B4ECF] px-2.5 py-1 rounded-md flex items-center gap-2 text-sm"
+              {isEditing && profileLinks.length < 5 && (
+                <div className="mt-4 flex flex-col gap-2">
+                  <select
+                    value={newLink.platform}
+                    onChange={(e) => setNewLink({ ...newLink, platform: e.target.value })}
+                    className="w-full px-4 py-2 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
                   >
-                    <a href={link.url} target="_blank" rel="noopener noreferrer" className="underline">
-                      {link.platform}
-                    </a>
+                    <option value="">Select Platform</option>
+                    <option value="GitHub">GitHub</option>
+                    <option value="LinkedIn">LinkedIn</option>
+                    <option value="HackerRank">HackerRank</option>
+                    <option value="LeetCode">LeetCode</option>
+                    <option value="Portfolio">Portfolio</option>
+                  </select>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="github.com/username"
+                      value={newLink.url}
+                      onChange={(e) => setNewLink({ ...newLink, url: e.target.value })}
+                      className="flex-1 w-full px-4 py-2 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                    />
                     <button
-                      onClick={() => {
-                        setProfileLinks(profileLinks.filter((_, i) => i !== index));
-                      }}
-                      className="text-red-500 font-bold"
+                      type="button"
+                      onClick={handleAddLink}
+                      className="bg-purple-600 text-white px-3 py-2 rounded-xl hover:bg-purple-700 transition"
                     >
-                      ×
+                      <FaPlus />
                     </button>
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
             </div>
-          )}
 
-          {!isEditing && profileLinks.length > 0 && (
-            <div className="bg-white/50 border border-[#6B4ECF]/30 rounded-2xl p-2.5 mb-4">
-              <h3 className="text-[#6B4ECF] font-semibold mb-1 tracking-wide">Profile Links</h3>
-              <ul className="list-disc list-inside text-sm text-[#4b436f]">
-                {profileLinks.map((link, idx) => (
-                  <li key={idx}>
-                    <a href={link.url} className="text-blue-700 underline" target="_blank" rel="noreferrer">
-                      {link.platform}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+            {/* Edit/Save Button */}
+            <button
+              onClick={() => isEditing ? handleSave() : setIsEditing(true)}
+              className={`w-full mt-6 flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold shadow-md transition-all duration-300 ${isEditing
+                ? "bg-green-500 hover:bg-green-600 text-white shadow-green-200/50"
+                : "bg-gray-900 hover:bg-gray-800 text-white shadow-gray-200/50"
+                }`}
+            >
+              {isEditing ? <><FaSave /> Save Profile</> : <><FaUserEdit /> Edit Profile Details</>}
+            </button>
+          </div>
+        </div>
+
+        {/* Right Content Area (Scrollable Info) */}
+        <div className="w-full lg:w-2/3 flex flex-col gap-6 sm:gap-8">
+
+          {/* Section 1: Personal Details */}
+          <div className="bg-white/80 backdrop-blur-xl border border-white rounded-[2rem] shadow-xl p-8 sm:p-10">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center text-purple-600 shadow-sm border border-white">
+                <FaUser size={20} />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-800">Personal Details</h2>
             </div>
-          )}
 
-          {/* Save/Edit Button */}
-          <button
-            onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
-            className="w-full py-2 bg-[#6B4ECF] text-white rounded-xl hover:bg-[#5939b8] transition shadow-md"
-          >
-            {isEditing ? "Save" : "Edit"}
-          </button>
-        </motion.section>
-
-        {/* Stats */}
-        <StatSection title="Problems Solved" solved={75} total={100} rank="Gold" buttonLabel="Solve More" />
-        <StatSection title="Contests Attended" solved={12} total={20} rank="Silver" buttonLabel="Join More" />
-
-        {/* LeetCode Stats */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="bg-gradient-to-br from-white/80 to-[#E4EBFE]/60 backdrop-blur-md border border-[#6B4ECF]/30 rounded-2xl p-6 shadow-lg text-center hover:shadow-xl transition-all"
-        >
-          <h3 className="text-2xl font-extrabold text-[#6B4ECF] mb-6 tracking-wide">LeetCode Stats</h3>
-
-          {leetcodeStats ? (
-            <div className="grid gap-4 sm:grid-cols-2">
-              {/* Total Solved */}
-              <div className="col-span-2 flex items-center justify-center gap-2 bg-white/50 border border-[#6B4ECF]/20 p-4 rounded-xl shadow-inner">
-                <FaCheckCircle className="text-[#6B4ECF] text-xl" />
-                <span className="text-[#2C225A] font-medium">Total Solved:</span>
-                <span className="bg-[#6B4ECF] text-white px-3 py-1 rounded-full text-sm shadow-md">
-                  {leetcodeStats.totalSolved}
-                </span>
-              </div>
-
-              {/* Easy */}
-              <div className="bg-green-50 border border-green-200 rounded-xl p-3 flex flex-col items-center shadow-sm transition hover:scale-105">
-                <FaThumbsUp className="text-green-600 text-xl mb-1" />
-                <span className="text-green-600 font-medium">Easy</span>
-                <span className="font-bold text-green-800">{leetcodeStats.easySolved}</span>
-              </div>
-
-              {/* Medium */}
-              <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 flex flex-col items-center shadow-sm transition hover:scale-105">
-                <FaBolt className="text-yellow-600 text-xl mb-1" />
-                <span className="text-yellow-600 font-medium">Medium</span>
-                <span className="font-bold text-yellow-800">{leetcodeStats.mediumSolved}</span>
-              </div>
-
-              {/* Hard */}
-              <div className="bg-red-50 border border-red-200 rounded-xl p-3 flex flex-col items-center shadow-sm transition hover:scale-105">
-                <FaTrophy className="text-red-600 text-xl mb-1" />
-                <span className="text-red-600 font-medium">Hard</span>
-                <span className="font-bold text-red-800">{leetcodeStats.hardSolved}</span>
-              </div>
-
-              {/* Ranking */}
-              <div className="bg-purple-50 border border-purple-200 rounded-xl p-3 flex flex-col items-center shadow-sm transition hover:scale-105">
-                <FaMedal className="text-purple-600 text-xl mb-1" />
-                <span className="text-purple-600 font-medium">Ranking</span>
-                <span className="font-bold text-purple-800">#{leetcodeStats.ranking}</span>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+              <InputField label="First Name" name="FirstName" />
+              <InputField label="Last Name" name="LastName" />
+              <InputField label="Email Address" name="Email" type="email" icon={<FaEnvelope />} />
+              <InputField label="Phone Number" name="Phone" type="tel" icon={<FaPhoneAlt />} />
             </div>
-          ) : (
-            <p className="text-[#4b436f]">Loading stats...</p>
-          )}
-        </motion.section>
+          </div>
 
-      </div>
+          {/* Section 2: Academic Snapshot */}
+          <div className="bg-white/80 backdrop-blur-xl border border-white rounded-[2rem] shadow-xl p-8 sm:p-10">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-100 to-rose-100 flex items-center justify-center text-pink-600 shadow-sm border border-white">
+                <FaGraduationCap size={22} />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-800">Academic Snapshot</h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+              <InputField label="Department" name="Department" />
+              <InputField label="Batch (Grad Year)" name="graduationYear" />
+              <InputField label="Current Year" name="Year" />
+              <InputField label="Current CGPA" name="Cgpa" />
+            </div>
+          </div>
+
+          {/* Section 3: Technical Skills (With Model 4 Autocomplete Logic) */}
+          <div className="bg-white/80 backdrop-blur-xl border border-white rounded-[2rem] shadow-xl p-8 sm:p-10">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-100 to-blue-100 flex items-center justify-center text-indigo-600 shadow-sm border border-white">
+                <FaCode size={20} />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-800">Technical Skills</h2>
+            </div>
+
+            {isEditing && (
+              <div className="mb-6">
+                <div className="flex flex-col sm:flex-row gap-3 bg-gray-50/50 p-4 rounded-2xl border border-gray-100">
+                  <input
+                    type="text"
+                    value={newSkill}
+                    onChange={(e) => setNewSkill(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addSkill())}
+                    placeholder="Search or type a skill (e.g. React)..."
+                    list="skills-suggestions"
+                    className="flex-1 px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 shadow-sm"
+                  />
+                  <datalist id="skills-suggestions">
+                    {SUGGESTED_SKILLS.map((skill, index) => (
+                      <option key={index} value={skill} />
+                    ))}
+                  </datalist>
+                  <button
+                    type="button"
+                    onClick={addSkill}
+                    className="flex items-center justify-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-xl shadow-md font-medium hover:bg-indigo-700 transition"
+                  >
+                    <FaPlus /> Add Skill
+                  </button>
+                </div>
+
+                {/* Popular Skill Suggestions */}
+                <div className="mt-4">
+                  <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 px-1">Popular right now:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {SUGGESTED_SKILLS.filter(s => !skills.includes(s)).slice(0, 10).map((suggestion, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => {
+                          if (skills.length < 15) {
+                            setSkills([...skills, suggestion]);
+                          } else {
+                            toast.error("Maximum 15 skills allowed.");
+                          }
+                        }}
+                        className="px-3 py-1.5 bg-gray-100 hover:bg-indigo-50 border border-gray-200 hover:border-indigo-200 rounded-lg text-xs font-medium text-gray-600 hover:text-indigo-600 transition-colors"
+                      >
+                        + {suggestion}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="flex flex-wrap gap-2.5">
+              {skills.length > 0 ? (
+                skills.map((skill, index) => (
+                  <div key={index} className="px-4 py-2 bg-indigo-50 border border-indigo-100 shadow-sm rounded-xl text-sm font-semibold text-indigo-700 flex items-center gap-2 transition hover:bg-indigo-100">
+                    {skill}
+                    {isEditing && (
+                      <button onClick={() => removeSkill(skill)} className="text-indigo-400 hover:text-indigo-900 transition-colors bg-white rounded-full p-0.5 ml-1 border border-indigo-100">
+                        <FaTimes size={10} />
+                      </button>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <div className="w-full text-center py-6 border-2 border-dashed border-gray-200 rounded-2xl">
+                  <p className="text-gray-400 text-sm">No skills added yet.</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+        </div>
+
+      </motion.div>
     </div>
   );
 };

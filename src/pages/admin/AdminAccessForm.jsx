@@ -27,6 +27,10 @@ const AdminAccessForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!username || !email || !password || !role) {
+      toast.error("Please fill all fields.", { id: "missing-fields" });
+      return;
+    }
     const payload = { userId: username, email: email, password: password, role: role };
 
     try {
@@ -34,105 +38,117 @@ const AdminAccessForm = () => {
       toast.success("User registered successfully!");
     } catch (error) {
       console.error("Error registering user:", error.message);
-      toast.error(`Failed to register user.${error.response.data.message}`);
+      toast.error(`Failed to register user. ${error.response?.data?.message || ""}`);
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-[#e6d6f9] via-[#f5d0e5] to-[#fbe5ff] flex items-center justify-center px-4 py-16">
+  const inputClasses = "w-full pl-11 pr-10 py-3.5 rounded-xl bg-white/80 border border-purple-100 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all shadow-sm";
 
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex items-center justify-center px-4 py-16 font-outfit">
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6 }}
-        className="w-full max-w-md bg-white/30 backdrop-blur-2xl border border-violet-300/40 p-8 rounded-3xl shadow-[0_0_40px_rgba(165,100,255,0.2)] text-[#2a104d] relative font-poppins"
+        initial={{ opacity: 0, scale: 0.95, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="w-full max-w-md bg-white/70 backdrop-blur-2xl border border-white/80 p-8 sm:p-10 rounded-[2rem] shadow-2xl relative"
       >
+        {/* 🔙 Back Button */}
         <NavLink
           to="/admin"
-          className="absolute top-4 left-4 flex items-center gap-2 text-violet-600 hover:text-indigo-700 text-sm transition-all"
+          className="absolute top-6 left-6 flex items-center gap-2 px-4 py-2 bg-white/50 hover:bg-white/90 border border-purple-100/50 hover:border-purple-300 rounded-full text-gray-600 hover:text-purple-700 text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-300 backdrop-blur-md group z-50"
         >
-          <FaArrowLeft />
+          <FaArrowLeft className="group-hover:-translate-x-1 transition-transform duration-300" />
           Back
         </NavLink>
 
+        {/* 👤 Icon & Title */}
         <div className="flex flex-col items-center mt-6">
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="w-14 h-14 bg-gradient-to-br from-violet-500 to-pink-400 rounded-full flex items-center justify-center mb-4 text-white shadow-[0_0_15px_rgba(165,100,255,0.4)] text-2xl"
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="w-16 h-16 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center mb-5 text-white shadow-xl shadow-purple-500/30 text-3xl"
           >
             <FaUserTie />
           </motion.div>
-          <h2 className="text-3xl font-bold text-center text-violet-700">Admin Access</h2>
-          <p className="text-sm text-violet-800 mt-1 text-center">
-            Grant new access in <span className="font-semibold">CareerNexus</span>
+          <h2 className="text-3xl font-bold text-center bg-gradient-to-r from-purple-800 to-indigo-800 bg-clip-text text-transparent">
+            Admin Access
+          </h2>
+          <p className="text-sm text-gray-500 mt-2 text-center font-medium">
+            Grant new access in <span className="text-purple-600 font-semibold">CareerNexus</span>
           </p>
         </div>
 
+        {/* 📄 Form */}
         <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
           <div className="relative">
-            <FaUser className="absolute left-3 top-3.5 text-violet-400" />
+            <FaUser className="absolute left-4 top-[1.1rem] text-purple-400 text-lg" />
             <input
               type="text"
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-md bg-white/70 border border-violet-200 text-violet-900 placeholder-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className={inputClasses}
               required
             />
           </div>
 
           <div className="relative">
-            <FaEnvelope className="absolute left-3 top-3.5 text-violet-400" />
+            <FaEnvelope className="absolute left-4 top-[1.1rem] text-purple-400 text-lg" />
             <input
               type="email"
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-md bg-white/70 border border-violet-200 text-violet-900 placeholder-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className={inputClasses}
               required
             />
           </div>
 
           <div className="relative">
-            <FaLock className="absolute left-3 top-3.5 text-violet-400" />
+            <FaLock className="absolute left-4 top-[1.1rem] text-purple-400 text-lg" />
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full pl-10 pr-10 py-2 rounded-md bg-white/70 border border-violet-200 text-violet-900 placeholder-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className={inputClasses}
               required
             />
             <div
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-3.5 text-violet-500 hover:text-violet-700 cursor-pointer"
+              className="absolute right-4 top-[1.1rem] text-gray-400 hover:text-purple-600 cursor-pointer transition-colors text-lg"
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </div>
           </div>
 
-          <div>
+          <div className="relative">
             <select
               value={role}
               onChange={(e) => setRole(e.target.value)}
-              className="w-full py-2 px-3 rounded-md bg-white/70 border border-violet-200 text-violet-900 focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className={`${inputClasses} pl-4 appearance-none`}
               required
             >
               <option value="student">Student</option>
               <option value="recruiter">Recruiter</option>
               <option value="tpo">TPO</option>
-
             </select>
+            {/* Custom dropdown arrow to match styling */}
+            <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center px-2 text-purple-400">
+              <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+              </svg>
+            </div>
           </div>
 
           <motion.button
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             type="submit"
-            className="w-full bg-gradient-to-r from-violet-500 to-pink-500 hover:from-pink-500 hover:to-violet-500 text-white py-2 rounded-md font-semibold shadow-[0_0_20px_rgba(165,100,255,0.5)] hover:shadow-[0_0_30px_rgba(165,100,255,0.7)] transition-all duration-300"
+            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-3.5 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 mt-4 text-lg"
           >
-            Grant Access →
+            Grant Access
           </motion.button>
         </form>
       </motion.div>
