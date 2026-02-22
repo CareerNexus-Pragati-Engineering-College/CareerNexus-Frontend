@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { FaTimes, FaFileUpload } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
+import { FaTimes, FaFileUpload, FaCloudUploadAlt } from "react-icons/fa";
 import toast from "react-hot-toast";
 
 const branches = [
@@ -21,6 +22,14 @@ const ShareResource = ({ onShare, onClose }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+
+  // Prevent background scrolling while modal is open
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -52,22 +61,15 @@ const ShareResource = ({ onShare, onClose }) => {
       onShare(formData);
       toast.success("Resource uploaded successfully!", { id: "upload-success" });
       setIsLoading(false);
-      setFormData({
-        year: "",
-        semester: "",
-        regulation: "",
-        branch: "",
-        subject: "",
-        description: "",
-        pdfFile: null,
-        videoLink: "",
-      });
+      onClose(); // Automatically close modal after upload
     }, 1500);
   };
 
-  return (
+  const inputClasses = "w-full bg-white/60 border border-gray-200 text-gray-800 text-sm rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-transparent outline-none p-2.5 transition-all hover:bg-white/90 shadow-sm backdrop-blur-md";
+
+  const modalContent = (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+      className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-6"
       onDragOver={(e) => {
         e.preventDefault();
         setDragActive(true);
@@ -75,141 +77,162 @@ const ShareResource = ({ onShare, onClose }) => {
       onDragLeave={() => setDragActive(false)}
       onDrop={handleDrop}
     >
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl h-[90vh] overflow-y-auto scrollbar-hide relative p-6">
-        {/* 🔝 Sticky Header */}
-        <div className="flex justify-between items-center mb-4 border-b pb-2 sticky top-0 bg-white z-10">
-          <h2 className="text-xl font-bold text-purple-700">📘 Share Academic Resource</h2>
+      <div
+        className="bg-white/80 backdrop-blur-2xl border border-white/50 rounded-3xl shadow-2xl w-full max-w-3xl max-h-[95vh] overflow-y-auto scrollbar-hide relative flex flex-col font-poppins"
+      >
+        {/* Header */}
+        <div className="flex justify-between items-center px-6 py-5 border-b border-gray-200/50 sticky top-0 bg-white/70 backdrop-blur-xl z-20">
+          <div>
+            <h2 className="text-xl font-bold bg-gradient-to-r from-purple-700 to-indigo-600 bg-clip-text text-transparent">
+              Share Academic Resource
+            </h2>
+            <p className="text-xs text-gray-500 mt-1">Help the community by sharing material.</p>
+          </div>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-red-600 text-2xl"
+            className="text-gray-400 hover:text-red-500 hover:bg-red-50 p-2.5 rounded-full transition-all"
           >
-            <FaTimes />
+            <FaTimes size={18} />
           </button>
         </div>
 
-        {/* 🧾 Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+          {/* Grid for Dropdowns - 4 columns on md screens to save vertical space */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-gray-600 uppercase ml-1">Year</label>
+              <select name="year" onChange={handleChange} value={formData.year} required className={inputClasses}>
+                <option value="">Select Year</option>
+                {[1, 2, 3, 4].map((y) => (
+                  <option key={y} value={y}>{y === 1 ? "1st" : y === 2 ? "2nd" : y === 3 ? "3rd" : "4th"} Year</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-gray-600 uppercase ml-1">Semester</label>
+              <select name="semester" onChange={handleChange} value={formData.semester} required className={inputClasses}>
+                <option value="">Select Sem</option>
+                {["1-1", "1-2", "2-1", "2-2", "3-1", "3-2", "4-1", "4-2"].map((sem) => (
+                  <option key={sem} value={sem}>Sem {sem}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-gray-600 uppercase ml-1">Regulation</label>
+              <select name="regulation" onChange={handleChange} value={formData.regulation} required className={inputClasses}>
+                <option value="">Regulation</option>
+                <option value="R20">R20</option>
+                <option value="R23">R23</option>
+              </select>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-gray-600 uppercase ml-1">Branch</label>
+              <select name="branch" onChange={handleChange} value={formData.branch} required className={inputClasses}>
+                <option value="">Branch</option>
+                {branches.map((branch) => (
+                  <option key={branch} value={branch}>{branch}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Texts inputs - 2 columns */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Dropdowns */}
-            <select name="year" onChange={handleChange} value={formData.year} required className="border p-2 rounded-lg">
-              <option value="">Select Year</option>
-              {[1, 2, 3, 4].map((y) => (
-                <option key={y} value={y}>{y} Year</option>
-              ))}
-            </select>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-gray-600 uppercase ml-1">Subject Name</label>
+              <input
+                name="subject"
+                type="text"
+                value={formData.subject}
+                onChange={handleChange}
+                placeholder="e.g. Data Structures"
+                required
+                className={inputClasses}
+              />
+            </div>
 
-            <select name="semester" onChange={handleChange} value={formData.semester} required className="border p-2 rounded-lg">
-              <option value="">Select Semester</option>
-              {["1-1", "1-2", "2-1", "2-2", "3-1", "3-2", "4-1", "4-2"].map((sem) => (
-                <option key={sem} value={sem}>Semester {sem}</option>
-              ))}
-            </select>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-gray-600 uppercase ml-1">Video / Drive Link (Optional)</label>
+              <input
+                name="videoLink"
+                type="text"
+                value={formData.videoLink}
+                onChange={handleChange}
+                placeholder="https://..."
+                className={inputClasses}
+              />
+            </div>
+          </div>
 
-            <select name="regulation" onChange={handleChange} value={formData.regulation} required className="border p-2 rounded-lg">
-              <option value="">Select Regulation</option>
-              <option value="R20">R20</option>
-              <option value="R23">R23</option>
-            </select>
-
-            <select name="branch" onChange={handleChange} value={formData.branch} required className="border p-2 rounded-lg">
-              <option value="">Select Branch</option>
-              {branches.map((branch) => (
-                <option key={branch} value={branch}>{branch}</option>
-              ))}
-            </select>
-
-            {/* Inputs */}
-            <input
-              name="subject"
-              type="text"
-              value={formData.subject}
-              onChange={handleChange}
-              placeholder="Enter Subject"
-              required
-              className="col-span-1 md:col-span-2 border p-2 rounded-lg w-full"
-            />
-
+          <div className="space-y-1">
+            <label className="text-xs font-semibold text-gray-600 uppercase ml-1">Description (Optional)</label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
-              placeholder="Short Description (optional)"
-              rows={3}
-              className="col-span-1 md:col-span-2 border p-2 rounded-lg resize-none"
-            />
-
-            {/* 📄 Upload */}
-            <div
-              className={`col-span-1 md:col-span-2 border-2 ${dragActive ? "border-dashed border-purple-500 bg-purple-50" : "border-gray-300"
-                } p-4 text-center rounded-lg`}
-            >
-              <label htmlFor="pdfFile" className="cursor-pointer text-sm text-gray-600">
-                {formData.pdfFile ? (
-                  <span className="text-green-700 font-medium">
-                    📄 {formData.pdfFile.name}
-                  </span>
-                ) : (
-                  <div className="flex flex-col items-center gap-2">
-                    <FaFileUpload className="text-purple-600 text-2xl" />
-                    <p>
-                      Drag & Drop PDF here or{" "}
-                      <span className="underline text-blue-600">click to upload</span>
-                    </p>
-                  </div>
-                )}
-              </label>
-              <input
-                id="pdfFile"
-                name="pdfFile"
-                type="file"
-                accept="application/pdf"
-                onChange={handleChange}
-                className="hidden"
-              />
-            </div>
-
-            {/* 🔗 Video Link */}
-            <input
-              name="videoLink"
-              type="text"
-              value={formData.videoLink}
-              onChange={handleChange}
-              placeholder="YouTube / Drive Link (optional)"
-              className="col-span-1 md:col-span-2 border p-2 rounded-lg"
+              placeholder="Briefly describe what this resource covers..."
+              rows={2}
+              className={`${inputClasses} resize-none`}
             />
           </div>
 
-          {/* ✅ Submit */}
+          {/* Upload Area */}
+          <div
+            className={`w-full border-2 border-dashed ${dragActive ? "border-purple-500 bg-purple-50/80 scale-[1.01]" : "border-gray-300 bg-white/50 hover:bg-white/80 hover:border-purple-300"
+              } rounded-2xl h-24 flex flex-col items-center justify-center transition-all cursor-pointer`}
+          >
+            <label htmlFor="pdfFile" className="cursor-pointer w-full h-full flex flex-col items-center justify-center text-center px-4">
+              {formData.pdfFile ? (
+                <div className="flex flex-col items-center gap-1">
+                  <div className="bg-green-100 p-2 rounded-full text-green-600 shadow-sm">
+                    <FaCloudUploadAlt size={20} />
+                  </div>
+                  <span className="text-green-700 font-semibold text-sm truncate max-w-full">
+                    {formData.pdfFile.name}
+                  </span>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center gap-1.5 text-gray-500">
+                  <div className="bg-purple-100 p-2 rounded-full text-purple-600 shadow-sm transition-transform">
+                    <FaCloudUploadAlt size={20} />
+                  </div>
+                  <p className="text-sm font-medium">
+                    Drag & Drop PDF or <span className="text-purple-600 underline decoration-purple-300">Browse</span>
+                  </p>
+                </div>
+              )}
+            </label>
+            <input id="pdfFile" name="pdfFile" type="file" accept="application/pdf" onChange={handleChange} className="hidden" />
+          </div>
+
+          {/* Submit */}
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg w-full flex items-center justify-center gap-2"
+            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold py-3.5 rounded-xl shadow hover:shadow-lg transition-all flex items-center justify-center gap-2 mt-2"
           >
             {isLoading ? (
               <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                  fill="none"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                />
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
             ) : (
-              "Upload Resource"
+              <>
+                <FaFileUpload size={16} /> Upload Resource
+              </>
             )}
           </button>
         </form>
       </div>
     </div>
   );
+
+  // Render the modal into document.body to ensure it completely overlays the navbar and evades parent stacking context
+  return ReactDOM.createPortal(modalContent, document.body);
 };
 
 export default ShareResource;
