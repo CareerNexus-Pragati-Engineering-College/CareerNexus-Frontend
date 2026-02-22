@@ -60,7 +60,7 @@ const StudentApplications = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await requestApi.get(`/applications/my-applications/${userId}`);
+        const res = await requestApi.get(`/applications/my-applications`);
         if (res && Array.isArray(res.data) && res.data.length > 0) {
           setAppliedJobs(res.data);
           toast.success("Applications fetched successfully!", { id: "fetch-applications" });

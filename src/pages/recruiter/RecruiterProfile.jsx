@@ -50,7 +50,7 @@ const RecruiterProfile = () => {
       });
     } else if (pageMode === "update") {
       setIsEditing(false);
-      const data = requestApi.get(`/recruiter/${userId}/profile`);
+      const data = requestApi.get(`/recruiter/profile`);
       data
         .then((response) => {
           const recruiterData = response.data;
@@ -118,13 +118,8 @@ const RecruiterProfile = () => {
       }
 
       const data = await requestApi.post(
-        `/recruiter/${userId}/profile`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        },
+        `/recruiter/profile`,
+        formData
       );
 
       toast.success(

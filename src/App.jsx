@@ -77,7 +77,7 @@ const App = () => {
         <Route path="/student/:userId/apply-jobs" element={<ProtectedRoute><StudentApplyJobs /></ProtectedRoute>} />
         <Route path="/student/apply-jobs" element={<StudentApplyJobs />} />
         <Route path="/student/:userId/applications" element={<ProtectedRoute><StudentApplications /></ProtectedRoute>} />
-        <Route path="/student/test" element={<StudentTestPage />} />
+        <Route path="/student/:userId/test/:assessmentId" element={<ProtectedRoute><StudentTestPage /></ProtectedRoute>} />
         <Route path="/student/resources" element={<Resources />} />
         <Route path="/student/practice" element={<StudentPractice />} />
 

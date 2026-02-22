@@ -9,8 +9,18 @@ import OutputConsole from './OutputConsole';
 import QuestionPanel from "./QuestionPanel";
 // import ChatPanel from './ChatPanel';
 
+const CODE_TEMPLATES = {
+    javascript: "console.log('Hello World!');",
+    java: `public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello World!");\n    }\n}`,
+    python: "print('Hello World!')",
+    cpp: `#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello World!";\n    return 0;\n}`,
+    c: `#include <stdio.h>\n\nint main() {\n    printf("Hello World!");\n    return 0;\n}`
+};
+
+const DEFAULT_START_MESSAGE = "// Start coding...\n// Welcome to the collaborative editor!";
+
 const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initialTheme = "vs-dark" }) => {
-    const [code, setCode] = useState("// Start coding...\n// Welcome to the collaborative editor!");
+    const [code, setCode] = useState(CODE_TEMPLATES[initialLanguage] || DEFAULT_START_MESSAGE);
     const [connectionStatus, setConnectionStatus] = useState('connecting');
     const [isCopied, setIsCopied] = useState(false);
     const [selectedLanguage, setSelectedLanguage] = useState(initialLanguage);
@@ -22,6 +32,7 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
     const [currentChatMessage, setCurrentChatMessage] = useState("");
     const [editQueue, setEditQueue] = useState([]);
     const [question, setQuestion] = useState(null);
+    const [customInput, setCustomInput] = useState("");
 
     // State for tracking newly joined user and last code updater
     const [current_added_user, set_current_addded_user] = useState("");
@@ -258,16 +269,44 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
     const handleLanguageChange = (event) => {
         const newLanguage = event.target.value;
         setSelectedLanguage(newLanguage); // Update local state with the new language
-        // If WebSocket is open, send the language change to the server
-        if (socketRef.current?.readyState === WebSocket.OPEN) {
-            socketRef.current.send(
-                JSON.stringify({
-                    type: "LANGUAGE_CHANGE",
-                    selectedLanguage: newLanguage, // Send the new language value
+        
+        // Apply default template if the editor is currently empty or holding an existing template
+        const currentTrimmedCode = code.trim();
+        const isDefaultCode = currentTrimmedCode === "" || 
+                              currentTrimmedCode === DEFAULT_START_MESSAGE.trim() ||
+                              Object.values(CODE_TEMPLATES).some(template => template.trim() === currentTrimmedCode);
+        
+        if (isDefaultCode && CODE_TEMPLATES[newLanguage]) {
+            const newCode = CODE_TEMPLATES[newLanguage];
+            setCode(newCode);
+            
+            // Push a FULL_RESET to the local edit queue so Monaco updates its uncontrolled internal state
+            setEditQueue(prev => [...prev, { type: 'FULL_RESET', content: newCode }]);
+            
+            // Also broadcast the template replacement code change to other users
+            if (socketRef.current?.readyState === WebSocket.OPEN) {
+                // Determine edit payload structure compatible with the collaborative system
+                // Usually it's better to trigger a FULL_RESET for a complete template swap
+                socketRef.current.send(JSON.stringify({
+                    type: "INITIAL_CODE_STATE", // Reusing INITIAL_CODE_STATE to force a full replacement on peers
+                    content: newCode,
                     user: username,
-                    sessionId: sessionId
-                })
-            );
+                    sessionId: sessionId,
+                    selectedLanguage: newLanguage
+                }));
+            }
+        } else {
+            // If WebSocket is open and we didn't override the code, just send the language change
+            if (socketRef.current?.readyState === WebSocket.OPEN) {
+                socketRef.current.send(
+                    JSON.stringify({
+                        type: "LANGUAGE_CHANGE",
+                        selectedLanguage: newLanguage, // Send the new language value
+                        user: username,
+                        sessionId: sessionId
+                    })
+                );
+            }
         }
     };
 
@@ -316,15 +355,23 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
             return; // Exit if language is not supported for execution
         }
 
+        // Heuristic check: Does the code seemingly require input, but the input box is empty?
+        const requiresInputRegEx = /(?:input\s*\()|(?:Scanner\s*\()|(?:cin\s*>>)|(?:scanf\s*\()/;
+        if (requiresInputRegEx.test(code) && !customInput.trim()) {
+            toast.error("Input required! Please add it to the Custom Input box.");
+            setIsExecuting(false);
+            setExecutionOutput("Execution blocked.\nPlease provide the required input in the 'Custom Input' box below before running.");
+            return;
+        }
+
         try {
             const response = await api.post(
-                '/api/code/execute',
+                '/student/code/run',
                 {
                     language: currentLangConfig.value,
-                    version: currentLangConfig.version,
                     code: code, // The current code from the editor
-                },
-
+                    stdin: customInput, // Send custom input for the execution
+                }
             );
 
             const result = response.data;
@@ -338,6 +385,10 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
             if (result.error) {
                 if (output) output += "\n"; // Add newline if there's existing output
                 output += "SERVICE ERROR: " + result.error;
+            }
+            if (result.executionTime !== undefined && result.executionTime !== null) {
+                if (output) output += "\n\n";
+                output += `--- Execution Time: ${result.executionTime}ms ---`;
             }
             setExecutionOutput(output || "Execution completed with no output."); // Update output console
 
@@ -474,9 +525,25 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
 
     </div>
 
-    {/* CONSOLE */}
-    <div className="h-64 border-t border-gray-800 bg-gray-900">
-        <OutputConsole executionOutput={executionOutput} />
+    {/* BOTTOM PANEL: CUSTOM INPUT & CONSOLE */}
+    <div className="h-64 border-t border-gray-800 bg-gray-900 flex flex-col md:flex-row">
+        {/* Custom Input */}
+        <div className="w-full md:w-1/3 border-r border-gray-800 flex flex-col">
+            <div className="bg-gray-800 px-4 py-2 font-semibold border-b border-gray-700">
+                Custom Input
+            </div>
+            <textarea
+                className="flex-1 w-full bg-transparent p-4 text-gray-300 resize-none outline-none font-mono placeholder-gray-600"
+                placeholder="Enter custom standard input here..."
+                value={customInput}
+                onChange={(e) => setCustomInput(e.target.value)}
+            />
+        </div>
+
+        {/* Console Output */}
+        <div className="w-full md:w-2/3 flex flex-col">
+            <OutputConsole executionOutput={executionOutput} />
+        </div>
     </div>
 
 </div>

@@ -77,13 +77,7 @@ const RecruitmentProcessPage = () => {
 
       const response = await requestApi.post(
         `exam/recruiter/mcq/assessment`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data"
-          },
-
-        }
+        formData
       );
 
 
@@ -114,7 +108,7 @@ const RecruitmentProcessPage = () => {
         setLoadingRounds(true);
 
         const response = await requestApi.get(
-          `/exam/recruiter/${userId}/${jobId}`
+          `/exam/recruiter/${jobId}`
         );
 
         setConfiguredRounds(response.data || []);

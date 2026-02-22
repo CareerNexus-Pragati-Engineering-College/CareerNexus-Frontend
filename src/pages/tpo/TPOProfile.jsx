@@ -40,7 +40,7 @@ const TPOProfile = () => {
     } else if (pageMode === "update") {
       setIsEditing(false);
       requestApi
-        .get(`/tpo/${userId}/profile`)
+        .get(`/tpo/profile`)
         .then((res) => {
           const r = res.data;
           setTpo({
@@ -80,7 +80,7 @@ const TPOProfile = () => {
         email: tpo.email,
       };
 
-      await requestApi.post(`/tpo/${userId}/profile`, payload);
+      await requestApi.post(`/tpo/profile`, payload);
 
       toast.success(
         pageMode === "data" ? "Profile saved!" : "Profile updated!",

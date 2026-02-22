@@ -44,7 +44,7 @@ const RecruiterDashboard = () => {
 
   useEffect(() => {
     if (userId) {
-      requestApi.get(`/recruiter/${userId}/profile`)
+      requestApi.get(`/recruiter/profile`)
         .then((response) => {
           if (response.data) {
             setRecruiter(response.data);
