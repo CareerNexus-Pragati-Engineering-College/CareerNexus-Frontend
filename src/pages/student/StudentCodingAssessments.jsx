@@ -44,14 +44,14 @@ const StudentCodingAssessments = () => {
         ) : assessments.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {assessments.map((test, index) => {
-               const startTime = new Date(test.startTime);
-               const endTime = new Date(test.endTime);
-               const now = new Date();
-               const isActive = now >= startTime && now <= endTime;
-               const isExpired = now > endTime;
-               const isFuture = now < startTime;
+              const startTime = new Date(test.startTime);
+              const endTime = new Date(test.endTime);
+              const now = new Date();
+              const isActive = now >= startTime && now <= endTime;
+              const isExpired = now > endTime;
+              const isFuture = now < startTime;
 
-               return (
+              return (
                 <motion.div
                   key={test.id}
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -59,18 +59,18 @@ const StudentCodingAssessments = () => {
                   transition={{ delay: index * 0.1 }}
                   className="bg-white/80 backdrop-blur-xl border border-white/40 shadow-xl rounded-3xl p-6 flex flex-col hover:shadow-2xl transition-all duration-300 relative overflow-hidden group"
                 >
-                   {/* Status Badge */}
-                   <div className="absolute top-4 right-4 z-10">
-                      {isActive ? (
-                        <span className="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full animate-pulse flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> Live
-                        </span>
-                      ) : isFuture ? (
-                        <span className="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">Upcoming</span>
-                      ) : (
-                        <span className="bg-gray-100 text-gray-500 text-xs font-bold px-3 py-1 rounded-full">Ended</span>
-                      )}
-                   </div>
+                  {/* Status Badge */}
+                  <div className="absolute top-4 right-4 z-10">
+                    {isActive ? (
+                      <span className="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full animate-pulse flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> Live
+                      </span>
+                    ) : isFuture ? (
+                      <span className="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">Upcoming</span>
+                    ) : (
+                      <span className="bg-gray-100 text-gray-500 text-xs font-bold px-3 py-1 rounded-full">Ended</span>
+                    )}
+                  </div>
 
                   <div className="w-14 h-14 bg-violet-100 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:rotate-12 transition-transform shadow-sm">
                     🚀
@@ -105,7 +105,7 @@ const StudentCodingAssessments = () => {
                     )}
                   </div>
                 </motion.div>
-               );
+              );
             })}
           </div>
         ) : (
@@ -116,6 +116,16 @@ const StudentCodingAssessments = () => {
           </div>
         )}
       </div>
+
+      {/* 📍 Footer */}
+      <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-10">
+        <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2 font-outfit">
+          <p className="text-sm sm:text-base opacity-90">
+            &copy; {new Date().getFullYear()} CareerNexus. All rights reserved.
+          </p>
+          <p className="text-xs opacity-60">Your one-stop placement tracker</p>
+        </div>
+      </footer>
     </div>
   );
 };
