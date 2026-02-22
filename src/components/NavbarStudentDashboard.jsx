@@ -7,6 +7,7 @@ import {
   FaSignOutAlt,
   FaLaptopCode,
   FaClipboardList,
+  FaCode
 } from "react-icons/fa";
 import { MdOutlineLibraryBooks, MdWork } from "react-icons/md";
 import getUserId from "../services/getUserId";
@@ -45,6 +46,10 @@ const NavbarStudentDashboard = () => {
           <NavLink to="/student/practice" className={getActiveClass}>
             <FaLaptopCode className="text-lg text-violet-400" />
             Practice
+          </NavLink>
+          <NavLink to={`/student/${getUserId()}/coding-assessments`} className={getActiveClass}>
+            <FaCode className="text-lg text-violet-400" />
+            Tests
           </NavLink>
           <NavLink to="/student/resources" className={getActiveClass}>
             <MdOutlineLibraryBooks className="text-lg text-violet-400" />
@@ -112,6 +117,10 @@ const NavbarStudentDashboard = () => {
           <NavLink to="/student/practice" className={getActiveClass} onClick={() => setIsOpen(false)}>
             <FaLaptopCode className="text-lg text-violet-400" />
             Practice
+          </NavLink>
+          <NavLink to={`/student/${getUserId()}/coding-assessments`} className={getActiveClass} onClick={() => setIsOpen(false)}>
+            <FaCode className="text-lg text-violet-400" />
+            Tests
           </NavLink>
           <NavLink to="/student/resources" className={getActiveClass} onClick={() => setIsOpen(false)}>
             <MdOutlineLibraryBooks className="text-lg text-violet-400" />
