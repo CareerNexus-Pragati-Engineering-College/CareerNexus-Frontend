@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { FaTimes, FaFileUpload } from "react-icons/fa";
 import toast from "react-hot-toast";
+import requestApi from "../../services/request";
+import getuserId from "../../services/getUserId";
+
 
 const branches = [
   "CSE", "CSE-AI", "CSE-DS", "CSE-AIML", "CSE-CS", "CSE-IT",
@@ -8,6 +11,7 @@ const branches = [
 ];
 
 const ShareResource = ({ onShare, onClose }) => {
+  const userId = getuserId();
   const [formData, setFormData] = useState({
     year: "",
     semester: "",
@@ -41,29 +45,62 @@ const ShareResource = ({ onShare, onClose }) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!formData.subject || !formData.pdfFile) {
-      toast.error("Please enter subject and upload a PDF.", { id: "missing-fields" });
-      return;
-    }
+  e.preventDefault();
 
+  if (!formData.subject || !formData.pdfFile) {
+    toast.error("Please enter subject and upload a PDF.", { id: "missing-fields" });
+    return;
+  }
+
+  try {
     setIsLoading(true);
-    setTimeout(() => {
-      onShare(formData);
-      toast.success("Resource uploaded successfully!", { id: "upload-success" });
-      setIsLoading(false);
-      setFormData({
-        year: "",
-        semester: "",
-        regulation: "",
-        branch: "",
-        subject: "",
-        description: "",
-        pdfFile: null,
-        videoLink: "",
-      });
-    }, 1500);
-  };
+
+    const uploadData = new FormData();
+
+    uploadData.append("file", formData.pdfFile);
+    uploadData.append("title", formData.subject);
+    uploadData.append("description", formData.description);
+    uploadData.append("year", formData.year);
+    uploadData.append("semester", formData.semester);
+    uploadData.append("regulation", formData.regulation);
+    uploadData.append("branch", formData.branch);
+    uploadData.append("resourceLink", formData.videoLink);
+    uploadData.append("userId", userId);
+
+    await requestApi.post(
+      `/resources/upload`,
+      uploadData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    toast.success("Resource uploaded successfully!", { id: "upload-success" });
+
+    setFormData({
+      year: "",
+      semester: "",
+      regulation: "",
+      branch: "",
+      subject: "",
+      description: "",
+      pdfFile: null,
+      videoLink: "",
+    });
+
+    onClose(); // Close modal after success
+  } catch (error) {
+    console.error("Upload failed:", error);
+    toast.error(
+      error.response?.data || "Failed to upload resource.",
+      { id: "upload-error" }
+    );
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div
