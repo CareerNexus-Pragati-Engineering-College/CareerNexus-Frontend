@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import NavbarRecruiterDashboard from "../../components/NavbarRecruiterDashboard";
 import { FaClock, FaFileUpload, FaClipboardList, FaArrowLeft, FaCheckCircle } from "react-icons/fa";
@@ -18,6 +18,9 @@ const RecruitmentProcessPage = () => {
 
   const { username, jobId } = useParams(); 
   const navigate = useNavigate();
+
+  const [configuredRounds, setConfiguredRounds] = useState([]);
+  const [loadingRounds, setLoadingRounds] = useState(false);
 
 
 
@@ -103,6 +106,29 @@ const RecruitmentProcessPage = () => {
   const handleBack = () => {
     navigate(`/recruiter/${userId}/applications`);
   };
+
+
+      useEffect(() => {
+   const fetchConfiguredRounds = async () => {
+     try {
+       setLoadingRounds(true);
+      
+       const response = await requestApi.get(
+          `/exam/recruiter/${userId}/${jobId}`
+       );
+      
+       setConfiguredRounds(response.data || []);
+     } catch (error) {
+       console.error("Error fetching configured rounds:", error);
+     } finally {
+       setLoadingRounds(false);
+     }
+   };
+  
+   if (userId && jobId) {
+     fetchConfiguredRounds();
+   }
+  }, [userId, jobId]);  
 
   return (
     <>
@@ -226,7 +252,8 @@ const RecruitmentProcessPage = () => {
 
         </div>
 
-        {/* Submit Button */}
+                          
+                {/* Submit Button */}
         <div className="flex justify-center mt-10">
           <button
             onClick={handleSubmit}
@@ -236,6 +263,43 @@ const RecruitmentProcessPage = () => {
             {loading ? 'Saving...' : 'Save Round Configuration'} {/* <--- Change button text while loading */}
           </button>
         </div>
+
+                      {/* Already Configured Rounds Section */}
+        <div className="max-w-6xl mx-auto mt-12 space-y-6">
+         {loadingRounds ? (
+           <p className="text-sm text-gray-500">Loading rounds...</p>
+         ) : configuredRounds.length === 0 ? (
+           <p className="text-sm text-gray-500">No rounds configured yet.</p>
+         ) : (
+            configuredRounds.map((round, index) => (
+              <motion.div
+               key={index}
+               initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.3 }}
+                className="bg-purple-50 p-6 rounded-xl shadow-md"
+             >
+                <p className="text-sm font-semibold text-purple-700">
+                 {round.roundName}
+               </p>
+            
+               <p className="text-xs text-gray-600 mt-2">
+                  Start: {new Date(round.startTime).toLocaleString()}
+                </p>
+            
+                <p className="text-xs text-gray-600">
+                  End: {new Date(round.endTime).toLocaleString()}
+                </p>
+            
+                <p className="text-xs text-gray-600 mt-1">
+                 Minimum Marks: {round.min_marks}
+               </p>
+             </motion.div>
+           ))
+         )}
+        </div>        
+
+
       </div>
     </>
   );
