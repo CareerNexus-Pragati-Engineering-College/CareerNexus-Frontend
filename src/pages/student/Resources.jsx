@@ -199,7 +199,7 @@ const Resources = () => {
                   <FaArrowLeft />
                 </button>
                 <span className="text-sm">
-                  {year && `${year}st Year`}
+                  {year && `${year === 1 ? "1st" : year === 2 ? "2nd" : year === 3 ? "3rd" : "4th"} Year`}
                   {regulation && ` • ${regulation}`}
                   {semester && ` • Semester ${semester}`}
                   {branch && ` • ${branch}`}
@@ -217,7 +217,7 @@ const Resources = () => {
                       onClick={() => setYear(y)}
                       className="bg-gray-100 hover:bg-purple-100 px-6 py-3 rounded-xl font-medium shadow"
                     >
-                      {y}st Year
+                      {y === 1 ? "1st" : y === 2 ? "2nd" : y === 3 ? "3rd" : "4th"} Year
                     </button>
                   ))}
                 </div>
