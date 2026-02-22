@@ -63,7 +63,7 @@ const RecruiterJob = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await requestApi.get(`/jobs/recruiter/${userId}`);
+        const res = await requestApi.get(`/jobs/recruiter`);
         setJobPosts(res.data);
 
         if (res.data.length === 0) {
@@ -129,7 +129,7 @@ const RecruiterJob = () => {
     try {
       if (isEditing) {
         const jobId = filteredJobs[editIndex + (currentPage - 1) * jobsPerPage].id;
-        const res = await requestApi.put(`/jobs/${getUserId()}/${jobId}`, payload);
+        const res = await requestApi.put(`/jobs/${jobId}`, payload);
         if (res.status === 200) {
           const updated = [...jobPosts];
           const realIndex = jobPosts.findIndex((j) => j.id === jobId);
@@ -138,7 +138,7 @@ const RecruiterJob = () => {
           showToast("Job updated successfully!");
         }
       } else {
-        const res = await requestApi.post(`/jobs/post/${getUserId()}`, payload);
+        const res = await requestApi.post(`/jobs/post`, payload);
         if (res.status === 200) {
           setJobPosts([res.data, ...jobPosts]);
           showToast("Job posted successfully!");
@@ -193,7 +193,7 @@ const RecruiterJob = () => {
   const handleDelete = async () => {
     const jobId = filteredJobs[deleteIndex].id;
     try {
-      await requestApi.delete(`/jobs/${getUserId()}/${jobId}`);
+      await requestApi.delete(`/jobs/${jobId}`);
       setJobPosts(jobPosts.filter((_, i) => i !== deleteIndex));
       setShowDeleteModal(false);
       showToast("Job deleted", "danger");

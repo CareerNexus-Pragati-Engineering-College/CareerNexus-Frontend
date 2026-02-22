@@ -43,7 +43,7 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
   useEffect(() => {
     const fetchStudentData = async () => {
       try {
-        const res = await requestApi.get(`/student/${userId}/profile`);
+        const res = await requestApi.get(`/student/profile`);
         const data = res.data;
         const populated = {
           FirstName: data.firstName || "",
@@ -120,7 +120,7 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
 
       try {
         setLoading(true);
-        await requestApi.post(`student/${userId}/profile`, payload);
+        await requestApi.post(`/student/profile`, payload);
         toast.success("Profile updated successfully!");
 
         setIsEditing(false);
@@ -149,12 +149,7 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
 
         const resumeData = new FormData();
         resumeData.append("resumeFile", formData.resume);
-        const response = await requestApi.post(`/applications/apply/${userId}/${job.id}`, resumeData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-        );
+        const response = await requestApi.post(`/applications/apply/${job.id}`, resumeData);
         setLoading(true);
 
         const appliedJob = {

@@ -18,11 +18,12 @@ const fallbackQuestions = [
 
 const StudentTestPage = () => {
   const navigate = useNavigate();
-  const { userId } = useParams();
+  const { userId, assessmentId } = useParams();
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [timeLeft, setTimeLeft] = useState(900); // 15 mins default
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const fullScreenRef = useRef(null);
 
@@ -31,60 +32,77 @@ const StudentTestPage = () => {
       fullScreenRef.current.requestFullscreen?.();
     }
 
-    requestApi.get("/test/questions")
-      .then(res => {
-        if (res.data && res.data.length > 0) {
-          setQuestions(res.data);
-        } else {
-          toast("No questions found from backend. Showing sample test.", { icon: "ℹ️" });
-          setQuestions(fallbackQuestions);
-        }
-      })
-      .catch(() => {
-        toast("Could not load questions from backend. Showing fallback questions.", { icon: "⚠️" });
-        setQuestions(fallbackQuestions);
-      });
+    let timer;
 
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          handleSubmit();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+    if (assessmentId) {
+      requestApi.get(`/api/exam/${assessmentId}/start`)
+        .then(res => {
+          if (res.data && res.data.questions && res.data.questions.length > 0) {
+            setQuestions(res.data.questions);
+            // Only start timer if successfully loaded
+            timer = setInterval(() => {
+              setTimeLeft(prev => {
+                if (prev <= 1) {
+                  clearInterval(timer);
+                  handleSubmit();
+                  return 0;
+                }
+                return prev - 1;
+              });
+            }, 1000);
+          } else {
+            setErrorMessage("No questions found for this assessment.");
+          }
+        })
+        .catch((err) => {
+          const msg = err.response?.data?.message || err.response?.data?.error || "Could not load exam. The test may not have started yet.";
+          setErrorMessage(msg);
+          toast.error(msg);
+        });
+    } else {
+        // Fallback for testing without an assessment ID
+        setQuestions(fallbackQuestions);
+        timer = setInterval(() => {
+          setTimeLeft(prev => {
+            if (prev <= 1) {
+              clearInterval(timer);
+              handleSubmit();
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
+    }
 
     return () => clearInterval(timer);
-  }, []);
+  }, [assessmentId]);
 
   const handleOptionSelect = (questionIndex, option) => {
     setSelectedAnswers(prev => ({ ...prev, [questionIndex]: option }));
   };
 
-  const handleClear = (questionIndex) => {
-    setSelectedAnswers(prev => {
-      const updated = { ...prev };
-      delete updated[questionIndex];
-      return updated;
-    });
-  };
-
   const handleSubmit = () => {
-    let score = 0;
-    questions.forEach((q, index) => {
-      if (selectedAnswers[index] === q.correct_option) {
-        score += 1;
-      }
+    if (!assessmentId) return;
+
+    // Map `selectedAnswers` { index: "Option Text" } to `{ que_no: int, option: String }` structure expected by backend
+    const payload = Object.entries(selectedAnswers).map(([indexStr, optionText]) => {
+      const idx = parseInt(indexStr);
+      const q = questions[idx];
+      return {
+        que_no: parseInt(q.question_no || q.questionNo), // Handle potential field name mismatches
+        option: optionText
+      };
     });
 
-    requestApi.post("/test/submit", { score })
-      .then(() => {
-        toast.success("Test submitted successfully");
+    requestApi.post(`/api/exam/${assessmentId}/submit`, payload)
+      .then((res) => {
+        const data = res.data;
+        toast.success(`Test submitted successfully! Score: ${data.score}/${data.totalQuestions} - ${data.status}`);
         navigate(`/student/${userId}/home`);
       })
-      .catch(() => toast.error("Submission failed"));
+      .catch((err) => {
+        toast.error(err.response?.data?.error || "Submission failed");
+      });
   };
 
   const getButtonColor = index => {
@@ -98,6 +116,24 @@ const StudentTestPage = () => {
   };
 
   const optionLetters = ["A", "B", "C", "D", "E"];
+
+  if (errorMessage) {
+    return (
+      <div className="flex w-full h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A] items-center justify-center">
+        <div className="bg-white p-10 rounded-xl shadow-xl text-center max-w-md border-t-4 border-red-500">
+          <div className="text-red-500 text-5xl mb-4">🚫</div>
+          <h1 className="text-2xl font-bold text-[#2C225A] mb-4">Access Restricted</h1>
+          <p className="text-lg text-gray-600 mb-8">{errorMessage}</p>
+          <button 
+            onClick={() => navigate(`/student/${userId}/home`)} 
+            className="bg-[#6B4ECF] text-white px-8 py-3 rounded-lg hover:bg-[#5939b8] font-bold shadow-md transition-all hover:scale-105"
+          >
+            Return to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div ref={fullScreenRef} className="flex w-full h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A]">
@@ -141,10 +177,10 @@ const StudentTestPage = () => {
         {questions.length > 0 && (
           <div className="space-y-6">
             <h2 className="text-xl font-bold text-[#6B4ECF]">
-              Q{currentQuestionIndex + 1}. {questions[currentQuestionIndex].Question}
+              Q{currentQuestionIndex + 1}. {questions[currentQuestionIndex].question_text || questions[currentQuestionIndex].Question}
             </h2>
             <div className="grid gap-4">
-              {questions[currentQuestionIndex].options.map((opt, idx) => (
+              {questions[currentQuestionIndex].options?.map((opt, idx) => (
                 <button
                   key={idx}
                   onClick={() => handleOptionSelect(currentQuestionIndex, opt)}

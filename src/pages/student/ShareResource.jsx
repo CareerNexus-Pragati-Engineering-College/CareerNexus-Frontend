@@ -85,11 +85,7 @@ const ShareResource = ({ onShare, onClose }) => {
       uploadData.append("resourceLink", formData.videoLink);
       uploadData.append("userId", userId);
 
-      await requestApi.post(`/resources/upload`, uploadData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await requestApi.post(`/resources/upload`, uploadData);
 
       toast.success("Resource uploaded successfully!", {
         id: "upload-success",
@@ -106,6 +102,7 @@ const ShareResource = ({ onShare, onClose }) => {
         videoLink: "",
       });
 
+      if (onShare) onShare();
       onClose(); // Close modal after success
     } catch (error) {
       console.error("Upload failed:", error);

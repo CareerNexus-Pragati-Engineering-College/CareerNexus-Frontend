@@ -58,6 +58,7 @@ const StudentProfile = () => {
 
   const [isEditing, setIsEditing] = useState(isDataMode);
   const [profilePic, setProfilePic] = useState(null);
+  const [profilePicFile, setProfilePicFile] = useState(null);
   const [newSkill, setNewSkill] = useState("");
   const [skills, setSkills] = useState([]);
   const [profileLinks, setProfileLinks] = useState([]);
@@ -80,7 +81,7 @@ const StudentProfile = () => {
       toast.error("User ID missing in URL.", { id: "missing-id" });
       setTimeout(() => navigate("/student/login"), 1500);
     } else if (userId) {
-      requestApi.get(`/student/${userId}/profile`)
+      requestApi.get(`/student/profile`)
         .then((response) => {
           const data = response.data;
           setStudent({
@@ -130,6 +131,7 @@ const StudentProfile = () => {
   const handleProfilePicChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setProfilePicFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setProfilePic(reader.result);
@@ -223,7 +225,16 @@ const StudentProfile = () => {
         urls: JSON.stringify(profileLinks),
       };
 
-      await requestApi.post(`/student/${userId}/profile`, payload);
+      const formData = new FormData();
+      formData.append("data", new Blob([JSON.stringify(payload)], { type: "application/json" }));
+      if (profilePicFile) {
+        formData.append("imageFile", profilePicFile);
+      } else {
+        // Append an empty blob to avoid missing required part error if expected
+        formData.append("imageFile", new Blob([], { type: "application/octet-stream" }), "empty.png");
+      }
+
+      await requestApi.post(`/student/profile`, formData);
 
       if (profilePic && userId) {
         localStorage.setItem(`profilePic_${userId}`, profilePic);

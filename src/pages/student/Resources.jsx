@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import NavbarStudentDashboard from "../../components/NavbarStudentDashboard";
 import {
   FaBook,
@@ -14,6 +14,8 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { Link } from "react-router-dom";
 import getUserId from "../../services/getUserId";
+import requestApi from "../../services/request";
+import toast from "react-hot-toast";
 
 const branches = [
   "CSE", "CSE-AI", "CSE-DS", "CSE-AIML", "CSE-CS", "CSE-IT",
@@ -32,16 +34,34 @@ const Resources = () => {
 
   const subjectsRef = useRef(null);
 
-  const handleShareResource = (data) => {
-    const completeData = {
-      ...data,
-      year,
-      regulation,
-      semester,
-      branch,
-      pdf: URL.createObjectURL(data.pdfFile),
-    };
-    setSharedResources((prev) => [...prev, completeData]);
+  const fetchResources = async () => {
+    try {
+      const response = await requestApi.get("/resources/all");
+      const formattedResources = response.data.map((res) => ({
+        id: res.id,
+        year: parseInt(res.year),
+        regulation: res.regulation,
+        semester: res.semester,
+        branch: res.branch,
+        subject: res.title,
+        description: res.description,
+        pdf: res.fileUrl,
+        videoLink: res.resourceLink,
+        uploadedBy: res.uploadedById
+      }));
+      setSharedResources(formattedResources);
+    } catch (error) {
+      console.error("Failed to fetch resources:", error);
+      toast.error("Could not load resources.");
+    }
+  };
+
+  useEffect(() => {
+    fetchResources();
+  }, []);
+
+  const handleShareResource = () => {
+    fetchResources();
     setShowShareForm(false);
 
     setTimeout(() => {
@@ -81,7 +101,7 @@ const Resources = () => {
     return "Student Resources";
   };
 
-  const confirmDelete = (index, subject) => {
+  const confirmDelete = (resourceId) => {
     confirmAlert({
       customUI: ({ onClose }) => (
         <div className="bg-white p-6 rounded-xl shadow-xl border max-w-sm w-full mx-auto text-center space-y-4">
@@ -90,11 +110,14 @@ const Resources = () => {
           <div className="flex justify-center gap-4 mt-4">
             <button
               className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-              onClick={() => {
-                const updated = sharedResources.filter(
-                  (_, idx) => !(idx === index && _.subject === subject)
-                );
-                setSharedResources(updated);
+              onClick={async () => {
+                try {
+                  await requestApi.delete(`/resources/${resourceId}?userId=${getUserId()}`);
+                  toast.success("Resource deleted successfully");
+                  fetchResources();
+                } catch (error) {
+                  toast.error("Failed to delete resource");
+                }
                 onClose();
               }}
             >
@@ -329,12 +352,14 @@ const Resources = () => {
                             </div>
 
                             <div className="mt-3 flex justify-end">
-                              <button
-                                onClick={() => confirmDelete(i, subject)}
-                                className="text-red-600 hover:text-red-700 hover:underline text-sm font-medium"
-                              >
-                                Delete
-                              </button>
+                              {getUserId() === String(res.uploadedBy) && (
+                                <button
+                                  onClick={() => confirmDelete(res.id)}
+                                  className="text-red-600 hover:text-red-700 hover:underline text-sm font-medium"
+                                >
+                                  Delete
+                                </button>
+                              )}
                             </div>
                           </li>
                         ))}
