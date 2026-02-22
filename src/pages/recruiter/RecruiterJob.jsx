@@ -221,7 +221,7 @@ const RecruiterJob = () => {
       <div className="absolute top-20 left-0 w-full p-4 sm:p-6 z-50 pointer-events-none">
         <button
           onClick={() => navigate(`/recruiter/${userId}/home`)}
-          className="flex items-center gap-2 px-5 py-2.5 bg-white/60 hover:bg-white/90 border border-purple-100/50 hover:border-purple-300 rounded-full text-gray-600 hover:text-purple-700 font-semibold shadow-sm transition-all duration-300 backdrop-blur-md group pointer-events-auto"
+          className="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 hover:border-slate-300 rounded-full text-slate-600 hover:text-slate-900 font-semibold shadow-sm transition-all duration-300 group pointer-events-auto text-sm"
         >
           <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" /> Back to Dashboard
         </button>
@@ -231,310 +231,344 @@ const RecruiterJob = () => {
       <AnimatePresence>
         {showSuccessAnimation && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-tr from-pink-100 to-blue-100/60 backdrop-blur-md"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="fixed top-24 left-1/2 -translate-x-1/2 z-[100] bg-slate-900 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4 border border-slate-700"
           >
-            <motion.div
-              initial={{ y: 50, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 30, opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              className="bg-white px-10 py-7 rounded-3xl shadow-2xl text-center max-w-sm"
-            >
-              <motion.div
-                initial={{ scale: 0.7 }}
-                animate={{ scale: 1 }}
-                exit={{ scale: 0.8 }}
-                transition={{ duration: 0.4 }}
-              >
-                <HiCheckCircle className="text-purple-600 text-6xl mx-auto mb-4 animate-pulse" />
-              </motion.div>
-              <p className="text-purple-900 font-semibold text-xl">Job Posted Successfully!</p>
-            </motion.div>
+            <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+              <HiCheckCircle size={24} />
+            </div>
+            <p className="font-semibold text-sm tracking-wide">Job Saved Successfully!</p>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Main Container */}
-      <div className="min-h-screen pt-24 pb-16 px-6 bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-gray-900 flex flex-col items-center font-poppins select-none transition-all duration-500">
-        {/* Form Container with animation */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="w-full max-w-6xl rounded-3xl bg-white/90 shadow-2xl border border-purple-100 p-12 flex flex-col gap-8"
-        >
-          {/* Form Header */}
-          <div className="flex items-center justify-center relative mb-8 mt-2">
-            <h2 className="text-4xl font-extrabold text-purple-700 text-center tracking-wide drop-shadow-lg flex items-center justify-center gap-3">
-              <RiSuitcaseLine className="text-purple-600 text-5xl drop-shadow-sm" />
-              Post a Job
-            </h2>
-          </div>
+      <div className="min-h-screen pt-36 pb-16 px-4 sm:px-6 lg:px-8 bg-slate-50 text-slate-900 font-outfit select-none">
 
-          {/* Form Inputs */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {Object.entries({
-              company_name: "Company Name",
-              job_title: "Job Title",
-              salary_package: "Salary (LPA)",
-              application_deadline: "Application Deadline",
-            }).map(([key, label]) => (
-              <div key={key}>
-                <label className="block mb-3 text-base font-semibold text-purple-700">{label}</label>
-                <input
-                  name={key}
-                  type={key === "application_deadline" ? "date" : "text"}
-                  value={job[key]}
-                  onChange={(e) => setJob({ ...job, [key]: e.target.value })}
-                  className="w-full px-5 py-3 rounded-2xl border border-purple-200 bg-purple-50 text-purple-900 placeholder-purple-400 shadow-md focus:outline-none focus:ring-4 focus:ring-purple-300 transition duration-300"
-                />
-              </div>
-            ))}
+        <div className="max-w-[1400px] mx-auto flex flex-col xl:flex-row gap-8 items-start">
 
-            {/* Location Input */}
-            <div className="col-span-2">
-              <label className="block mb-3 text-base font-semibold text-purple-700">Locations</label>
-              <div className="w-full flex flex-wrap items-center gap-3 px-4 py-3 border border-purple-200 rounded-2xl bg-purple-50 shadow-inner focus-within:ring-4 focus-within:ring-purple-300 transition duration-300">
-                {parseLocations(job.location).map((loc, idx) => (
-                  <div
-                    key={idx}
-                    className="bg-purple-600 text-white px-4 py-1 rounded-full flex items-center gap-3 text-sm font-semibold shadow-lg hover:bg-purple-700 transition"
-                  >
-                    {loc}
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setJob({ ...job, location: parseLocations(job.location).filter((_, i) => i !== idx) })
-                      }
-                      className="hover:text-red-400 text-white font-bold"
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-                <input
-                  type="text"
-                  value={job.newLocation || ""}
-                  onChange={(e) => setJob({ ...job, newLocation: e.target.value })}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && job.newLocation.trim()) {
-                      e.preventDefault();
-                      if (!job.location.includes(job.newLocation.trim())) {
-                        setJob({
-                          ...job,
-                          location: [...job.location, job.newLocation.trim()],
-                          newLocation: "",
-                        });
-                      }
-                    }
-                  }}
-                  placeholder="Type location & press Enter"
-                  className="bg-transparent focus:outline-none text-purple-900 placeholder-purple-500 flex-1 min-w-[140px] py-1"
-                />
+          {/* Form Container (Left Column) */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="w-full xl:w-[400px] shrink-0 bg-white rounded-3xl shadow-sm border border-slate-200 p-6 sm:p-8 xl:sticky xl:top-32 relative overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-bl-full -z-10 opacity-70"></div>
+            <div className="flex items-center gap-4 mb-8 pb-4 border-b border-slate-100">
+              <div className="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 border border-indigo-100">
+                <RiSuitcaseLine size={24} />
               </div>
-              <p className="mt-2 text-sm font-semibold text-purple-600 tracking-wide">
-                Press Enter to add multiple locations
-              </p>
+              <h2 className="text-2xl font-bold text-slate-800">
+                {editIndex !== null ? "Edit Job" : "Post New Job"}
+              </h2>
             </div>
-          </div>
 
-          {/* Textareas */}
-          {["job_description", "recruitment_process"].map((key) => (
-            <div key={key} className="mt-6">
-              <label className="block mb-3 text-base font-semibold text-purple-700">
-                {key === "job_description" ? "Job Description" : "Recruitment Process"}
-              </label>
-              <textarea
-                rows="3"
-                name={key}
-                value={job[key]}
-                onChange={(e) => setJob({ ...job, [key]: e.target.value })}
-                className="w-full px-6 py-3 rounded-3xl border border-purple-200 bg-purple-50 text-purple-900 placeholder-purple-400 shadow-md resize-none focus:outline-none focus:ring-4 focus:ring-purple-300 transition duration-300"
-                placeholder={`Enter ${key === "job_description" ? "job description" : "recruitment process"} here...`}
+            <div className="space-y-5">
+              {/* Form Inputs */}
+              {Object.entries({
+                company_name: "Company Name",
+                job_title: "Job Title",
+                salary_package: "Salary (LPA)",
+                application_deadline: "Deadline",
+              }).map(([key, label]) => (
+                <div key={key}>
+                  <label className="block mb-2 text-xs font-bold text-slate-400 uppercase tracking-wider">{label}</label>
+                  <input
+                    name={key}
+                    type={key === "application_deadline" ? "date" : "text"}
+                    value={job[key]}
+                    onChange={(e) => setJob({ ...job, [key]: e.target.value })}
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm font-semibold"
+                  />
+                </div>
+              ))}
+
+              {/* Location Input */}
+              <div>
+                <label className="block mb-2 text-xs font-bold text-slate-400 uppercase tracking-wider">Locations</label>
+                <div className="w-full flex flex-col gap-3">
+                  <input
+                    type="text"
+                    value={job.newLocation || ""}
+                    onChange={(e) => setJob({ ...job, newLocation: e.target.value })}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && job.newLocation.trim()) {
+                        e.preventDefault();
+                        if (!job.location.includes(job.newLocation.trim())) {
+                          setJob({
+                            ...job,
+                            location: [...job.location, job.newLocation.trim()],
+                            newLocation: "",
+                          });
+                        }
+                      }
+                    }}
+                    placeholder="Type location & press Enter"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm font-semibold"
+                  />
+                  {job.location.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {parseLocations(job.location).map((loc, idx) => (
+                        <span key={idx} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold border border-indigo-100">
+                          {loc}
+                          <button type="button" onClick={() => setJob({ ...job, location: parseLocations(job.location).filter((_, i) => i !== idx) })} className="hover:text-red-500 ml-1 text-base leading-none">&times;</button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Textareas */}
+              {["job_description", "recruitment_process"].map((key) => (
+                <div key={key}>
+                  <label className="block mb-2 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    {key === "job_description" ? "Description" : "Process"}
+                  </label>
+                  <textarea
+                    rows="3"
+                    name={key}
+                    value={job[key]}
+                    onChange={(e) => setJob({ ...job, [key]: e.target.value })}
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 placeholder-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm font-semibold"
+                    placeholder={`Enter details...`}
+                  />
+                </div>
+              ))}
+
+            </div>
+
+            <div className="mt-8 flex flex-col gap-3">
+              <button
+                onClick={handlePostJob}
+                className="w-full py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold tracking-wide transition-all shadow-md shadow-slate-900/10"
+              >
+                {editIndex !== null ? "Update Job Post" : "Publish Job Post"}
+              </button>
+              {editIndex !== null && (
+                <button
+                  onClick={() => {
+                    setEditIndex(null);
+                    setJob({
+                      company_name: "", job_title: "", job_description: "", recruitment_process: "",
+                      salary_package: "", location: [], newLocation: "", application_deadline: "",
+                    });
+                  }}
+                  className="w-full py-3.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold transition-all"
+                >
+                  Cancel Edit
+                </button>
+              )}
+            </div>
+          </motion.div>
+
+
+          {/* Right Column (Job List & Filters) */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex-1 w-full flex flex-col gap-6"
+          >
+            {/* Filter */}
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-2 sm:p-3 flex items-center relative overflow-hidden">
+              <div className="absolute left-0 top-0 bottom-0 w-2 bg-indigo-500"></div>
+              <HiMagnifyingGlass className="text-slate-400 text-2xl absolute left-8" />
+              <input
+                type="text"
+                placeholder="Search by company or job title..."
+                value={filterText}
+                onChange={(e) => setFilterText(e.target.value)}
+                className="w-full pl-14 pr-4 py-3 bg-transparent focus:outline-none text-slate-800 placeholder-slate-400 font-semibold text-lg"
               />
             </div>
-          ))}
 
-          {/* Submit Button */}
-          <div className="mt-10 text-center">
-            <motion.button
-              whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(128, 90, 213, 0.6)" }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handlePostJob}
-              className="bg-gradient-to-r from-purple-600 via-purple-700 to-purple-800 text-white px-12 py-4 rounded-3xl shadow-xl font-bold tracking-wide uppercase transition duration-300"
-            >
-              {editIndex !== null ? "Update Job" : "Post Job"}
-            </motion.button>
-            {editIndex !== null && (
-              <button
-                onClick={() => {
-                  setEditIndex(null);
-                  setJob({
-                    company_name: "",
-                    job_title: "",
-                    job_description: "",
-                    recruitment_process: "",
-                    salary_package: "",
-                    location: [],
-                    newLocation: "",
-                    application_deadline: "",
-                  });
-                }}
-                className="ml-4 px-8 py-3.5 rounded-2xl border border-gray-300 text-gray-600 hover:bg-gray-100 font-semibold transition"
-              >
-                Cancel
-              </button>
-            )}
-          </div>
-        </motion.div>
+            {/* List */}
+            <div className="space-y-4">
+              {currentJobs.map((job, index) => (
+                <motion.div
+                  key={job.id || index}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="bg-white rounded-2xl shadow-sm hover:shadow-md border border-slate-200 transition-all p-6 sm:p-8 flex flex-col md:flex-row gap-6 justify-between items-start md:items-center group"
+                >
+                  <div className="flex-1 w-full">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="px-3 py-1 bg-emerald-50 text-emerald-600 text-[11px] font-extrabold uppercase tracking-wider rounded-lg border border-emerald-100 flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Active
+                      </span>
+                      <span className="text-xs font-bold text-slate-400 uppercase border border-slate-200 px-2 py-0.5 rounded-lg bg-slate-50">ID: {job.job_id || job.id}</span>
+                    </div>
+                    <h4 className="text-2xl font-black text-slate-900 mb-1 leading-tight tracking-tight">
+                      {job.job_title || job.jobTitle}
+                    </h4>
+                    <p className="text-indigo-600 font-bold text-lg mb-5">
+                      {job.company_name || job.companyName}
+                    </p>
 
-        {/* Filter Input */}
-        <div className="mt-16 w-full max-w-5xl relative">
-          <input
-            type="text"
-            placeholder="Filter by company or title..."
-            value={filterText}
-            onChange={(e) => setFilterText(e.target.value)}
-            className="w-full px-6 py-4 pr-16 text-lg font-semibold border border-purple-200 rounded-3xl bg-purple-50 text-purple-900 placeholder-purple-400 shadow-md focus:outline-none focus:ring-4 focus:ring-purple-300 transition duration-300"
-          />
-          <HiMagnifyingGlass className="absolute right-6 top-1/2 -translate-y-1/2 text-purple-600 text-2xl" />
-        </div>
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 bg-slate-50/50 p-4 rounded-xl border border-slate-100">
+                      <div className="col-span-2 lg:col-span-2">
+                        <p className="text-slate-400 text-[10px] font-extrabold uppercase tracking-widest mb-1.5">Locations</p>
+                        <div className="flex gap-2 flex-wrap">
+                          {parseLocations(job.location || job.locations).map((loc, i) => (
+                            <span key={i} className="text-slate-700 font-semibold text-sm bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-sm">{loc}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-slate-400 text-[10px] font-extrabold uppercase tracking-widest mb-1.5">Package</p>
+                        <p className="text-slate-800 font-bold text-sm bg-white px-2 py-0.5 rounded-md border border-slate-200 inline-block shadow-sm">{job.salary_package || job.salaryPackage} LPA</p>
+                      </div>
+                      <div>
+                        <p className="text-slate-400 text-[10px] font-extrabold uppercase tracking-widest mb-1.5">Deadline</p>
+                        <p className="text-slate-800 font-bold text-sm bg-white px-2 py-0.5 rounded-md border border-slate-200 inline-block shadow-sm">{job.application_deadline || job.applicationDeadline}</p>
+                      </div>
+                    </div>
+                  </div>
 
-        {/* Job List */}
-        <div className="w-full max-w-6xl space-y-8 mt-10">
-          {currentJobs.map((job, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="relative p-8 rounded-3xl border border-purple-200 bg-white text-purple-900 shadow-lg hover:shadow-2xl transition-shadow cursor-pointer"
-            >
+                  <div className="flex md:flex-col gap-2 w-full md:w-auto mt-2 md:mt-0">
+                    <button onClick={() => openModal(job)} className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 bg-white hover:bg-slate-50 text-slate-600 hover:text-indigo-600 rounded-xl text-sm font-bold transition-all border border-slate-200 shadow-sm">
+                      <HiOutlineEye size={18} className="stroke-2" /> View
+                    </button>
+                    <button onClick={() => handleEdit(index)} className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 bg-white hover:bg-slate-50 text-slate-600 hover:text-emerald-600 rounded-xl text-sm font-bold transition-all border border-slate-200 shadow-sm">
+                      <HiOutlinePencil size={18} className="stroke-2" /> Edit
+                    </button>
+                    <button onClick={() => confirmDelete(index)} className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 bg-white hover:bg-red-50 text-slate-600 hover:text-red-600 rounded-xl text-sm font-bold transition-all border border-slate-200 shadow-sm">
+                      <HiOutlineTrash size={18} className="stroke-2" /> Delete
+                    </button>
+                  </div>
+                </motion.div>
+              ))}
 
-              <h4 className="text-2xl font-extrabold text-purple-700 mb-2 tracking-wide">
-                {job.job_title || job.jobTitle}
-              </h4>
-              <p className="text-lg font-semibold text-gray-700 mb-3">
-                {job.company_name || job.companyName}
-              </p>
-              <p className="text-sm text-gray-500 mb-2">
-                <span className="font-semibold">Locations:</span>{" "}
-                {parseLocations(job.location || job.locations).join(" , ")}
-              </p>
+              {currentJobs.length === 0 && (
+                <div className="text-center py-20 bg-white rounded-3xl border border-slate-200 shadow-sm">
+                  <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100">
+                    <RiSuitcaseLine size={40} className="text-slate-300" />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-800">No Jobs Found</h3>
+                  <p className="text-slate-500 mt-2 font-medium">Adjust your filters or post a new job.</p>
+                </div>
+              )}
+            </div>
 
-              <p className="text-sm text-gray-500">
-                <span className="font-semibold">Deadline:</span>{" "}
-                {job.application_deadline || job.applicationDeadline}
-              </p>
-              <p className="text-sm text-gray-500 mb-4">
-                <span className="font-semibold">Job Id: </span>{" "}
-                {job.job_id || job.id}
-              </p>
-              <p className="text-xs text-gray-400 mt-2">
-                Posted: {dayjs(job.posted_at).format("YYYY-MM-DD HH:mm")}
-              </p>
-              <div className="absolute top-6 right-6 flex gap-6 text-purple-700">
-                <button onClick={() => openModal(job)} className="hover:text-purple-900 transition-transform hover:scale-110" aria-label="View Job">
-                  <HiOutlineEye size={24} />
-                </button>
-                <button onClick={() => handleEdit(index)} className="hover:text-indigo-600 transition-transform hover:scale-110" aria-label="Edit Job">
-                  <HiOutlinePencil size={24} />
-                </button>
-                <button onClick={() => confirmDelete(index)} className="hover:text-red-600 transition-transform hover:scale-110" aria-label="Delete Job">
-                  <HiOutlineTrash size={24} />
-                </button>
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="mt-8 flex justify-center items-center gap-3 bg-white p-4 rounded-3xl border border-slate-200 shadow-sm w-fit mx-auto">
+                {[...Array(totalPages)].map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentPage(i + 1)}
+                    className={`w-12 h-12 rounded-xl text-lg flex items-center justify-center transition-all ${currentPage === i + 1 ? 'bg-slate-900 text-white font-black shadow-md' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 font-bold border border-slate-200'}`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
               </div>
-            </motion.div>
-          ))}
+            )}
+          </motion.div>
         </div>
-
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="mt-14 flex gap-8 items-center justify-center">
-            <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-              className="px-6 py-3 rounded-3xl text-purple-700 font-semibold border border-purple-200 bg-purple-100 shadow-md hover:bg-purple-200 disabled:opacity-50 disabled:cursor-not-allowed transition"
-            >
-              ← Previous
-            </button>
-            <span className="text-purple-700 font-bold text-lg tracking-wide">
-              Page <span className="text-purple-900">{currentPage}</span> of{" "}
-              <span className="text-purple-900">{totalPages}</span>
-            </span>
-            <button
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-              disabled={currentPage === totalPages}
-              className="px-6 py-3 rounded-3xl text-purple-700 font-semibold border border-purple-200 bg-purple-100 shadow-md hover:bg-purple-200 disabled:opacity-50 disabled:cursor-not-allowed transition"
-            >
-              Next →
-            </button>
-          </div>
-        )}
       </div>
 
-      {/* Modal & Delete Confirm */}
-      {showModal && selectedJob && (
-        <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex justify-center items-center p-6">
-          <div className="relative max-w-3xl w-full bg-white rounded-3xl shadow-2xl p-10 overflow-y-auto max-h-[90vh]">
-            <button
-              onClick={() => setShowModal(false)}
-              className="absolute top-6 right-6 text-gray-500 hover:text-gray-700 text-4xl font-semibold transition"
-              aria-label="Close modal"
+      {/* Modernised Modals */}
+      <AnimatePresence>
+        {showModal && selectedJob && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-sm flex justify-center items-center p-4 sm:p-6"
+          >
+            <motion.div
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              className="relative max-w-2xl w-full bg-white rounded-3xl shadow-2xl p-8 overflow-y-auto max-h-[90vh] border border-slate-200"
             >
-              &times;
-            </button>
-            <h2 className="text-3xl font-extrabold text-purple-700 mb-6 tracking-wide">
-              {selectedJob.job_title || selectedJob.jobTitle}
-            </h2>
-            <p className="text-md text-gray-700 mb-3">
-              <strong>Company: </strong> {selectedJob.company_name || selectedJob.companyName}
-            </p>
-            <p className="text-md text-gray-700 mb-3">
-              <strong>Salary Package: </strong> {selectedJob.salary_package || selectedJob.salaryPackage} LPA
-            </p>
-            <p className="text-md text-gray-700 mb-3">
-              <strong>Locations: </strong>
-
-              {parseLocations(selectedJob.location || selectedJob.locations).join(" , ")}
-
-
-            </p>
-            <p className="text-md text-gray-700 mb-6">
-              <strong>Deadline: </strong> {selectedJob.application_deadline || selectedJob.applicationDeadline}
-            </p>
-            <h3 className="text-xl font-semibold text-purple-700 mb-3 tracking-wide">Job Description</h3>
-            <p className="text-gray-700 mb-6 whitespace-pre-wrap">{selectedJob.job_description || selectedJob.jobDescription}</p>
-            <h3 className="text-xl font-semibold text-purple-700 mb-3 tracking-wide">Recruitment Process</h3>
-            <p className="text-gray-700 whitespace-pre-wrap">{selectedJob.recruitment_process || selectedJob.recruitmentProcess}</p>
-          </div>
-        </div>
-      )}
-
-      {showDeleteModal && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex justify-center items-center p-4">
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-xl text-center">
-            <p className="text-xl font-semibold text-purple-700 mb-6">Are you sure you want to delete this job?</p>
-            <div className="flex justify-center gap-8">
-              <button
-                onClick={() => setShowDeleteModal(false)}
-                className="px-8 py-3 rounded-xl border border-purple-400 text-purple-700 font-semibold hover:bg-purple-100 transition"
-              >
-                Cancel
+              <button onClick={() => setShowModal(false)} className="absolute top-6 right-6 p-2 text-slate-400 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition" aria-label="Close modal">
+                <span className="sr-only">Close</span>
+                <svg className="w-6 h-6" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
               </button>
-              <button
-                onClick={handleDelete}
-                className="px-8 py-3 rounded-xl bg-red-600 text-white font-semibold shadow-lg hover:bg-red-700 transition"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+
+              <div className="flex items-start gap-4 mb-8">
+                <div className="w-16 h-16 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 shrink-0 border border-indigo-100 shadow-sm">
+                  <RiSuitcaseLine size={32} />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-black text-slate-900 leading-tight tracking-tight">
+                    {selectedJob.job_title || selectedJob.jobTitle}
+                  </h2>
+                  <p className="text-indigo-600 font-bold text-lg mt-1">
+                    {selectedJob.company_name || selectedJob.companyName}
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Package</p>
+                  <p className="font-extrabold text-slate-800 text-lg">{selectedJob.salary_package || selectedJob.salaryPackage} LPA</p>
+                </div>
+                <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Deadline</p>
+                  <p className="font-extrabold text-slate-800 text-lg">{selectedJob.application_deadline || selectedJob.applicationDeadline}</p>
+                </div>
+                <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100 col-span-2">
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Locations</p>
+                  <div className="flex flex-wrap gap-2">
+                    {parseLocations(selectedJob.location || selectedJob.locations).map((loc, i) => (
+                      <span key={i} className="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-sm font-bold text-slate-700 shadow-sm">{loc}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-slate-50/50 p-6 rounded-2xl border border-slate-100 mb-6">
+                <h3 className="text-xs font-black text-indigo-600 uppercase tracking-wider mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-indigo-500"></div> Job Description</h3>
+                <div className="prose prose-sm prose-slate max-w-none text-slate-700 font-medium">
+                  <p className="whitespace-pre-wrap leading-relaxed">{selectedJob.job_description || selectedJob.jobDescription}</p>
+                </div>
+              </div>
+
+              <div className="bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
+                <h3 className="text-xs font-black text-indigo-600 uppercase tracking-wider mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-indigo-500"></div> Recruitment Process</h3>
+                <div className="prose prose-sm prose-slate max-w-none text-slate-700 font-medium">
+                  <p className="whitespace-pre-wrap leading-relaxed">{selectedJob.recruitment_process || selectedJob.recruitmentProcess}</p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showDeleteModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-sm flex justify-center items-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.95 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.95 }}
+              className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl border border-slate-100 text-center"
+            >
+              <div className="w-16 h-16 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto mb-6 border border-red-100">
+                <HiOutlineTrash size={32} />
+              </div>
+              <h3 className="text-2xl font-black text-slate-900 mb-2">Delete Job?</h3>
+              <p className="text-slate-500 mb-8 text-sm font-medium">This action cannot be undone. All candidates linked to this job will also lose connection to it.</p>
+              <div className="flex gap-3">
+                <button onClick={() => setShowDeleteModal(false)} className="flex-1 py-3 rounded-xl border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 transition">Cancel</button>
+                <button onClick={handleDelete} className="flex-1 py-3 rounded-xl bg-red-600 text-white font-bold hover:bg-red-700 transition shadow-md shadow-red-600/20">Delete</button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* 📍 Footer */}
       <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-10">
