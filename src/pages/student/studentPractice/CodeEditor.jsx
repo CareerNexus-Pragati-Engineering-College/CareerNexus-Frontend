@@ -19,7 +19,7 @@ const CODE_TEMPLATES = {
 
 const DEFAULT_START_MESSAGE = "// Start coding...\n// Welcome to the collaborative editor!";
 
-const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initialTheme = "vs-dark" }) => {
+const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initialTheme = "vs-dark", question: externalQuestion, onCodeChange, onLanguageChange }) => {
     const [code, setCode] = useState(CODE_TEMPLATES[initialLanguage] || DEFAULT_START_MESSAGE);
     const [connectionStatus, setConnectionStatus] = useState('connecting');
     const [isCopied, setIsCopied] = useState(false);
@@ -74,7 +74,14 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
         }
 
         const backendWsUrl = import.meta.env.VITE_APP_BACKEND_WEBSOCKET_URL;
-        const protocol = window.location.protocol === 'https:' ? 'wss' : 'wss'; // Default to wss for cloud
+        
+        // Skip WebSocket for exams or if URL is missing
+        if (!backendWsUrl || externalQuestion) {
+            setConnectionStatus('offline');
+            return;
+        }
+
+        const protocol = window.location.protocol === 'https:' ? 'wss' : 'wss'; 
         const rawSocketUrl = `${protocol}://${backendWsUrl}/ws/editor?token=${token}&sessionId=${sessionId}&username=${username}`;
 
         // Initialize WebSocket connection
@@ -216,6 +223,10 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
 
         {/* use effect for question rendering from backend */}
                    useEffect(() => {
+                 if (externalQuestion) {
+                    setQuestion(externalQuestion);
+                    return;
+                 }
                  const fetchQuestion = async () => {
                    try {
                      const res = await api.get(`/api/practice/question/${sessionId}`);
@@ -230,7 +241,7 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
                  };
 
                  fetchQuestion();
-               }, [sessionId]);
+               }, [sessionId, externalQuestion]);
 
     const handleEditsApplied = (processedCount) => {
 
@@ -269,6 +280,7 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
     const handleLanguageChange = (event) => {
         const newLanguage = event.target.value;
         setSelectedLanguage(newLanguage); // Update local state with the new language
+        if (onLanguageChange) onLanguageChange(newLanguage);
         
         // Apply default template if the editor is currently empty or holding an existing template
         const currentTrimmedCode = code.trim();
@@ -440,6 +452,7 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
             case 'connected': return 'bg-green-500';
             case 'disconnected': return 'bg-red-500';
             case 'connecting': return 'bg-yellow-500';
+            case 'offline': return 'bg-gray-500';
             default: return 'bg-gray-500';
         }
     }, []); // No dependencies as it's a pure function
@@ -447,6 +460,7 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
 
     const handleCodeChangeForParent = (newCode) => {
         setCode(newCode);
+        if (onCodeChange) onCodeChange(newCode);
     };
 
 

@@ -53,6 +53,15 @@ const TpoHome = () => {
             <p className="mt-4 text-lg md:text-xl text-[#5C5C80] max-w-2xl mx-auto font-outfit leading-relaxed">
               Monitor placements, track student data, and collaborate with recruiters effortlessly through your central command center.
             </p>
+            
+            <div className="mt-8 flex justify-center gap-4">
+              <button 
+                onClick={() => window.location.assign(`/tpo/${userId}/coding-assessment/create`)}
+                className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white px-8 py-3 rounded-xl font-bold font-outfit shadow-lg shadow-violet-200 hover:scale-105 transition border border-transparent hover:border-violet-300"
+              >
+                + Create Coding Assessment
+              </button>
+            </div>
           </motion.div>
         </section>
 

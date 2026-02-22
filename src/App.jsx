@@ -19,14 +19,17 @@ import StudentTestPage from "./pages/student/StudentTestPage";
 import StudentApplications from "./pages/student/StudentApplications";
 import Resources from "./pages/student/Resources";
 import StudentPractice from "./pages/student/StudentPractice";
+import StudentCodingAssessments from "./pages/student/StudentCodingAssessments";
+import StudentCodingExam from "./pages/student/StudentCodingExam";
 
 // 🏫 TPO
 import TPO from "./pages/tpo/TPO";
 import TPOLogin from "./pages/tpo/TpoLogin";
-import Tpohome from "./pages/tpo/Tpohome";
-import TpoProfile from "./pages/tpo/TpoProfile";
+// import Tpohome from "./pages/tpo/Tpohome";
+import TpoProfile from "./pages/tpo/TPOProfile";
 import TPOStudents from "./pages/tpo/TPOStudents";
 import TPORecruiters from "./pages/tpo/TPORecruiters";
+import TPOCodingAssessmentForm from "./pages/tpo/TPOCodingAssessmentForm";
 
 // 👨‍💼 Recruiter
 import Recruiter from "./pages/recruiter/Recruiter";
@@ -80,6 +83,8 @@ const App = () => {
         <Route path="/student/:userId/test/:assessmentId" element={<ProtectedRoute><StudentTestPage /></ProtectedRoute>} />
         <Route path="/student/resources" element={<Resources />} />
         <Route path="/student/practice" element={<StudentPractice />} />
+        <Route path="/student/:userId/coding-assessments" element={<ProtectedRoute><StudentCodingAssessments /></ProtectedRoute>} />
+        <Route path="/student/:userId/coding-assessment/:assessmentId" element={<ProtectedRoute><StudentCodingExam /></ProtectedRoute>} />
 
 
 
@@ -90,6 +95,7 @@ const App = () => {
         <Route path="/tpo/:userId/profile" element={<TpoProfile />} />
         <Route path="/tpo/:userid/students" element={<TPOStudents />} />
         <Route path="/tpo/:userId/recruiters" element={<TPORecruiters />} />
+        <Route path="/tpo/:userId/coding-assessment/create" element={<TPOCodingAssessmentForm />} />
 
         {/* 👨‍💼 Recruiter */}
         <Route path="/recruiter" element={<Recruiter />} />
