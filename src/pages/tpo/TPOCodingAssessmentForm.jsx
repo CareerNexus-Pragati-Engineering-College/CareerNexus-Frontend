@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import requestApi from "../../services/request";
 import toast from "react-hot-toast";
 import NavbarTpoDashboard from "../../components/NavbarTPODashboard";
-import { FaPlus, FaTrash, FaCheck } from "react-icons/fa";
+import { FaPlus, FaTrash, FaCheck, FaArrowLeft } from "react-icons/fa";
 
 const TPOCodingAssessmentForm = () => {
   const navigate = useNavigate();
+  const { userId } = useParams();
 
   const [assessmentDetails, setAssessmentDetails] = useState({
     assessmentName: "",
@@ -108,12 +109,21 @@ const TPOCodingAssessmentForm = () => {
           className="bg-white/80 backdrop-blur-xl border border-white/40 shadow-xl rounded-[2rem] p-8 sm:p-12 relative overflow-hidden"
         >
           <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-violet-500 to-indigo-500"></div>
-          
-          <h1 className="text-4xl font-extrabold text-[#2F2F5B] mb-2 tracking-tight">Create Coding Assessment</h1>
-          <p className="text-[#5C5C80] mb-8 text-lg">Define code challenges and execution test cases.</p>
+
+          <div className="flex items-center gap-4 mb-2">
+            <Link
+              to={`/tpo/${userId}/home`}
+              className="group flex-shrink-0 flex items-center justify-center w-10 h-10 bg-white border border-violet-200 hover:border-violet-400 rounded-full text-violet-500 hover:text-violet-700 shadow-sm hover:shadow transition-all duration-300"
+              title="Back to TPO Home"
+            >
+              <FaArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
+            </Link>
+            <h1 className="text-4xl font-extrabold text-[#2F2F5B] tracking-tight">Create Coding Assessment</h1>
+          </div>
+          <p className="text-[#5C5C80] mb-8 text-lg sm:pl-14">Define code challenges and execution test cases.</p>
 
           <form onSubmit={handleSubmit} className="space-y-12">
-            
+
             {/* 1. Assessment Details */}
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-violet-700 border-b border-violet-200 pb-2">1. Assessment Configuration</h2>
@@ -149,21 +159,21 @@ const TPOCodingAssessmentForm = () => {
               {questions.map((q, qIndex) => (
                 <div key={qIndex} className="bg-white rounded-2xl p-6 shadow-sm border border-violet-100 relative">
                   <div className="absolute top-4 right-4">
-                     <button type="button" onClick={() => handleRemoveQuestion(qIndex)} className="text-red-400 hover:text-red-600 transition p-2 bg-red-50 rounded-full">
-                       <FaTrash />
-                     </button>
+                    <button type="button" onClick={() => handleRemoveQuestion(qIndex)} className="text-red-400 hover:text-red-600 transition p-2 bg-red-50 rounded-full">
+                      <FaTrash />
+                    </button>
                   </div>
-                  
+
                   <h3 className="text-lg font-bold text-[#2F2F5B] mb-4">Challenge {qIndex + 1}</h3>
                   <div className="space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                       <div className="sm:col-span-3">
-                         <label className="block text-sm font-bold text-gray-700 mb-2">Title</label>
-                         <input required placeholder="e.g. Two Sum" value={q.title} onChange={(e) => handleQuestionChange(qIndex, 'title', e.target.value)} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-violet-500" />
+                        <label className="block text-sm font-bold text-gray-700 mb-2">Title</label>
+                        <input required placeholder="e.g. Two Sum" value={q.title} onChange={(e) => handleQuestionChange(qIndex, 'title', e.target.value)} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-violet-500" />
                       </div>
                       <div className="sm:col-span-1">
-                         <label className="block text-sm font-bold text-gray-700 mb-2">Max Points</label>
-                         <input required type="number" min="1" value={q.points} onChange={(e) => handleQuestionChange(qIndex, 'points', parseInt(e.target.value))} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-violet-500" />
+                        <label className="block text-sm font-bold text-gray-700 mb-2">Max Points</label>
+                        <input required type="number" min="1" value={q.points} onChange={(e) => handleQuestionChange(qIndex, 'points', parseInt(e.target.value))} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-violet-500" />
                       </div>
                     </div>
 
@@ -190,12 +200,12 @@ const TPOCodingAssessmentForm = () => {
                         {q.testCases.map((tc, tcIndex) => (
                           <div key={tcIndex} className="flex gap-4 items-start bg-gray-50 p-4 rounded-xl border border-gray-200">
                             <div className="flex-1">
-                               <label className="block text-xs font-bold text-gray-600 mb-1">Standard Input (stdin)</label>
-                               <textarea required rows="2" placeholder="Input string..." value={tc.input} onChange={(e) => handleTestCaseChange(qIndex, tcIndex, 'input', e.target.value)} className="w-full p-2 border border-gray-300 rounded-lg text-sm font-mono"></textarea>
+                              <label className="block text-xs font-bold text-gray-600 mb-1">Standard Input (stdin)</label>
+                              <textarea required rows="2" placeholder="Input string..." value={tc.input} onChange={(e) => handleTestCaseChange(qIndex, tcIndex, 'input', e.target.value)} className="w-full p-2 border border-gray-300 rounded-lg text-sm font-mono"></textarea>
                             </div>
                             <div className="flex-1">
-                               <label className="block text-xs font-bold text-gray-600 mb-1">Expected Output (stdout)</label>
-                               <textarea required rows="2" placeholder="Expected exact output..." value={tc.expectedOutput} onChange={(e) => handleTestCaseChange(qIndex, tcIndex, 'expectedOutput', e.target.value)} className="w-full p-2 border border-gray-300 rounded-lg text-sm font-mono"></textarea>
+                              <label className="block text-xs font-bold text-gray-600 mb-1">Expected Output (stdout)</label>
+                              <textarea required rows="2" placeholder="Expected exact output..." value={tc.expectedOutput} onChange={(e) => handleTestCaseChange(qIndex, tcIndex, 'expectedOutput', e.target.value)} className="w-full p-2 border border-gray-300 rounded-lg text-sm font-mono"></textarea>
                             </div>
                             <div className="w-24">
                               <label className="block text-xs font-bold text-gray-600 mb-1">Marks</label>
