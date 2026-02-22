@@ -139,10 +139,10 @@ const Resources = () => {
           <div className="flex items-center gap-4">
             <Link
               to={`/student/${getUserId()}/home`}
-              className="bg-gray-100 hover:bg-purple-100 text-gray-600 hover:text-purple-700 p-2.5 rounded-full transition-colors flex items-center justify-center shadow-sm"
+              className="group flex items-center justify-center w-10 h-10 bg-white border border-gray-200 hover:border-purple-300 rounded-full text-gray-500 hover:text-purple-600 shadow-sm hover:shadow transition-all duration-300"
               title="Back to Dashboard"
             >
-              <FaArrowLeft size={18} />
+              <FaArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
             </Link>
             <h1 className="text-4xl font-bold text-purple-600">{getPageHeading()}</h1>
           </div>

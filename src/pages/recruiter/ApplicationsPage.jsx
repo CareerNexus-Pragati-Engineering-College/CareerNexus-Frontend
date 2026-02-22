@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import NavbarRecruiterDashboard from "../../components/NavbarRecruiterDashboard";
-import { FaArrowRight, FaUsers } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { FaArrowRight, FaUsers, FaArrowLeft } from "react-icons/fa";
+import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import requestApi from "../../services/request";
 import getUserId from "../../services/getUserId";
@@ -47,7 +47,16 @@ const ApplicationsPage = () => {
       <NavbarRecruiterDashboard />
       <div className="pt-24 px-4 pb-16 min-h-screen bg-white text-gray-900 font-poppins">
         <div className="max-w-6xl mx-auto space-y-10">
-          <h1 className="text-4xl font-bold text-gray-800">Applications</h1>
+          <div className="flex items-center gap-4">
+            <Link
+              to={`/recruiter/${userId}/home`}
+              className="group flex items-center justify-center w-10 h-10 bg-white border border-gray-200 hover:border-purple-300 rounded-full text-gray-500 hover:text-purple-600 shadow-sm hover:shadow transition-all duration-300"
+              title="Back to Dashboard"
+            >
+              <FaArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
+            </Link>
+            <h1 className="text-4xl font-bold text-gray-800">Applications</h1>
+          </div>
 
           {/* Search Input */}
           <div className="max-w-md">
@@ -108,6 +117,16 @@ const ApplicationsPage = () => {
           )}
         </div>
       </div>
+
+      {/* 📍 Footer */}
+      <footer className="bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-10">
+        <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2 font-outfit">
+          <p className="text-sm sm:text-base opacity-90">
+            &copy; {new Date().getFullYear()} CareerNexus. All rights reserved.
+          </p>
+          <p className="text-xs opacity-60">Your one-stop placement tracker</p>
+        </div>
+      </footer>
     </>
   );
 };

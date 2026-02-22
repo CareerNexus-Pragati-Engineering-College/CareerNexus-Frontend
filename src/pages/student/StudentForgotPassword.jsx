@@ -38,9 +38,9 @@ const StudentForgotPassword = () => {
         {/* 🔙 Back Button */}
         <NavLink
           to="/student/login"
-          className="absolute top-4 left-4 flex items-center gap-2 text-violet-600 hover:text-indigo-700 text-sm transition-all"
+          className="absolute top-6 left-6 flex items-center gap-2 px-4 py-2 bg-white/50 hover:bg-white/90 border border-purple-100/50 hover:border-purple-300 rounded-full text-gray-600 hover:text-purple-700 text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-300 backdrop-blur-md group z-50"
         >
-          <FaArrowLeft />
+          <FaArrowLeft className="group-hover:-translate-x-1 transition-transform duration-300" />
           Back to Login
         </NavLink>
 

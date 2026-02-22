@@ -16,7 +16,7 @@ const RecruitmentProcessPage = () => {
   const userId = getuserId();
   const [min_marks, setmin_marks] = useState(0);
 
-  const { username, jobId } = useParams(); 
+  const { username, jobId } = useParams();
   const navigate = useNavigate();
 
   const [configuredRounds, setConfiguredRounds] = useState([]);
@@ -108,27 +108,27 @@ const RecruitmentProcessPage = () => {
   };
 
 
-      useEffect(() => {
-   const fetchConfiguredRounds = async () => {
-     try {
-       setLoadingRounds(true);
-      
-       const response = await requestApi.get(
+  useEffect(() => {
+    const fetchConfiguredRounds = async () => {
+      try {
+        setLoadingRounds(true);
+
+        const response = await requestApi.get(
           `/exam/recruiter/${userId}/${jobId}`
-       );
-      
-       setConfiguredRounds(response.data || []);
-     } catch (error) {
-       console.error("Error fetching configured rounds:", error);
-     } finally {
-       setLoadingRounds(false);
-     }
-   };
-  
-   if (userId && jobId) {
-     fetchConfiguredRounds();
-   }
-  }, [userId, jobId]);  
+        );
+
+        setConfiguredRounds(response.data || []);
+      } catch (error) {
+        console.error("Error fetching configured rounds:", error);
+      } finally {
+        setLoadingRounds(false);
+      }
+    };
+
+    if (userId && jobId) {
+      fetchConfiguredRounds();
+    }
+  }, [userId, jobId]);
 
   return (
     <>
@@ -138,9 +138,9 @@ const RecruitmentProcessPage = () => {
       <div className="pt-20 px-6">
         <button
           onClick={handleBack}
-          className="flex items-center text-purple-700 text-base font-semibold mb-6 hover:underline"
+          className="group flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 hover:border-purple-300 rounded-full text-gray-500 hover:text-purple-600 shadow-sm hover:shadow transition-all duration-300 mb-6 font-medium text-sm w-fit"
         >
-          <FaArrowLeft className="mr-2 text-lg" />
+          <FaArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
           Back to Applications
         </button>
       </div>
@@ -252,8 +252,8 @@ const RecruitmentProcessPage = () => {
 
         </div>
 
-                          
-                {/* Submit Button */}
+
+        {/* Submit Button */}
         <div className="flex justify-center mt-10">
           <button
             onClick={handleSubmit}
@@ -264,40 +264,40 @@ const RecruitmentProcessPage = () => {
           </button>
         </div>
 
-                      {/* Already Configured Rounds Section */}
+        {/* Already Configured Rounds Section */}
         <div className="max-w-6xl mx-auto mt-12 space-y-6">
-         {loadingRounds ? (
-           <p className="text-sm text-gray-500">Loading rounds...</p>
-         ) : configuredRounds.length === 0 ? (
-           <p className="text-sm text-gray-500">No rounds configured yet.</p>
-         ) : (
+          {loadingRounds ? (
+            <p className="text-sm text-gray-500">Loading rounds...</p>
+          ) : configuredRounds.length === 0 ? (
+            <p className="text-sm text-gray-500">No rounds configured yet.</p>
+          ) : (
             configuredRounds.map((round, index) => (
               <motion.div
-               key={index}
-               initial={{ opacity: 0, y: 20 }}
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-               transition={{ duration: 0.3 }}
+                transition={{ duration: 0.3 }}
                 className="bg-purple-50 p-6 rounded-xl shadow-md"
-             >
+              >
                 <p className="text-sm font-semibold text-purple-700">
-                 {round.roundName}
-               </p>
-            
-               <p className="text-xs text-gray-600 mt-2">
+                  {round.roundName}
+                </p>
+
+                <p className="text-xs text-gray-600 mt-2">
                   Start: {new Date(round.startTime).toLocaleString()}
                 </p>
-            
+
                 <p className="text-xs text-gray-600">
                   End: {new Date(round.endTime).toLocaleString()}
                 </p>
-            
+
                 <p className="text-xs text-gray-600 mt-1">
-                 Minimum Marks: {round.min_marks}
-               </p>
-             </motion.div>
-           ))
-         )}
-        </div>        
+                  Minimum Marks: {round.min_marks}
+                </p>
+              </motion.div>
+            ))
+          )}
+        </div>
 
 
       </div>

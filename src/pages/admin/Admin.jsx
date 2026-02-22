@@ -64,15 +64,15 @@ const Admin = () => {
       {/* 🔙 Back to Main Home */}
       <div className="fixed top-[90px] left-3 z-50 hidden md:block">
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
         >
           <NavLink
             to="/"
-            className="flex items-center gap-2 text-sm text-violet-600 hover:text-white bg-white/40 hover:bg-violet-600 px-4 py-2 rounded-full shadow-lg hover:shadow-[0_0_18px_rgba(130,90,255,0.4)] transition-all font-semibold backdrop-blur-md border border-white/20 font-outfit"
+            className="group flex items-center gap-2.5 px-5 py-2.5 bg-white border border-purple-200 rounded-full text-purple-900 font-bold text-sm shadow-[0_4px_10px_rgba(0,0,0,0.05)] hover:shadow-[0_6px_15px_rgba(109,40,217,0.15)] hover:border-purple-300 transition-all duration-300 font-outfit"
           >
-            <FaHome className="text-base" />
+            <FaHome className="text-purple-600 text-lg group-hover:-translate-y-[2px] transition-transform duration-300" />
             Back to Home
           </NavLink>
         </motion.div>
