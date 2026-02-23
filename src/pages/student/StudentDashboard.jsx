@@ -51,47 +51,45 @@ const StudentHome = () => {
   };
 
   useEffect(() => {
-    // Fetch visited companies
-    requestApi.get(`/student/companies-visited`)
-      .then((response) => {
-        setVisitedCompanies(response.data || Companies);
-      })
-      .catch((error) => {
-        console.error("Error fetching companies:", error);
-        setVisitedCompanies(Companies);
-      });
 
-    // ✅ Fetch latest trending jobs
-    requestApi.get(`/jobs/latest`)
-      .then((response) => {
-        console.log("Trending Jobs:", response.data);
-        setTrendingJobs(response.data);
-        setLoadingJobs(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching latest jobs:", error);
-        setLoadingJobs(false);
-      });
+  // 🔹 Fetch visited companies
+  requestApi.get(`/student/companies-visited`)
+    .then((response) => {
+      setVisitedCompanies(response.data || Companies);
+    })
+    .catch((error) => {
+      console.error("Error fetching companies:", error);
+      setVisitedCompanies(Companies);
+    });
 
-  }, []);
+  // 🔹 Fetch latest trending jobs
+  requestApi.get(`/jobs/latest`)
+    .then((response) => {
+      setTrendingJobs(response.data);
+      setLoadingJobs(false);
+    })
+    .catch((error) => {
+      console.error("Error fetching latest jobs:", error);
+      setLoadingJobs(false);
+    });
 
+  // 🔹 Fetch recent applications
+  requestApi.get(`/applications/my-applications`)
+    .then((res) => {
+      if (Array.isArray(res.data)) {
+        const sorted = res.data
+          .sort(
+            (a, b) =>
+              new Date(b.applicationDate) - new Date(a.applicationDate)
+          )
+          .slice(0, 3);
 
-    // ✅ Fetch recent applications
-    requestApi.get(`/applications/my-applications`)
-     .then((res) => {
-       if (Array.isArray(res.data)) {
-          const sorted = res.data
-           .sort((a, b) =>
-             new Date(b.applicationDate) - new Date(a.applicationDate)
-           )
-            .slice(0, 3); // only latest 3
-         
-         setRecentApplications(sorted);
-       }
-     })
-     .catch((error) => {
-       console.error("Error fetching applications:", error);
-     });
+        setRecentApplications(sorted);
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching applications:", error);
+    });
 
 }, []);
 
