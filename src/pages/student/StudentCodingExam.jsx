@@ -63,13 +63,8 @@ const StudentCodingExam = () => {
     };
 
     const handleSubmitExam = async () => {
-<<<<<<< HEAD
         if (!window.confirm("Are you sure you want to submit your assessment? You cannot make changes after this.")) return;
 
-=======
-        if (!window.confirm("Are you sure you want to submit this coding practice test? You cannot make changes after this submission.")) return;
-        
->>>>>>> 7deaa70c3737df4fe3d116ab10ba80010eb433f7
         setIsSubmitting(true);
         try {
             const submissions = Object.keys(answers).map(qId => ({

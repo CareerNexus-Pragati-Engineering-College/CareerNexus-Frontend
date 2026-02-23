@@ -28,11 +28,11 @@ const TpoHome = () => {
   const userId = getUserId();
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col font-outfit bg-gradient-to-br from-[#F8E5EB] via-[#ECEAFE] to-[#D6E6FD]">
       <NavbarTpoDashboard />
 
       <motion.div
-        className="min-h-screen bg-gradient-to-br from-[#F8E5EB] via-[#ECEAFE] to-[#D6E6FD] text-[#2C225A] font-outfit pt-28 pb-16 px-4"
+        className="flex-grow text-[#2C225A] pt-28 pb-16 px-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
@@ -53,9 +53,9 @@ const TpoHome = () => {
             <p className="mt-4 text-lg md:text-xl text-[#5C5C80] max-w-2xl mx-auto font-outfit leading-relaxed">
               Monitor placements, track student data, and collaborate with recruiters effortlessly through your central command center.
             </p>
-            
+
             <div className="mt-8 flex justify-center gap-4">
-              <button 
+              <button
                 onClick={() => window.location.assign(`/tpo/${userId}/coding-assessment/create`)}
                 className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white px-8 py-3 rounded-xl font-bold font-outfit shadow-lg shadow-violet-200 hover:scale-105 transition border border-transparent hover:border-violet-300"
               >
@@ -147,7 +147,16 @@ const TpoHome = () => {
         </section>
       </motion.div>
 
-    </>
+      {/* 📍 Footer */}
+      <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-auto">
+        <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2 font-outfit">
+          <p className="text-sm sm:text-base opacity-90">
+            &copy; {new Date().getFullYear()} CareerNexus. All rights reserved.
+          </p>
+          <p className="text-xs opacity-60">Your one-stop placement tracker</p>
+        </div>
+      </footer>
+    </div>
   );
 };
 

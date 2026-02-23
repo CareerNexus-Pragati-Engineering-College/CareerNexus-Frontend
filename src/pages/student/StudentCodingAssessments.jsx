@@ -61,7 +61,6 @@ const StudentCodingAssessments = () => {
                   transition={{ delay: index * 0.05 }}
                   className="bg-white/80 backdrop-blur-xl border border-white/40 shadow-sm rounded-2xl p-4 flex flex-col md:flex-row items-center gap-6 hover:shadow-md transition-all duration-300 relative overflow-hidden group"
                 >
-<<<<<<< HEAD
                   {/* Status Badge */}
                   <div className="absolute top-4 right-4 z-10">
                     {isActive ? (
@@ -75,11 +74,8 @@ const StudentCodingAssessments = () => {
                     )}
                   </div>
 
-                  <div className="w-14 h-14 bg-violet-100 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:rotate-12 transition-transform shadow-sm">
-=======
                   {/* Leading Icon */}
                   <div className="w-12 h-12 bg-violet-100 rounded-xl flex items-center justify-center text-2xl group-hover:rotate-12 transition-transform shrink-0">
->>>>>>> 7deaa70c3737df4fe3d116ab10ba80010eb433f7
                     🚀
                   </div>
 
@@ -89,11 +85,11 @@ const StudentCodingAssessments = () => {
                       <h3 className="text-lg font-bold text-[#2F2F5B] truncate">{test.assessmentName}</h3>
                       {test.solved && (
                         <span className="bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full flex items-center gap-1">
-                           Solved
+                          Solved
                         </span>
                       )}
                     </div>
-                    
+
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500">
                       <div className="flex items-center gap-1.5 font-medium">
                         <FaCalendarAlt className="text-violet-500" />
@@ -127,17 +123,17 @@ const StudentCodingAssessments = () => {
                       </Link>
                     ) : isFuture ? (
                       <div className="w-full md:w-40 bg-blue-50 text-blue-600 text-xs font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 border border-blue-100">
-                         Upcoming
+                        Upcoming
                       </div>
                     ) : (
                       <div className="w-full md:w-40 bg-gray-50 text-gray-400 text-xs font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 border border-gray-100 italic">
-                         Closed
+                        Closed
                       </div>
                     )}
                   </div>
 
-                   {/* Mobile score display */}
-                   {test.solved && test.highestScore !== null && (
+                  {/* Mobile score display */}
+                  {test.solved && test.highestScore !== null && (
                     <div className="md:hidden flex items-center gap-2 text-xs bg-violet-50 px-3 py-1 rounded-full border border-violet-100">
                       <span className="text-violet-400 font-bold uppercase tracking-widest">Score:</span>
                       <span className="font-black text-violet-700">{test.highestScore} / {test.maxScore}</span>

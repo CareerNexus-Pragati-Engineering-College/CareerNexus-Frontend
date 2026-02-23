@@ -7,7 +7,6 @@ import {
   FaEyeSlash,
   FaArrowLeft,
   FaUserGraduate,
-  FaGoogle,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
@@ -143,22 +142,6 @@ const StudentLogin = () => {
               Sign In
             </motion.button>
 
-            <div className="flex items-center gap-4 text-gray-400 text-sm mt-4 font-medium">
-              <div className="flex-grow border-t border-gray-200" />
-              or
-              <div className="flex-grow border-t border-gray-200" />
-            </div>
-
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              type="button"
-              className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-50 border border-gray-200 py-3.5 rounded-xl transition-all text-gray-700 font-semibold shadow-sm"
-            >
-              <FaGoogle className="text-red-500 text-lg" />
-              Sign in with Google
-            </motion.button>
-
             <p className="text-center text-sm text-gray-600 mt-6 font-medium">
               Don’t have an account?{" "}
               <NavLink
@@ -181,7 +164,7 @@ const StudentLogin = () => {
           <p className="text-xs opacity-60">Your one-stop placement tracker</p>
         </div>
       </footer>
-    </div>
+    </div >
   );
 };
 

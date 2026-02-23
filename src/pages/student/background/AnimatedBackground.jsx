@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
 
-const AnimatedBackground = () => {
+const AnimatedBackground = ({ isLightMode }) => {
   const particlesInit = useCallback(async (engine) => {
     await loadSlim(engine);
   }, []);
@@ -14,7 +14,7 @@ const AnimatedBackground = () => {
       options={{
         fullScreen: { enable: true, zIndex: -1 },
         background: {
-          color: { value: "#1e293b" }, // brighter slate-800
+          color: { value: isLightMode ? "#f8fafc" : "#1e293b" }, // light slate vs dark slate
         },
         fpsLimit: 60,
         interactivity: {
@@ -36,7 +36,7 @@ const AnimatedBackground = () => {
             density: { enable: true, area: 800 },
           },
           color: {
-            value: ["#0ea5e9", "#22d3ee", "#f472b6"], // brighter & modern
+            value: isLightMode ? ["#8b5cf6", "#d946ef", "#3b82f6"] : ["#0ea5e9", "#22d3ee", "#f472b6"], // deep violet/pink for light mode
           },
           links: {
             enable: true,
