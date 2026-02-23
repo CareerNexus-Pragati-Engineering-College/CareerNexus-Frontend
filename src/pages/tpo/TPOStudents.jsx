@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import * as XLSX from "xlsx";
 import { motion } from "framer-motion";
 import requestApi from "../../services/request";
 import getuserId from "../../services/getUserId";
 import toast from "react-hot-toast";
+import { FaArrowLeft, FaSearch, FaDownload, FaFilter } from "react-icons/fa";
+import NavbarTpoDashboard from "../../components/NavbarTPODashboard";
 
 const departments = [
   "CSE", "CSE-IT", "CSE-AI", "CSE-AIML", "CSE-DS", "Cyber Security",
@@ -134,135 +136,150 @@ const TpoStudents = () => {
   );
 
   return (
-    <motion.div
-      className="min-h-screen bg-gradient-to-br from-gray-100 to-purple-50 px-4 py-6 md:px-10"
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      {/* Header & Back */}
-      <div className="relative mb-6">
-        <button
-          onClick={() => navigate(`/tpo/${userid}/home`)}
-          className="text-violet-700 hover:underline font-medium text-base"
+    <div className="min-h-screen bg-gradient-to-br from-[#F8E5EB] via-[#ECEAFE] to-[#D6E6FD] text-[#2C225A] font-outfit">
+      <NavbarTpoDashboard />
+      <div className="pt-28 pb-16 px-4 max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="bg-white/80 backdrop-blur-xl border border-white/40 shadow-xl rounded-[2rem] p-6 md:p-10 relative overflow-hidden"
         >
-          ← Back
-        </button>
-        <h2 className="text-2xl md:text-3xl font-bold text-violet-800 text-center">
-          🎓 Explore Student Profiles
-        </h2>
-      </div>
+          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-violet-500 to-indigo-500"></div>
 
-      {/* Dropdown Filters */}
-      <div className="flex flex-wrap justify-center gap-4 mb-6">
-        <select
-          onChange={(e) => setYear(e.target.value)}
-          value={year}
-          className="p-2 rounded-xl shadow border border-gray-300 focus:outline-none focus:ring-2 focus:ring-violet-400"
-        >
-          <option value="">Select Year</option>
-          {[1, 2, 3, 4].map((yr) => (
-            <option key={yr} value={yr}>
-              {yr}
-            </option>
-          ))}
-        </select>
+          {/* Header & Back */}
+          <div className="flex items-center gap-4 mb-2">
+            <Link
+              to={`/tpo/${userid}/home`}
+              className="group flex-shrink-0 flex items-center justify-center w-10 h-10 bg-white border border-violet-200 hover:border-violet-400 rounded-full text-violet-500 hover:text-violet-700 shadow-sm hover:shadow transition-all duration-300"
+              title="Back to TPO Home"
+            >
+              <FaArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
+            </Link>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-[#2F2F5B] tracking-tight">
+              Explore Student Profiles
+            </h2>
+          </div>
+          <p className="text-[#5C5C80] mb-8 text-lg sm:pl-14">View and download student platform profiles from various departments.</p>
 
-        <select
-          onChange={(e) => setDepartment(e.target.value)}
-          value={department}
-          className="p-2 rounded-xl shadow border border-gray-300 focus:outline-none focus:ring-2 focus:ring-violet-400"
-        >
-          <option value="">Select Department</option>
-          {departments.map((dep) => (
-            <option key={dep} value={dep}>
-              {dep}
-            </option>
-          ))}
-        </select>
-
-        <select
-          onChange={(e) => setPlatform(e.target.value)}
-          value={platform}
-          className="p-2 rounded-xl shadow border border-gray-300 focus:outline-none focus:ring-2 focus:ring-violet-400"
-        >
-          <option value="">Select Platform</option>
-          {platforms.map((plat) => (
-            <option key={plat} value={plat}>
-              {plat}
-            </option>
-          ))}
-        </select>
-
-        <button
-          onClick={handleFilter}
-          className="px-4 py-2 bg-violet-600 text-white rounded-xl shadow hover:bg-violet-700 transition"
-        >
-          Submit
-        </button>
-      </div>
-
-      {/* Search & Download */}
-      {filteredData.length > 0 && (
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
-          <input
-            type="text"
-            placeholder="Search by student name..."
-            className="w-full md:w-1/3 p-2 border border-gray-300 rounded-xl shadow focus:outline-none focus:ring-2 focus:ring-violet-300"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button
-            onClick={handleDownload}
-            className="mt-2 md:mt-0 px-4 py-2 bg-gradient-to-r from-green-400 to-green-600 text-white rounded-xl hover:brightness-105 shadow-md transition-all"
-          >
-            📥 Download Excel
-          </button>
-        </div>
-      )}
-
-      {/* Table */}
-      {filteredSearchResults.length > 0 ? (
-        <div className="overflow-x-auto mt-6 rounded-xl shadow-2xl backdrop-blur-sm bg-white/60 p-4">
-          <table className="min-w-full text-left border-separate border-spacing-y-2">
-            <thead>
-              <tr className="bg-violet-100 text-violet-900">
-                <th className="py-3 px-5 rounded-l-xl">Student ID</th>
-                <th className="py-3 px-5">Name</th>
-                <th className="py-3 px-5">Department</th>
-                <th className="py-3 px-5 rounded-r-xl">Profile Link</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredSearchResults.map((student, idx) => (
-                <tr
-                  key={idx}
-                  className="bg-white/80 hover:bg-violet-50 transition duration-200 text-gray-700 shadow-sm"
-                >
-                  <td className="py-2 px-5 rounded-l-xl">{student.id}</td>
-                  <td className="py-2 px-5">{student.name}</td>
-                  <td className="py-2 px-5">{student.department}</td>
-                  <td className="py-2 px-5 rounded-r-xl">
-                    <a
-                      href={student.profileLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-violet-700 underline break-all"
-                    >
-                      {student.profileLink}
-                    </a>
-                  </td>
-                </tr>
+          {/* Dropdown Filters */}
+          <div className="flex flex-col sm:flex-row flex-wrap gap-4 mb-8 p-6 bg-white/50 border border-violet-100 rounded-2xl shadow-sm">
+            <select
+              onChange={(e) => setYear(e.target.value)}
+              value={year}
+              className="flex-1 p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-violet-400 bg-white"
+            >
+              <option value="">Select Year</option>
+              {[1, 2, 3, 4].map((yr) => (
+                <option key={yr} value={yr}>
+                  Year {yr}
+                </option>
               ))}
-            </tbody>
-          </table>
-        </div>
-      ) : filteredData.length > 0 ? (
-        <p className="text-center text-gray-500 mt-8">
-          No students match your search.
-        </p>
-      ) : null}
-    </motion.div>
+            </select>
+
+            <select
+              onChange={(e) => setDepartment(e.target.value)}
+              value={department}
+              className="flex-1 p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-violet-400 bg-white"
+            >
+              <option value="">Select Department</option>
+              {departments.map((dep) => (
+                <option key={dep} value={dep}>
+                  {dep}
+                </option>
+              ))}
+            </select>
+
+            <select
+              onChange={(e) => setPlatform(e.target.value)}
+              value={platform}
+              className="flex-1 p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-violet-400 bg-white"
+            >
+              <option value="">Select Platform</option>
+              {platforms.map((plat) => (
+                <option key={plat} value={plat}>
+                  {plat}
+                </option>
+              ))}
+            </select>
+
+            <button
+              onClick={handleFilter}
+              className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-xl shadow-lg hover:from-violet-700 hover:to-indigo-700 transition font-bold"
+            >
+              <FaFilter /> Submit
+            </button>
+          </div>
+
+          {/* Search & Download */}
+          {filteredData.length > 0 && (
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+              <div className="relative w-full md:w-1/2">
+                <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search by student name..."
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-400 bg-white/80 backdrop-blur-sm transition-all"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+
+              <button
+                onClick={handleDownload}
+                className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-white text-green-600 border border-green-200 rounded-xl hover:bg-green-50 shadow-sm transition-all font-bold"
+              >
+                <FaDownload /> Download Excel
+              </button>
+            </div>
+          )}
+
+          {/* Table */}
+          {filteredSearchResults.length > 0 ? (
+            <div className="overflow-x-auto bg-white border border-gray-100 rounded-2xl shadow-sm">
+              <table className="min-w-full text-left">
+                <thead className="bg-[#F8F9FA] border-b border-gray-100">
+                  <tr>
+                    <th className="py-4 px-6 text-sm font-bold text-gray-700 uppercase tracking-wider">Student ID</th>
+                    <th className="py-4 px-6 text-sm font-bold text-gray-700 uppercase tracking-wider">Name</th>
+                    <th className="py-4 px-6 text-sm font-bold text-gray-700 uppercase tracking-wider">Department</th>
+                    <th className="py-4 px-6 text-sm font-bold text-gray-700 uppercase tracking-wider">Profile Link</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {filteredSearchResults.map((student, idx) => (
+                    <tr
+                      key={idx}
+                      className="hover:bg-violet-50/50 transition duration-200"
+                    >
+                      <td className="py-4 px-6 text-sm font-medium text-gray-900">{student.id}</td>
+                      <td className="py-4 px-6 text-sm text-gray-700">{student.name}</td>
+                      <td className="py-4 px-6 text-sm text-gray-700">{student.department}</td>
+                      <td className="py-4 px-6 text-sm">
+                        <a
+                          href={student.profileLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-violet-600 hover:text-violet-800 font-medium break-all hover:underline"
+                        >
+                          {student.profileLink}
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : filteredData.length > 0 ? (
+            <div className="text-center bg-white/50 border border-violet-100 rounded-2xl p-12">
+              <p className="text-lg text-gray-500 font-medium">
+                No students match your search "{searchQuery}".
+              </p>
+            </div>
+          ) : null}
+        </motion.div>
+      </div>
+    </div>
   );
 };
 
