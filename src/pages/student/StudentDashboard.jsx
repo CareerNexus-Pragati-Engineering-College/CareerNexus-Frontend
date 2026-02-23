@@ -65,7 +65,7 @@ const StudentHome = () => {
     });
 
   // ✅ Fetch latest trending jobs
-  requestApi.get(`/api/jobs/latest`)
+  requestApi.get(`/jobs/latest`)
     .then((response) => {
       console.log("Trending Jobs:", response.data);
       setTrendingJobs(response.data);
@@ -178,11 +178,11 @@ const StudentHome = () => {
                           </div>
 
                           <Link
-                            to={`/student/${userId}/jobs/${job.id}`}
+                              to={`/student/${userId}/apply-jobs?jobId=${job.id}&apply=true`}
                             className="px-4 py-1.5 bg-gradient-to-r from-violet-600 hover:from-violet-700 to-indigo-600 hover:to-indigo-700 text-white rounded-lg text-xs sm:text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300"
-                         >
-                            Apply
-                          </Link>
+                            >
+                              Apply
+                            </Link>
                        </motion.div>
                       ))
                    ) : (
