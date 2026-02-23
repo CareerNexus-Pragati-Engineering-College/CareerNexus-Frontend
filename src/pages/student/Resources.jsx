@@ -154,10 +154,10 @@ const Resources = () => {
   );
 
   return (
-    <div className="min-h-screen bg-white pt-24 pb-10 px-4 text-gray-900 font-poppins">
+    <div className="flex flex-col min-h-screen bg-white text-gray-900 font-poppins">
       <NavbarStudentDashboard />
 
-      <div className="max-w-6xl mx-auto space-y-10 relative">
+      <div className="flex-grow max-w-6xl mx-auto space-y-10 relative pt-24 pb-10 px-4 w-full">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-4">
             <Link
@@ -414,6 +414,16 @@ const Resources = () => {
           </motion.div>
         )}
       </div>
+
+      {/* 📍 Footer */}
+      <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-auto">
+        <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2 font-outfit">
+          <p className="text-sm sm:text-base opacity-90">
+            &copy; {new Date().getFullYear()} CareerNexus. All rights reserved.
+          </p>
+          <p className="text-xs opacity-60">Your one-stop placement tracker</p>
+        </div>
+      </footer>
     </div>
   );
 };

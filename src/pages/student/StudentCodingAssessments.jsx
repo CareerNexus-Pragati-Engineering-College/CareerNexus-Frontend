@@ -25,9 +25,9 @@ const StudentCodingAssessments = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F8E5EB] via-[#ECEAFE] to-[#D6E6FD] text-[#2C225A] font-poppins">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#F8E5EB] via-[#ECEAFE] to-[#D6E6FD] text-[#2C225A] font-poppins">
       <NavbarStudentDashboard />
-      <div className="pt-28 pb-16 px-4 max-w-6xl mx-auto">
+      <div className="flex-grow pt-28 pb-16 px-4 max-w-6xl w-full mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -46,14 +46,14 @@ const StudentCodingAssessments = () => {
         ) : assessments.length > 0 ? (
           <div className="space-y-4">
             {assessments.map((test, index) => {
-               const startTime = new Date(test.startTime);
-               const endTime = new Date(test.endTime);
-               const now = new Date();
-               const isActive = now >= startTime && now <= endTime;
-               const isExpired = now > endTime;
-               const isFuture = now < startTime;
+              const startTime = new Date(test.startTime);
+              const endTime = new Date(test.endTime);
+              const now = new Date();
+              const isActive = now >= startTime && now <= endTime;
+              const isExpired = now > endTime;
+              const isFuture = now < startTime;
 
-               return (
+              return (
                 <motion.div
                   key={test.id}
                   initial={{ opacity: 0, x: -20 }}
@@ -61,8 +61,25 @@ const StudentCodingAssessments = () => {
                   transition={{ delay: index * 0.05 }}
                   className="bg-white/80 backdrop-blur-xl border border-white/40 shadow-sm rounded-2xl p-4 flex flex-col md:flex-row items-center gap-6 hover:shadow-md transition-all duration-300 relative overflow-hidden group"
                 >
+<<<<<<< HEAD
+                  {/* Status Badge */}
+                  <div className="absolute top-4 right-4 z-10">
+                    {isActive ? (
+                      <span className="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full animate-pulse flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> Live
+                      </span>
+                    ) : isFuture ? (
+                      <span className="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">Upcoming</span>
+                    ) : (
+                      <span className="bg-gray-100 text-gray-500 text-xs font-bold px-3 py-1 rounded-full">Ended</span>
+                    )}
+                  </div>
+
+                  <div className="w-14 h-14 bg-violet-100 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:rotate-12 transition-transform shadow-sm">
+=======
                   {/* Leading Icon */}
                   <div className="w-12 h-12 bg-violet-100 rounded-xl flex items-center justify-center text-2xl group-hover:rotate-12 transition-transform shrink-0">
+>>>>>>> 7deaa70c3737df4fe3d116ab10ba80010eb433f7
                     🚀
                   </div>
 
@@ -127,7 +144,7 @@ const StudentCodingAssessments = () => {
                     </div>
                   )}
                 </motion.div>
-               );
+              );
             })}
           </div>
         ) : (
@@ -138,6 +155,16 @@ const StudentCodingAssessments = () => {
           </div>
         )}
       </div>
+
+      {/* 📍 Footer */}
+      <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-auto">
+        <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2 font-outfit">
+          <p className="text-sm sm:text-base opacity-90">
+            &copy; {new Date().getFullYear()} CareerNexus. All rights reserved.
+          </p>
+          <p className="text-xs opacity-60">Your one-stop placement tracker</p>
+        </div>
+      </footer>
     </div>
   );
 };

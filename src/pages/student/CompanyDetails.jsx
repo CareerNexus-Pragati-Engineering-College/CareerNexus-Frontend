@@ -38,15 +38,15 @@ const CompanyDetails = () => {
   }
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A] font-poppins">
       <NavbarStudentDashboard />
-     <motion.div
-  className="min-h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A] font-poppins flex flex-col px-4 sm:px-6 pt-24 pb-10"
-  initial={{ opacity: 0, scale: 0.95 }}
-  animate={{ opacity: 1, scale: 1 }}
-  exit={{ opacity: 0, scale: 0.95 }}
-  transition={{ duration: 0.6, ease: [0.43, 0.13, 0.23, 0.96] }}
->
+      <motion.div
+        className="flex-grow flex flex-col px-4 sm:px-6 pt-24 pb-10 w-full"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ duration: 0.6, ease: [0.43, 0.13, 0.23, 0.96] }}
+      >
 
 
         {/* Back Button */}
@@ -127,57 +127,67 @@ const CompanyDetails = () => {
               ))}
             </Swiper>
 
-         <AnimatePresence>
-  {selectedExperience && (
-    <motion.div
-      key="modal"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm px-4 py-6"
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.3, ease: 'easeOut' }}
-    >
-      <div className="relative max-w-3xl w-full bg-white/80 backdrop-blur-lg border border-violet-200 rounded-3xl shadow-2xl p-6 sm:p-10 overflow-y-auto max-h-[90vh] no-scrollbar">
+            <AnimatePresence>
+              {selectedExperience && (
+                <motion.div
+                  key="modal"
+                  className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm px-4 py-6"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.3, ease: 'easeOut' }}
+                >
+                  <div className="relative max-w-3xl w-full bg-white/80 backdrop-blur-lg border border-violet-200 rounded-3xl shadow-2xl p-6 sm:p-10 overflow-y-auto max-h-[90vh] no-scrollbar">
 
-        {/* Close Button */}
-        <button
-          onClick={() => setSelectedExperience(null)}
-          className="absolute top-4 right-4 text-violet-600 hover:text-pink-500 text-2xl font-bold transition"
-        >
-          ✕
-        </button>
+                    {/* Close Button */}
+                    <button
+                      onClick={() => setSelectedExperience(null)}
+                      className="absolute top-4 right-4 text-violet-600 hover:text-pink-500 text-2xl font-bold transition"
+                    >
+                      ✕
+                    </button>
 
-        {/* Profile Avatar with Glow */}
-        <div className="flex justify-center mb-6">
-          <div className="relative">
-            <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-pink-300 via-violet-400 to-indigo-300 blur-xl opacity-50"></div>
-            <img
-              src={selectedExperience.profilePic || "/images/profile.png"}
-              alt={selectedExperience.title}
-              className="relative h-24 w-24 rounded-full border-4 border-white object-cover shadow-md"
-            />
-          </div>
-        </div>
+                    {/* Profile Avatar with Glow */}
+                    <div className="flex justify-center mb-6">
+                      <div className="relative">
+                        <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-pink-300 via-violet-400 to-indigo-300 blur-xl opacity-50"></div>
+                        <img
+                          src={selectedExperience.profilePic || "/images/profile.png"}
+                          alt={selectedExperience.title}
+                          className="relative h-24 w-24 rounded-full border-4 border-white object-cover shadow-md"
+                        />
+                      </div>
+                    </div>
 
-        {/* Title */}
-        <h2 className="text-center text-2xl sm:text-3xl font-bold text-[#2C225A] mb-4">
-          {selectedExperience.title}
-        </h2>
+                    {/* Title */}
+                    <h2 className="text-center text-2xl sm:text-3xl font-bold text-[#2C225A] mb-4">
+                      {selectedExperience.title}
+                    </h2>
 
-        {/* Details */}
-        <p className="text-sm sm:text-base leading-relaxed text-[#3D345B] text-justify whitespace-pre-line">
-          {selectedExperience.details}
-        </p>
-      </div>
-    </motion.div>
-  )}
-</AnimatePresence>
+                    {/* Details */}
+                    <p className="text-sm sm:text-base leading-relaxed text-[#3D345B] text-justify whitespace-pre-line">
+                      {selectedExperience.details}
+                    </p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
 
           </div>
         </div>
       </motion.div>
-    </>
+
+      {/* 📍 Footer */}
+      <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-auto">
+        <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2 font-outfit">
+          <p className="text-sm sm:text-base opacity-90">
+            &copy; {new Date().getFullYear()} CareerNexus. All rights reserved.
+          </p>
+          <p className="text-xs opacity-60">Your one-stop placement tracker</p>
+        </div>
+      </footer>
+    </div>
   );
 };
 
