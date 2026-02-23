@@ -13,7 +13,7 @@ import StudentLogin from "./pages/student/StudentLogin";
 import StudentSignup from "./pages/student/StudentSignup";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import StudentProfile from "./pages/student/StudentProfile";
-import CompanyDetails from "./pages/student/CompanyDetails";
+
 import StudentApplyJobs from "./pages/student/StudentApplyJobs";
 import StudentTestPage from "./pages/student/StudentTestPage";
 import StudentApplications from "./pages/student/StudentApplications";
@@ -78,7 +78,7 @@ const App = () => {
         <Route path="/student/:userId/home" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
         <Route path="/student/:userId/profile" element={<ProtectedRoute><StudentProfile /></ProtectedRoute>} />
         <Route path="/student/profile" element={<StudentProfile />} />
-        <Route path="/student/:userId/company/:id" element={<ProtectedRoute><CompanyDetails /></ProtectedRoute>} />
+
         <Route path="/student/:userId/apply-jobs" element={<ProtectedRoute><StudentApplyJobs /></ProtectedRoute>} />
         <Route path="/student/apply-jobs" element={<StudentApplyJobs />} />
         <Route path="/student/:userId/applications" element={<ProtectedRoute><StudentApplications /></ProtectedRoute>} />

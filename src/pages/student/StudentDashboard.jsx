@@ -54,31 +54,31 @@ const StudentHome = () => {
   };
 
   useEffect(() => {
-  // Fetch visited companies
-  requestApi.get(`/student/companies-visited`)
-    .then((response) => {
-      setVisitedCompanies(response.data || Companies);
-    })
-    .catch((error) => {
-      console.error("Error fetching companies:", error);
-      setVisitedCompanies(Companies);
-    });
+    // Fetch visited companies
+    requestApi.get(`/student/companies-visited`)
+      .then((response) => {
+        setVisitedCompanies(response.data || Companies);
+      })
+      .catch((error) => {
+        console.error("Error fetching companies:", error);
+        setVisitedCompanies(Companies);
+      });
 
-  // ✅ Fetch latest trending jobs
-  requestApi.get(`/jobs/latest`)
-    .then((response) => {
-      console.log("Trending Jobs:", response.data);
-      setTrendingJobs(response.data);
-      setLoadingJobs(false);
-    })
-    .catch((error) => {
-      console.error("Error fetching latest jobs:", error);
-      setLoadingJobs(false);
-    });
+    // ✅ Fetch latest trending jobs
+    requestApi.get(`/jobs/latest`)
+      .then((response) => {
+        console.log("Trending Jobs:", response.data);
+        setTrendingJobs(response.data);
+        setLoadingJobs(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching latest jobs:", error);
+        setLoadingJobs(false);
+      });
 
-}, []);
+  }, []);
 
-    
+
 
 
 
@@ -151,46 +151,46 @@ const StudentHome = () => {
                 <p className="text-sm text-[#4b436f] mb-6">Browse the latest openings & apply instantly.</p>
 
                 <div className="space-y-3">
-                    {loadingJobs ? (
-                     <p className="text-sm text-gray-500">Loading latest jobs...</p>
-                   ) : trendingJobs.length > 0 ? (
-                     trendingJobs.map((job) => (
-                        <motion.div
-                          key={job.id}
-                         whileHover={{ scale: 1.02, x: 5 }}
-                         className="group flex items-center justify-between bg-white/80 border border-violet-100/50 p-3 rounded-xl shadow-sm hover:shadow-md hover:border-violet-300 transition-all duration-300"
-                       >
-                         <div className="flex items-center gap-3">
-                           <div className="w-10 h-10 flex items-center justify-center bg-violet-50 rounded-lg text-xl group-hover:bg-violet-100 transition-colors shadow-sm">
-                             💼
-                           </div>
-                           <div>
-                              <h3 className="text-sm sm:text-base font-bold text-[#2C225A]">
-                                {job.jobTitle}
-                             </h3>
-                             <span className="text-xs sm:text-sm text-violet-600 font-medium">
-                               {job.companyName}
-                             </span>
-                              <p className="text-xs text-gray-500">
-                                📍 {job.locations} • 💰 {job.salaryPackage}
-                              </p>
-                            </div>
+                  {loadingJobs ? (
+                    <p className="text-sm text-gray-500">Loading latest jobs...</p>
+                  ) : trendingJobs.length > 0 ? (
+                    trendingJobs.map((job) => (
+                      <motion.div
+                        key={job.id}
+                        whileHover={{ scale: 1.02, x: 5 }}
+                        className="group flex items-center justify-between bg-white/80 border border-violet-100/50 p-3 rounded-xl shadow-sm hover:shadow-md hover:border-violet-300 transition-all duration-300"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 flex items-center justify-center bg-violet-50 rounded-lg text-xl group-hover:bg-violet-100 transition-colors shadow-sm">
+                            💼
                           </div>
+                          <div>
+                            <h3 className="text-sm sm:text-base font-bold text-[#2C225A]">
+                              {job.jobTitle}
+                            </h3>
+                            <span className="text-xs sm:text-sm text-violet-600 font-medium">
+                              {job.companyName}
+                            </span>
+                            <p className="text-xs text-gray-500">
+                              📍 {job.locations} • 💰 {job.salaryPackage}
+                            </p>
+                          </div>
+                        </div>
 
-                          <Link
-                              to={`/student/${userId}/apply-jobs?jobId=${job.id}&apply=true`}
-                            className="px-4 py-1.5 bg-gradient-to-r from-violet-600 hover:from-violet-700 to-indigo-600 hover:to-indigo-700 text-white rounded-lg text-xs sm:text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300"
-                            >
-                              Apply
-                            </Link>
-                       </motion.div>
-                      ))
-                   ) : (
-                      <p className="text-sm text-gray-500">
-                        No latest jobs available right now.
-                      </p>
-                   )}
-                  </div>
+                        <Link
+                          to={`/student/${userId}/apply-jobs?jobId=${job.id}&apply=true`}
+                          className="px-4 py-1.5 bg-gradient-to-r from-violet-600 hover:from-violet-700 to-indigo-600 hover:to-indigo-700 text-white rounded-lg text-xs sm:text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300"
+                        >
+                          Apply
+                        </Link>
+                      </motion.div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-gray-500">
+                      No latest jobs available right now.
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           </motion.div>
@@ -242,9 +242,8 @@ const StudentHome = () => {
                     transition={{ delay: index * 0.1, duration: 0.5 }}
                     className="flex-shrink-0"
                   >
-                    <Link
-                      to={`/student/company/${company.userId}`}
-                      className="group bg-white/70 border border-violet-100 backdrop-blur-xl p-6 sm:p-8 rounded-3xl shadow-[0_4px_20px_rgba(107,78,207,0.08)] flex flex-col items-center justify-center min-w-[200px] transform transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_8px_30px_rgba(107,78,207,0.2)] hover:bg-white cursor-pointer relative overflow-hidden"
+                    <div
+                      className="group bg-white/70 border border-violet-100 backdrop-blur-xl p-6 sm:p-8 rounded-3xl shadow-[0_4px_20px_rgba(107,78,207,0.08)] flex flex-col items-center justify-center min-w-[200px] transform transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_8px_30px_rgba(107,78,207,0.2)] hover:bg-white relative overflow-hidden"
                     >
                       {/* Decorative gradient overlay */}
                       <div className="absolute inset-0 bg-gradient-to-br from-violet-500/0 to-indigo-500/0 group-hover:from-violet-500/5 group-hover:to-indigo-500/5 transition-colors duration-300"></div>
@@ -258,7 +257,7 @@ const StudentHome = () => {
                         />
                       </div>
                       <span className="text-lg font-bold text-[#2C225A] text-center group-hover:text-violet-700 transition-colors">{company.company}</span>
-                    </Link>
+                    </div>
                   </motion.div>
                 ))}
 
