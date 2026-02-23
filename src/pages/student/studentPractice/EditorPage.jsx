@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 import CodeEditor from './CodeEditor';
 import { toast } from 'react-hot-toast'; // Import toast for notifications
 import AnimatedBackground from '../background/AnimatedBackground';
+import getUserId from '../../../services/getUserId';
 
 const EditorPage = () => {
   const { sessionId } = useParams();
+  const navigate = useNavigate();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isLightMode, setIsLightMode] = useState(false);
   const MIN_WIDTH_REQUIRED = 770; // Define the minimum width requirement
 
   let username = "AnonymousUser"; // Default fallback
@@ -69,7 +73,14 @@ const EditorPage = () => {
             Your current screen width is: <span className="font-semibold text-yellow-400">{windowWidth}px</span>
           </p>
 
-          <button onClick={() => navigate('/dashboard')} className="mt-8 px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-semibold transition duration-200">
+          <button onClick={() => {
+            const userId = getUserId();
+            if (userId) {
+              navigate(`/student/${userId}/home`);
+            } else {
+              navigate('/student/login');
+            }
+          }} className="mt-8 px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-semibold transition duration-200">
             Go to Dashboard
           </button>
         </div>
@@ -79,11 +90,14 @@ const EditorPage = () => {
 
   // If screen width is sufficient, render the CodeEditor
   return (
-    <>
-
-      <AnimatedBackground />
-      <CodeEditor sessionId={sessionId} username={username} />
-    </>
+    <div className={`relative w-full h-full flex flex-col font-outfit overflow-hidden ${isLightMode ? 'bg-white' : 'bg-transparent'}`}>
+      <AnimatedBackground isLightMode={isLightMode} />
+      <div className="absolute inset-0 z-10 flex flex-col h-full pointer-events-none p-0 sm:p-2">
+        <div className={`pointer-events-auto h-full flex flex-col sm:rounded-3xl ${isLightMode ? 'bg-white/60 backdrop-blur-3xl border border-gray-200' : 'bg-[#0a0614]/20 backdrop-blur-3xl border border-white/5'} shadow-2xl overflow-hidden p-0 transition-colors duration-500`}>
+          <CodeEditor sessionId={sessionId} username={username} onThemeBrightnessChange={setIsLightMode} />
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -18,11 +18,7 @@ const trackerStats = [
   { title: "Offers Received", value: 2, icon: "🏆", color: "text-emerald-500", bg: "bg-emerald-50" },
 ];
 
-const recentApplications = [
-  { company: "Amazon", role: "Software Engineer Intern", status: "Under Review", date: "Aug 10", statusColor: "bg-blue-100 text-blue-700" },
-  { company: "TCS", role: "System Engineer", status: "Shortlisted", date: "Aug 05", statusColor: "bg-emerald-100 text-emerald-700" },
-  { company: "Wipro", role: "Project Engineer", status: "Applied", date: "Aug 02", statusColor: "bg-amber-100 text-amber-700" }
-];
+
 
 
 const StudentHome = () => {
@@ -44,6 +40,7 @@ const StudentHome = () => {
   const [visitedCompanies, setVisitedCompanies] = useState([]);
   const [trendingJobs, setTrendingJobs] = useState([]);
   const [loadingJobs, setLoadingJobs] = useState(true);
+  const [recentApplications, setRecentApplications] = useState([]);
   const scrollAmount = 220; // Adjust this for the scroll jump per click
 
   const scrollLeft = () => {
@@ -75,6 +72,24 @@ const StudentHome = () => {
       console.error("Error fetching latest jobs:", error);
       setLoadingJobs(false);
     });
+
+
+    // ✅ Fetch recent applications
+    requestApi.get(`/applications/my-applications`)
+     .then((res) => {
+       if (Array.isArray(res.data)) {
+          const sorted = res.data
+           .sort((a, b) =>
+             new Date(b.applicationDate) - new Date(a.applicationDate)
+           )
+            .slice(0, 3); // only latest 3
+         
+         setRecentApplications(sorted);
+       }
+     })
+     .catch((error) => {
+       console.error("Error fetching applications:", error);
+     });
 
 }, []);
 
@@ -178,11 +193,11 @@ const StudentHome = () => {
                           </div>
 
                           <Link
-                            to={`/student/${userId}/jobs/${job.id}`}
+                              to={`/student/${userId}/apply-jobs?jobId=${job.id}&apply=true`}
                             className="px-4 py-1.5 bg-gradient-to-r from-violet-600 hover:from-violet-700 to-indigo-600 hover:to-indigo-700 text-white rounded-lg text-xs sm:text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300"
-                         >
-                            Apply
-                          </Link>
+                            >
+                              Apply
+                            </Link>
                        </motion.div>
                       ))
                    ) : (
@@ -354,30 +369,54 @@ const StudentHome = () => {
           </div>
 
           <div className="max-w-4xl mx-auto space-y-4">
-            {recentApplications.map((app, index) => (
-              <motion.div
-                key={index}
-                className="bg-white/70 backdrop-blur-xl border border-white/60 p-4 sm:p-5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between shadow-[0_4px_20px_rgba(107,78,207,0.04)] hover:shadow-[0_8px_30px_rgba(107,78,207,0.1)] transition-all duration-300 gap-4"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1 * index }}
-              >
-                <div className="flex items-center gap-4 sm:gap-5">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white rounded-xl flex items-center justify-center border border-gray-100 shadow-sm text-2xl text-blue-500">
-                    🏢
+            {recentApplications.length > 0 ? (
+  recentApplications.map((app, index) => {
+    const locations = JSON.parse(app.jobPost.locations || "[]") || [];
+
+    return (
+      <motion.div
+        key={index}
+        className="bg-white/70 backdrop-blur-xl border border-white/60 p-4 sm:p-5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between shadow-[0_4px_20px_rgba(107,78,207,0.04)] hover:shadow-[0_8px_30px_rgba(107,78,207,0.1)] transition-all duration-300 gap-4"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.1 * index }}
+      >
+        <div className="flex items-center gap-4 sm:gap-5">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white rounded-xl flex items-center justify-center border border-gray-100 shadow-sm text-2xl text-blue-500">
+            🏢
+          </div>
+          <div>
+            <h3 className="font-extrabold text-[#2C225A] text-lg sm:text-xl">
+              {app.jobPost.jobTitle}
+            </h3>
+            <p className="text-sm font-medium text-[#4b436f] mt-0.5">
+              {app.jobPost.companyName} •{" "}
+              <span className="text-gray-400">
+                Applied on {new Date(app.applicationDate).toLocaleDateString()}
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <span className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold ${
+            app.status === "ACCEPTED"
+              ? "bg-green-100 text-green-700"
+              : app.status === "REJECTED"
+              ? "bg-red-100 text-red-700"
+              : "bg-yellow-100 text-yellow-800"
+          }`}>
+            {app.status}
+          </span>
                   </div>
-                  <div>
-                    <h3 className="font-extrabold text-[#2C225A] text-lg sm:text-xl">{app.role}</h3>
-                    <p className="text-sm font-medium text-[#4b436f] mt-0.5">{app.company} • <span className="text-gray-400">Applied on {app.date}</span></p>
-                  </div>
-                </div>
-                <div>
-                  <span className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold ${app.statusColor} whitespace-nowrap`}>
-                    {app.status}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
+               </motion.div>
+              );
+           })
+          ) : (
+            <p className="text-gray-500 text-sm text-center">
+              No recent applications.
+           </p>
+          )}
           </div>
 
           <div className="flex justify-center mt-8">

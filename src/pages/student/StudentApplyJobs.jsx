@@ -15,6 +15,7 @@ import QuickApplyModal from "./QuickApplyModal";
 import requestApi from "../../services/request";
 import toast from "react-hot-toast";
 import getUserId from "../../services/getUserId";
+import { useLocation } from "react-router-dom";
 
 
 
@@ -30,6 +31,7 @@ const StudentApplyJobs = () => {
   const [isPrefModalOpen, setIsPrefModalOpen] = useState(false);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const userId = getUserId();
+  const location = useLocation();
 
 
   const parseLocation = (loc) => {
@@ -43,41 +45,62 @@ const StudentApplyJobs = () => {
   };
 
   useEffect(() => {
-    const prefs = JSON.parse(localStorage.getItem("jobPreferences"));
-    if (prefs) setFilters(prefs);
+  const prefs = JSON.parse(localStorage.getItem("jobPreferences"));
+  if (prefs) setFilters(prefs);
 
-    const fetchJobs = async () => {
-      try {
-        const res = await requestApi.get(`/jobs/all`);
+  const queryParams = new URLSearchParams(location.search);
+  const jobIdFromQuery = queryParams.get("jobId");
+  const shouldAutoApply = queryParams.get("apply") === "true";
 
-        const jobsWithSaved = res.data.map((job) => ({
-          job_title: job.jobTitle,
-          company_name: job.companyName,
-          job_description: job.jobDescription,
-          recruitment_process: job.recruitmentProcess,
-          salary_package: job.salaryPackage,
-          location: job.locations,
-          application_deadline: job.applicationDeadline.time
-            ? new Date(job.applicationDeadline.time).toLocaleDateString("en-US", {
+  const fetchJobs = async () => {
+    try {
+      const res = await requestApi.get(`/jobs/all`);
+
+      const jobsWithSaved = res.data.map((job) => ({
+        job_title: job.jobTitle,
+        company_name: job.companyName,
+        job_description: job.jobDescription,
+        recruitment_process: job.recruitmentProcess,
+        salary_package: job.salaryPackage,
+        location: job.locations,
+        application_deadline: job.applicationDeadline?.time
+          ? new Date(job.applicationDeadline.time).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
               day: "numeric",
             })
-            : job.applicationDeadline,
+          : job.applicationDeadline,
+        id: job.id,
+        saved: false,
+        applied: false,
+      }));
 
-          id: job.id,
+      setJobs(jobsWithSaved);
 
-          saved: false,
-          applied: false,
-        }));
-        setJobs(jobsWithSaved);
+      // 🔥 Auto select and open modal
+      if (jobIdFromQuery) {
+        const matchedJob = jobsWithSaved.find(
+          (job) => job.id.toString() === jobIdFromQuery
+        );
+
+        if (matchedJob) {
+          setSelectedJob(matchedJob);
+
+          if (shouldAutoApply) {
+            setShowApplyModal(true);
+          }
+        }
+      } else {
         setSelectedJob(jobsWithSaved[0]);
-      } catch {
-        toast.error("Failed to fetch jobs", { id: "fetch-jobs-error" });
       }
-    };
-    fetchJobs();
-  }, []);
+
+    } catch {
+      toast.error("Failed to fetch jobs", { id: "fetch-jobs-error" });
+    }
+  };
+
+  fetchJobs();
+}, [location.search]);
 
   useEffect(() => {
     if (isPrefModalOpen) {

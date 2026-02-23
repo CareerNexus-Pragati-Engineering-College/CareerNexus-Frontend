@@ -43,7 +43,8 @@ const StudentCodingExam = () => {
         });
         setAnswers(initialAnswers);
       } catch (err) {
-        const errorMsg = err.response?.data || "Failed to load exam. It might have ended.";
+        const errorMsg =
+          err.response?.data || "Failed to load exam. It might have ended.";
         toast.error(errorMsg);
         navigate("/student/" + getUserId() + "/coding-assessments");
       } finally {
