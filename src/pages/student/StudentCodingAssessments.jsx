@@ -61,7 +61,6 @@ const StudentCodingAssessments = () => {
                   transition={{ delay: index * 0.05 }}
                   className="bg-white/80 backdrop-blur-xl border border-white/40 shadow-sm rounded-2xl p-4 flex flex-col md:flex-row items-center gap-6 hover:shadow-md transition-all duration-300 relative overflow-hidden group"
                 >
-<<<<<<< HEAD
                   {/* Status Badge */}
                   <div className="absolute top-4 right-4 z-10">
                     {isActive ? (
@@ -75,11 +74,8 @@ const StudentCodingAssessments = () => {
                     )}
                   </div>
 
-                  <div className="w-14 h-14 bg-violet-100 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:rotate-12 transition-transform shadow-sm">
-=======
                   {/* Leading Icon */}
-                  <div className="w-12 h-12 bg-violet-100 rounded-xl flex items-center justify-center text-2xl group-hover:rotate-12 transition-transform shrink-0">
->>>>>>> 7deaa70c3737df4fe3d116ab10ba80010eb433f7
+                  <div className="w-14 h-14 bg-violet-100 rounded-2xl flex items-center justify-center text-3xl shrink-0 group-hover:rotate-12 transition-transform shadow-sm">
                     🚀
                   </div>
 
@@ -119,12 +115,18 @@ const StudentCodingAssessments = () => {
                   {/* Action Button */}
                   <div className="w-full md:w-auto shrink-0">
                     {isActive ? (
-                      <Link
-                        to={`/student/${userId}/coding-assessment/${test.id}`}
-                        className="w-full md:w-40 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 hover:shadow-lg hover:brightness-110 transition"
-                      >
-                        {test.solved ? "Retake Test" : "Start Now"} <FaChevronRight className="text-[10px]" />
-                      </Link>
+                      test.solved ? (
+                        <div className="w-full md:w-40 bg-gray-200 text-gray-500 text-sm font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 cursor-not-allowed">
+                          Attempted
+                        </div>
+                      ) : (
+                        <Link
+                          to={`/student/${userId}/coding-assessment/${test.id}`}
+                          className="w-full md:w-40 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 hover:shadow-lg hover:brightness-110 transition"
+                        >
+                          Start Now <FaChevronRight className="text-[10px]" />
+                        </Link>
+                      )
                     ) : isFuture ? (
                       <div className="w-full md:w-40 bg-blue-50 text-blue-600 text-xs font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 border border-blue-100">
                          Upcoming

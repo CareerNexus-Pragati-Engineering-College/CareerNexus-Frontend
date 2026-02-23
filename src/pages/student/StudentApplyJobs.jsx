@@ -23,6 +23,8 @@ const StudentApplyJobs = () => {
   const [selectedTab, setSelectedTab] = useState("Recommended");
   const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
+  const [jobRounds, setJobRounds] = useState([]);
+  const [isLoadingRounds, setIsLoadingRounds] = useState(false);
   const [filters, setFilters] = useState({ location: "", role: "" });
   const [tempPrefs, setTempPrefs] = useState({ location: "", role: "" });
   const [isPrefModalOpen, setIsPrefModalOpen] = useState(false);
@@ -82,6 +84,24 @@ const StudentApplyJobs = () => {
       setTempPrefs(filters);
     }
   }, [isPrefModalOpen]);
+
+  // Fetch rounds for the selected job
+  useEffect(() => {
+    const fetchJobRounds = async () => {
+      if (!selectedJob?.id) return;
+      setIsLoadingRounds(true);
+      try {
+        const res = await requestApi.get(`/exam/student/${selectedJob.id}`);
+        setJobRounds(res.data || []);
+      } catch (err) {
+        console.error("Failed to fetch rounds:", err);
+        setJobRounds([]);
+      } finally {
+        setIsLoadingRounds(false);
+      }
+    };
+    fetchJobRounds();
+  }, [selectedJob]);
 
   // ------------------ Save/Unsave Job ------------------
   const toggleSave = (id) => {
@@ -236,7 +256,55 @@ const StudentApplyJobs = () => {
 
                 <div>
                   <h4 className="font-semibold mb-1">Recruitment Process</h4>
-                  <p className="text-sm text-gray-700">{selectedJob.recruitment_process}</p>
+                  <p className="text-sm text-gray-700 mb-3">{selectedJob.recruitment_process}</p>
+                  
+                  {/* Round Configuration Section */}
+                  <div className="mt-4 p-4 bg-white rounded-xl border border-purple-100 shadow-sm">
+                    <h5 className="text-sm font-bold text-purple-800 mb-3 flex items-center gap-2">
+                       Scheduled Assessment Rounds
+                    </h5>
+                    {isLoadingRounds ? (
+                      <div className="flex justify-center py-4">
+                        <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-purple-600"></div>
+                      </div>
+                    ) : jobRounds.length > 0 ? (
+                      <div className="space-y-3">
+                        {jobRounds.map((round, idx) => (
+                          <div key={idx} className="flex items-start gap-3 p-3 bg-purple-50/50 rounded-lg border border-purple-50 transition-all hover:border-purple-200">
+                            <div className="bg-purple-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                              {idx + 1}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-bold text-gray-800 truncate">{round.roundName}</p>
+                              <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
+                                <p className="text-[10px] text-gray-500 flex items-center gap-1">
+                                  <span className="font-semibold text-purple-600">Start:</span>
+                                  {new Date(round.startTime).toLocaleString()}
+                                </p>
+                                <p className="text-[10px] text-gray-500 flex items-center gap-1">
+                                  <span className="font-semibold text-purple-600">End:</span>
+                                  {new Date(round.endTime).toLocaleString()}
+                                </p>
+                              </div>
+                            </div>
+                            {/* Start Test Button */}
+                            {new Date() >= new Date(round.startTime) && new Date() <= new Date(round.endTime) && (
+                              <Link
+                                to={round.examUrl}
+                                className="bg-purple-600 hover:bg-purple-700 text-white text-[10px] font-bold px-3 py-1 rounded-md transition-colors shrink-0 self-center"
+                              >
+                                Start Test
+                              </Link>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-6 bg-gray-50/50 rounded-xl border border-dashed border-gray-200">
+                        <p className="text-xs text-gray-400 italic">No specific assessment rounds configured yet.</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div>

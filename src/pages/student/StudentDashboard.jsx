@@ -65,7 +65,7 @@ const StudentHome = () => {
     });
 
   // ✅ Fetch latest trending jobs
-  requestApi.get(`/api/jobs/latest`)
+  requestApi.get(`/jobs/latest`)
     .then((response) => {
       console.log("Trending Jobs:", response.data);
       setTrendingJobs(response.data);
