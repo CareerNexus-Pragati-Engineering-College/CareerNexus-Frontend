@@ -116,9 +116,9 @@ const TPOCodingAssessmentForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F8E5EB] via-[#ECEAFE] to-[#D6E6FD] text-[#2C225A] font-outfit">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#F8E5EB] via-[#ECEAFE] to-[#D6E6FD] text-[#2C225A] font-outfit">
       <NavbarTpoDashboard />
-      <div className="pt-28 pb-16 px-4 max-w-5xl mx-auto">
+      <div className="flex-grow pt-28 pb-16 px-4 max-w-5xl mx-auto w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -445,6 +445,16 @@ const TPOCodingAssessmentForm = () => {
           </form>
         </motion.div>
       </div>
+
+      {/* 📍 Footer */}
+      <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-auto">
+        <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2 font-outfit">
+          <p className="text-sm sm:text-base opacity-90">
+            &copy; {new Date().getFullYear()} CareerNexus. All rights reserved.
+          </p>
+          <p className="text-xs opacity-60">Your one-stop placement tracker</p>
+        </div>
+      </footer>
     </div>
   );
 };

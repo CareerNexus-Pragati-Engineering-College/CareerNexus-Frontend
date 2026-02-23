@@ -11,7 +11,7 @@ const MonacoCodeEditor = ({ code, selectedLanguage, selectedTheme, onCodeChange 
     };
 
     return (
-        <div className="h-full w-full flex flex-col rounded-lg overflow-hidden border border-gray-700 shadow-xl min-h-0">
+        <div className="h-full w-full flex flex-col overflow-hidden min-h-0">
             <Editor
                 height="100%"
                 language={selectedLanguage}
@@ -22,17 +22,23 @@ const MonacoCodeEditor = ({ code, selectedLanguage, selectedTheme, onCodeChange 
                     onCodeChange(newValue);
                 }}
                 options={{
-                    fontSize: 16,
+                    fontSize: 18,
+                    fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace",
+                    fontLigatures: true,
+                    lineHeight: 28,
+                    padding: { top: 20, bottom: 20 },
                     minimap: { enabled: false },
                     scrollBeyondLastLine: false,
                     wordWrap: "on",
                     automaticLayout: true,
+                    cursorBlinking: "smooth",
+                    smoothScrolling: true,
                     scrollbar: {
-                        verticalScrollbarSize: 8,
-                        horizontalScrollbarSize: 8,
-                        arrowSize: 8,
-                        verticalSliderSize: 8,
-                        horizontalSliderSize: 8,
+                        verticalScrollbarSize: 10,
+                        horizontalScrollbarSize: 10,
+                        arrowSize: 10,
+                        verticalSliderSize: 10,
+                        horizontalSliderSize: 10,
                         verticalScrollbarColor: '#3d3d3d',
                         horizontalScrollbarColor: '#3d3d3d',
                         verticalSliderColor: '#6b6b6b',
