@@ -28,8 +28,8 @@ const NavbarTPODashboard = () => {
   return (
     <nav className="w-full fixed top-0 left-0 z-50 bg-gradient-to-r from-[#0f0c1d] via-[#1b1433] to-[#0f0c1d] shadow-md font-outfit">
       <div className="max-w-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo - Points to TPO Landing Page */}
-        <NavLink to="/tpo" className="flex items-center gap-3">
+        {/* Logo - Points to TPO Dashboard */}
+        <NavLink to={`/tpo/${userId}/home`} className="flex items-center gap-3">
           <img
             src="/images/logo.png"
             alt="CareerNexus Logo"
@@ -42,9 +42,9 @@ const NavbarTPODashboard = () => {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-6 text-white text-base">
-          {/* Home - Points to TPO Landing Page */}
+          {/* Home - Points to TPO Dashboard */}
           <NavLink
-            to="/tpo"
+            to={`/tpo/${userId}/home`}
             className="flex items-center gap-2 hover:text-violet-400 transition font-outfit"
           >
             <FaHome className="text-lg text-violet-400" />
@@ -109,7 +109,7 @@ const NavbarTPODashboard = () => {
       {isOpen && (
         <div className="md:hidden bg-[#0f0c1d] px-6 pb-6 space-y-4 text-white text-base">
           <NavLink
-            to="/tpo"
+            to={`/tpo/${userId}/home`}
             className="flex items-center gap-2 hover:text-violet-400 transition font-outfit"
             onClick={() => setIsOpen(false)}
           >
