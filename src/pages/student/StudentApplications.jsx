@@ -51,6 +51,8 @@ const dummyApplications = [
 const StudentApplications = () => {
   const [appliedJobs, setAppliedJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
+  const [jobRounds, setJobRounds] = useState([]);
+  const [isLoadingRounds, setIsLoadingRounds] = useState(false);
   const [sortOrder, setSortOrder] = useState("latest");
   const userId = getUserId()
   const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
@@ -77,6 +79,24 @@ const StudentApplications = () => {
     }
     fetchData();
   }, [userId]);
+
+  // Fetch rounds when a job is selected
+  useEffect(() => {
+    const fetchJobRounds = async () => {
+      if (!selectedJob?.jobPost?.id) return;
+      setIsLoadingRounds(true);
+      try {
+        const res = await requestApi.get(`/exam/student/${selectedJob.jobPost.id}`);
+        setJobRounds(res.data || []);
+      } catch (err) {
+        console.error("Failed to fetch rounds:", err);
+        setJobRounds([]);
+      } finally {
+        setIsLoadingRounds(false);
+      }
+    };
+    fetchJobRounds();
+  }, [selectedJob]);
 
   const sortByDate = (order) => {
     const sorted = [...appliedJobs].sort((a, b) => {
@@ -263,6 +283,75 @@ const StudentApplications = () => {
               <p className="text-sm text-gray-700 mt-2">
                 <strong>Description:</strong> {selectedJob.jobPost.jobDescription}
               </p>
+
+              {/* Assessment Rounds Section */}
+              <div className="mt-6 p-4 bg-purple-50/30 rounded-xl border border-purple-100">
+                <h4 className="text-sm font-bold text-purple-800 mb-3 flex items-center gap-2">
+                  🚀 Scheduled Assessment Rounds
+                </h4>
+                {isLoadingRounds ? (
+                  <div className="flex justify-center py-4">
+                    <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-purple-600"></div>
+                  </div>
+                ) : jobRounds.length > 0 ? (
+                  <div className="space-y-3">
+                    {jobRounds.map((round, idx) => (
+                      <div key={idx} className="flex items-start gap-3 p-3 bg-white rounded-lg border border-purple-50 shadow-sm transition-all hover:border-purple-200">
+                        <div className="bg-purple-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                          {idx + 1}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <p className="text-xs font-bold text-gray-800 truncate">{round.roundName}</p>
+                            {/* Status Badge */}
+                            {round.attempted ? (
+                               <span className="bg-emerald-100 text-emerald-700 text-[8px] font-black uppercase px-2 py-0.5 rounded-full">Solved</span>
+                            ) : (
+                              (() => {
+                                const now = new Date();
+                                const start = new Date(round.startTime);
+                                const end = new Date(round.endTime);
+                                if (now < start) return <span className="bg-blue-100 text-blue-700 text-[8px] font-black uppercase px-2 py-0.5 rounded-full">Upcoming</span>;
+                                if (now > end) return <span className="bg-gray-100 text-gray-500 text-[8px] font-black uppercase px-2 py-0.5 rounded-full">Ended</span>;
+                                return <span className="bg-emerald-100 text-emerald-700 text-[8px] font-black uppercase px-2 py-0.5 rounded-full animate-pulse">Live</span>;
+                              })()
+                            )}
+                          </div>
+                          <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
+                            <p className="text-[10px] text-gray-500 flex items-center gap-1">
+                              <span className="font-semibold text-purple-600">Start:</span>
+                              {new Date(round.startTime).toLocaleString()}
+                            </p>
+                            <p className="text-[10px] text-gray-500 flex items-center gap-1">
+                              <span className="font-semibold text-purple-600">End:</span>
+                              {new Date(round.endTime).toLocaleString()}
+                            </p>
+                          </div>
+                        </div>
+                        {/* Start Assessment Button or Attempted Status */}
+                        {round.attempted ? (
+                          <span className="bg-gray-200 text-gray-500 text-[10px] font-bold px-3 py-1 rounded-md shrink-0 self-center cursor-not-allowed">
+                            Attempted
+                          </span>
+                        ) : (
+                          new Date() >= new Date(round.startTime) && new Date() <= new Date(round.endTime) && (
+                            <Link
+                              to={round.examUrl}
+                              className="bg-purple-600 hover:bg-purple-700 text-white text-[10px] font-bold px-3 py-1 rounded-md transition-colors shrink-0 self-center"
+                            >
+                              Start Assessment
+                            </Link>
+                          )
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-4 bg-white/50 rounded-lg border border-dashed border-gray-200">
+                    <p className="text-[10px] text-gray-400 italic">No specific assessment rounds configured yet.</p>
+                  </div>
+                )}
+              </div>
             </motion.div>
           </motion.div>
         )}

@@ -33,9 +33,12 @@ const StudentCodingAssessments = () => {
           animate={{ opacity: 1, y: 0 }}
           className="mb-12"
         >
-          <h1 className="text-4xl font-extrabold text-[#2F2F5B] mb-2 tracking-tight">Coding Practice Tests</h1>
+          <h1 className="text-4xl font-extrabold text-[#2F2F5B] mb-2 tracking-tight">
+            Coding Practice Tests
+          </h1>
           <p className="text-[#5C5C80] text-lg">
-            Practice coding challenges and improve your skills. These scores are for your practice and do not affect job applications.
+            Practice coding challenges and improve your skills. These scores are
+            for your practice and do not affect job applications.
           </p>
         </motion.div>
 
@@ -65,12 +68,17 @@ const StudentCodingAssessments = () => {
                   <div className="absolute top-4 right-4 z-10">
                     {isActive ? (
                       <span className="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full animate-pulse flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> Live
+                        <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>{" "}
+                        Live
                       </span>
                     ) : isFuture ? (
-                      <span className="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">Upcoming</span>
+                      <span className="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">
+                        Upcoming
+                      </span>
                     ) : (
-                      <span className="bg-gray-100 text-gray-500 text-xs font-bold px-3 py-1 rounded-full">Ended</span>
+                      <span className="bg-gray-100 text-gray-500 text-xs font-bold px-3 py-1 rounded-full">
+                        Ended
+                      </span>
                     )}
                   </div>
 
@@ -82,7 +90,9 @@ const StudentCodingAssessments = () => {
                   {/* Main Info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-1">
-                      <h3 className="text-lg font-bold text-[#2F2F5B] truncate">{test.assessmentName}</h3>
+                      <h3 className="text-lg font-bold text-[#2F2F5B] truncate">
+                        {test.assessmentName}
+                      </h3>
                       {test.solved && (
                         <span className="bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full flex items-center gap-1">
                           Solved
@@ -97,7 +107,15 @@ const StudentCodingAssessments = () => {
                       </div>
                       <div className="flex items-center gap-1.5 font-medium">
                         <FaClock className="text-violet-500" />
-                        {startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        {startTime.toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}{" "}
+                        -{" "}
+                        {endTime.toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
                       </div>
                     </div>
                   </div>
@@ -105,9 +123,14 @@ const StudentCodingAssessments = () => {
                   {/* Score Info (if solved) */}
                   {test.solved && test.highestScore !== null && (
                     <div className="hidden md:flex flex-col items-center px-4 border-l border-gray-100">
-                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Highest Score</span>
+                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                        Highest Score
+                      </span>
                       <div className="text-lg font-black text-violet-600">
-                        {test.highestScore} <span className="text-xs text-gray-300 font-normal">/ {test.maxScore}</span>
+                        {test.highestScore}{" "}
+                        <span className="text-xs text-gray-300 font-normal">
+                          / {test.maxScore}
+                        </span>
                       </div>
                     </div>
                   )}
@@ -115,12 +138,18 @@ const StudentCodingAssessments = () => {
                   {/* Action Button */}
                   <div className="w-full md:w-auto shrink-0">
                     {isActive ? (
-                      <Link
-                        to={`/student/${userId}/coding-assessment/${test.id}`}
-                        className="w-full md:w-40 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 hover:shadow-lg hover:brightness-110 transition"
-                      >
-                        {test.solved ? "Retake Test" : "Start Now"} <FaChevronRight className="text-[10px]" />
-                      </Link>
+                      test.solved ? (
+                        <div className="w-full md:w-40 bg-gray-200 text-gray-500 text-sm font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 cursor-not-allowed">
+                          Attempted
+                        </div>
+                      ) : (
+                        <Link
+                          to={`/student/${userId}/coding-assessment/${test.id}`}
+                          className="w-full md:w-40 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 hover:shadow-lg hover:brightness-110 transition"
+                        >
+                          Start Now <FaChevronRight className="text-[10px]" />
+                        </Link>
+                      )
                     ) : isFuture ? (
                       <div className="w-full md:w-40 bg-blue-50 text-blue-600 text-xs font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 border border-blue-100">
                         Upcoming
@@ -135,8 +164,12 @@ const StudentCodingAssessments = () => {
                   {/* Mobile score display */}
                   {test.solved && test.highestScore !== null && (
                     <div className="md:hidden flex items-center gap-2 text-xs bg-violet-50 px-3 py-1 rounded-full border border-violet-100">
-                      <span className="text-violet-400 font-bold uppercase tracking-widest">Score:</span>
-                      <span className="font-black text-violet-700">{test.highestScore} / {test.maxScore}</span>
+                      <span className="text-violet-400 font-bold uppercase tracking-widest">
+                        Score:
+                      </span>
+                      <span className="font-black text-violet-700">
+                        {test.highestScore} / {test.maxScore}
+                      </span>
                     </div>
                   )}
                 </motion.div>
@@ -146,8 +179,13 @@ const StudentCodingAssessments = () => {
         ) : (
           <div className="bg-white/60 backdrop-blur-md rounded-3xl p-16 text-center border border-dashed border-gray-300">
             <div className="text-6xl mb-6">📝</div>
-            <h2 className="text-2xl font-bold text-[#2F2F5B] mb-2">No Practice Tests</h2>
-            <p className="text-gray-500">There are no coding practice tests available at the moment. Keep learning and revising your skills!</p>
+            <h2 className="text-2xl font-bold text-[#2F2F5B] mb-2">
+              No Practice Tests
+            </h2>
+            <p className="text-gray-500">
+              There are no coding practice tests available at the moment. Keep
+              learning and revising your skills!
+            </p>
           </div>
         )}
       </div>

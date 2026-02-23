@@ -69,7 +69,7 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
         const fetchQuestion = async () => {
             if (!sessionId) return; // Skip fetch if no sessionId
             try {
-                const res = await api.get(`/api/practice/question/${sessionId}`);
+                const res = await api.get(`/practice/question/${sessionId}`);
                 if (res.data?.question) {
                     setQuestion(res.data.question);
                 } else {
