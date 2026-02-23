@@ -42,6 +42,8 @@ const StudentHome = () => {
   const { userId } = useParams(); // Get the URL parameter
   const scrollRef = useRef(null);
   const [visitedCompanies, setVisitedCompanies] = useState([]);
+  const [trendingJobs, setTrendingJobs] = useState([]);
+  const [loadingJobs, setLoadingJobs] = useState(true);
   const scrollAmount = 220; // Adjust this for the scroll jump per click
 
   const scrollLeft = () => {
@@ -52,16 +54,34 @@ const StudentHome = () => {
   };
 
   useEffect(() => {
-    const data = requestApi.get(`/student/companies-visited`);
-    data.then((response) => {
-      const companies = response.data;
-      console.log(companies);
-      setVisitedCompanies(companies || Companies);
+  // Fetch visited companies
+  requestApi.get(`/student/companies-visited`)
+    .then((response) => {
+      setVisitedCompanies(response.data || Companies);
+    })
+    .catch((error) => {
+      console.error("Error fetching companies:", error);
+      setVisitedCompanies(Companies);
     });
 
+  // ✅ Fetch latest trending jobs
+  requestApi.get(`/api/jobs/latest`)
+    .then((response) => {
+      console.log("Trending Jobs:", response.data);
+      setTrendingJobs(response.data);
+      setLoadingJobs(false);
+    })
+    .catch((error) => {
+      console.error("Error fetching latest jobs:", error);
+      setLoadingJobs(false);
+    });
+
+}, []);
+
+    
 
 
-  }, []);
+
 
   return (
     <>
@@ -131,32 +151,46 @@ const StudentHome = () => {
                 <p className="text-sm text-[#4b436f] mb-6">Browse the latest openings & apply instantly.</p>
 
                 <div className="space-y-3">
-                  {[
-                    { company: "Google", role: "Frontend Engineer", icon: "🌐" },
-                    { company: "Microsoft", role: "Full-Stack Dev", icon: "💻" },
-                    { company: "Amazon", role: "Cloud Engineer", icon: "☁️" },
-                    { company: "Infosys", role: "Software Trainee", icon: "🚀" },
-                  ].map((job, index) => (
-                    <motion.div
-                      key={index}
-                      whileHover={{ scale: 1.02, x: 5 }}
-                      className="group flex items-center justify-between bg-white/80 border border-violet-100/50 p-3 rounded-xl shadow-sm hover:shadow-md hover:border-violet-300 transition-all duration-300"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 flex items-center justify-center bg-violet-50 rounded-lg text-xl group-hover:bg-violet-100 transition-colors shadow-sm">
-                          {job.icon}
-                        </div>
-                        <div>
-                          <h3 className="text-sm sm:text-base font-bold text-[#2C225A]">{job.role}</h3>
-                          <span className="text-xs sm:text-sm text-violet-600 font-medium">{job.company}</span>
-                        </div>
-                      </div>
-                      <button className="px-4 py-1.5 bg-gradient-to-r from-violet-600 hover:from-violet-700 to-indigo-600 hover:to-indigo-700 text-white rounded-lg text-xs sm:text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300">
-                        Apply
-                      </button>
-                    </motion.div>
-                  ))}
-                </div>
+                    {loadingJobs ? (
+                     <p className="text-sm text-gray-500">Loading latest jobs...</p>
+                   ) : trendingJobs.length > 0 ? (
+                     trendingJobs.map((job) => (
+                        <motion.div
+                          key={job.id}
+                         whileHover={{ scale: 1.02, x: 5 }}
+                         className="group flex items-center justify-between bg-white/80 border border-violet-100/50 p-3 rounded-xl shadow-sm hover:shadow-md hover:border-violet-300 transition-all duration-300"
+                       >
+                         <div className="flex items-center gap-3">
+                           <div className="w-10 h-10 flex items-center justify-center bg-violet-50 rounded-lg text-xl group-hover:bg-violet-100 transition-colors shadow-sm">
+                             💼
+                           </div>
+                           <div>
+                              <h3 className="text-sm sm:text-base font-bold text-[#2C225A]">
+                                {job.jobTitle}
+                             </h3>
+                             <span className="text-xs sm:text-sm text-violet-600 font-medium">
+                               {job.companyName}
+                             </span>
+                              <p className="text-xs text-gray-500">
+                                📍 {job.locations} • 💰 {job.salaryPackage}
+                              </p>
+                            </div>
+                          </div>
+
+                          <Link
+                            to={`/student/${userId}/jobs/${job.id}`}
+                            className="px-4 py-1.5 bg-gradient-to-r from-violet-600 hover:from-violet-700 to-indigo-600 hover:to-indigo-700 text-white rounded-lg text-xs sm:text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300"
+                         >
+                            Apply
+                          </Link>
+                       </motion.div>
+                      ))
+                   ) : (
+                      <p className="text-sm text-gray-500">
+                        No latest jobs available right now.
+                      </p>
+                   )}
+                  </div>
               </div>
             </div>
           </motion.div>
