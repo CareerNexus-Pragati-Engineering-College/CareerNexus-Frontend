@@ -25,7 +25,7 @@ import StudentCodingExam from "./pages/student/StudentCodingExam";
 // 🏫 TPO
 import TPO from "./pages/tpo/TPO";
 import TPOLogin from "./pages/tpo/TpoLogin";
-// import Tpohome from "./pages/tpo/Tpohome";
+import Tpohome from "./pages/tpo/Tpohome";
 import TpoProfile from "./pages/tpo/TPOProfile";
 import TPOStudents from "./pages/tpo/TPOStudents";
 import TPORecruiters from "./pages/tpo/TPORecruiters";
@@ -39,10 +39,12 @@ import RecruiterProfile from "./pages/recruiter/RecruiterProfile";
 import RecruiterJob from "./pages/recruiter/RecruiterJob";
 import ApplicationsPage from "./pages/recruiter/ApplicationsPage";
 import RecruitmentProcessPage from "./pages/recruiter/RecruitmentProcessPage";
+import RecruiterCodingRoundResults from "./pages/recruiter/RecruiterCodingRoundResults";
 
 // 🛠️ Admin
 import Admin from "./pages/admin/Admin";
 import AdminAccessForm from "./pages/admin/AdminAccessForm";
+import AdminCreateUser from "./pages/admin/AdminCreateUser";
 
 const App = () => {
   const location = useLocation();
@@ -109,9 +111,11 @@ const App = () => {
         <Route path="/recruiter/:userId/jobpostings" element={<RecruiterJob />} />
         <Route path="/recruiter/:userId/applications" element={<ApplicationsPage />} />
         <Route path="/recruiter/:userId/recruitment-process/:jobId" element={<RecruitmentProcessPage />} />
+        <Route path="/recruiter/:userId/recruitment-process/:jobId/coding-round/:assessmentId" element={<RecruiterCodingRoundResults />} />
 
         {/* 🛠️ Admin */}
         <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/create-user" element={<AdminCreateUser />} />
         <Route path="/admin/AdminAccessForm" element={<AdminAccessForm />} />
       </Routes>
 

@@ -1,25 +1,22 @@
 // src/pages/admin/AdminAccessForm.jsx
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   FaEnvelope,
-  FaLock,
-  FaEye,
-  FaEyeSlash,
   FaArrowLeft,
   FaUserTie,
   FaUser,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
-import axios from "axios";
+import requestApi from "../../services/request";
 import toast from "react-hot-toast";
 
 const AdminAccessForm = () => {
-  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [role, setRole] = useState("student");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -27,18 +24,18 @@ const AdminAccessForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!username || !email || !password || !role) {
-      toast.error("Please fill all fields.", { id: "missing-fields" });
-      return;
-    }
-    const payload = { userId: username, email: email, password: password, role: role };
+    setLoading(true);
+    const payload = { userId: username, email: email, role: role };
 
     try {
-      const response = await axios.post(`http://localhost:8080/auth/${role}/register`, payload);
-      toast.success("User registered successfully!");
+      await requestApi.post("/admin/create-user", payload);
+      toast.success("User created and welcome email sent!");
+      setTimeout(() => navigate("/admin"), 2000);
     } catch (error) {
       console.error("Error registering user:", error.message);
-      toast.error(`Failed to register user. ${error.response?.data?.message || ""}`);
+      toast.error(`Failed to register user. ${error.response?.data?.error || ""}`);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -77,6 +74,7 @@ const AdminAccessForm = () => {
           <p className="text-sm text-gray-500 mt-2 text-center font-medium">
             Grant new access in <span className="text-purple-600 font-semibold">CareerNexus</span>
           </p>
+          <p className="text-xs text-gray-400 mt-1 italic text-center">Passwords are auto-generated and emailed.</p>
         </div>
 
         {/* 📄 Form */}
@@ -106,24 +104,6 @@ const AdminAccessForm = () => {
           </div>
 
           <div className="relative">
-            <FaLock className="absolute left-4 top-[1.1rem] text-purple-400 text-lg" />
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className={inputClasses}
-              required
-            />
-            <div
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-[1.1rem] text-gray-400 hover:text-purple-600 cursor-pointer transition-colors text-lg"
-            >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </div>
-          </div>
-
-          <div className="relative">
             <select
               value={role}
               onChange={(e) => setRole(e.target.value)}
@@ -145,10 +125,11 @@ const AdminAccessForm = () => {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            disabled={loading}
             type="submit"
-            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-3.5 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 mt-4 text-lg"
+            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-3.5 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 mt-4 text-lg disabled:opacity-50"
           >
-            Grant Access
+            {loading ? "Creating..." : "Grant Access"}
           </motion.button>
         </form>
       </motion.div>

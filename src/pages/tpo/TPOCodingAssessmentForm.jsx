@@ -85,6 +85,8 @@ const TPOCodingAssessmentForm = () => {
       ...assessmentDetails,
       jobPostId: assessmentDetails.jobPostId ? parseInt(assessmentDetails.jobPostId) : null,
       questions: questions,
+      mode: "PRACTICE",
+      minMarks: null,
     };
 
     try {
@@ -109,22 +111,38 @@ const TPOCodingAssessmentForm = () => {
         >
           <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-violet-500 to-indigo-500"></div>
           
-          <h1 className="text-4xl font-extrabold text-[#2F2F5B] mb-2 tracking-tight">Create Coding Assessment</h1>
-          <p className="text-[#5C5C80] mb-8 text-lg">Define code challenges and execution test cases.</p>
+          <h1 className="text-4xl font-extrabold text-[#2F2F5B] mb-2 tracking-tight">Create Coding Practice Test</h1>
+          <p className="text-[#5C5C80] mb-8 text-lg">
+            Define practice coding challenges and execution test cases. These tests are for practice only and do not affect any job application.
+          </p>
 
           <form onSubmit={handleSubmit} className="space-y-12">
             
             {/* 1. Assessment Details */}
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-violet-700 border-b border-violet-200 pb-2">1. Assessment Configuration</h2>
+              <h2 className="text-2xl font-bold text-violet-700 border-b border-violet-200 pb-2">1. Practice Test Configuration</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">Assessment Name</label>
-                  <input required placeholder="e.g. SDE 1 HackerRank Challenge" name="assessmentName" onChange={handleDetailsChange} value={assessmentDetails.assessmentName} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-violet-500 bg-white/50" />
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Practice Test Name</label>
+                  <input
+                    required
+                    placeholder="e.g. DSA Coding Practice Set 1"
+                    name="assessmentName"
+                    onChange={handleDetailsChange}
+                    value={assessmentDetails.assessmentName}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-violet-500 bg-white/50"
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-2">Job Post ID (Optional)</label>
-                  <input type="number" placeholder="Leave blank for open exam" name="jobPostId" onChange={handleDetailsChange} value={assessmentDetails.jobPostId} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-violet-500 bg-white/50" />
+                  <input
+                    type="number"
+                    placeholder="Leave blank for general practice"
+                    name="jobPostId"
+                    onChange={handleDetailsChange}
+                    value={assessmentDetails.jobPostId}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-violet-500 bg-white/50"
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-2">Start Time</label>
@@ -140,7 +158,7 @@ const TPOCodingAssessmentForm = () => {
             {/* 2. Questions Array */}
             <div className="space-y-6">
               <div className="flex justify-between items-center border-b border-violet-200 pb-2">
-                <h2 className="text-2xl font-bold text-violet-700">2. Coding Challenges</h2>
+                <h2 className="text-2xl font-bold text-violet-700">2. Practice Coding Challenges</h2>
                 <button type="button" onClick={handleAddQuestion} className="flex items-center gap-2 bg-violet-100 text-violet-700 px-4 py-2 rounded-lg font-bold hover:bg-violet-200 transition">
                   <FaPlus /> Add Question
                 </button>
@@ -225,7 +243,11 @@ const TPOCodingAssessmentForm = () => {
                 disabled={isSubmitting}
                 className="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-violet-700 hover:to-indigo-700 transition shadow-lg disabled:opacity-50"
               >
-                {isSubmitting ? "Creating..." : <><FaCheck /> Create Coding Assessment</>}
+                {isSubmitting ? "Creating..." : (
+                  <>
+                    <FaCheck /> Create Coding Practice Test
+                  </>
+                )}
               </button>
             </div>
 
