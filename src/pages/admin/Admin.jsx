@@ -10,6 +10,7 @@ import {
   FaChartBar,
   FaBell,
   FaUserTie,
+  FaUserPlus,
   FaPlus,
 } from "react-icons/fa";
 import NavbarAdmin from "../../components/NavbarAdminDashboard"; // ✅ using NavbarAdmin
@@ -43,9 +44,18 @@ const tpoFeatures = [
     color: "from-emerald-500/20 to-teal-500/20",
     iconColor: "text-emerald-500",
   },
+  {
+    icon: <FaUserPlus />,
+    title: "User Management",
+    desc: "Create and manage Student, TPO, and Recruiter accounts.",
+    color: "from-rose-500/20 to-orange-500/20",
+    iconColor: "text-rose-500",
+    to: "/admin/create-user",
+  },
 ];
 
 const Admin = () => {
+  const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -54,11 +64,11 @@ const Admin = () => {
     <div className="bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A] scroll-smooth font-outfit">
       {/* 🆕 Navbar with "Add" Button */}
       <NavbarAdmin
-      // extraButton={{
-      //label: "Add",
-      //to: "/admin/add",
-      //icon: <FaPlus className="text-base" />,
-      // }}
+        extraButton={{
+          label: "Create User",
+          to: "/admin/create-user",
+          icon: <FaPlus className="text-base" />,
+        }}
       />
 
       {/* 🔙 Back to Main Home */}
@@ -99,7 +109,10 @@ const Admin = () => {
             Administrator Control
           </motion.span>
           <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-6 text-[#2F2F5B] font-outfit tracking-tight">
-            Welcome To <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-indigo-600">Admin Portal</span>
+            Welcome To{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-indigo-600">
+              Admin Portal
+            </span>
           </h1>
           <div className="text-2xl sm:text-3xl font-semibold mb-6 text-[#9266FF] drop-shadow-sm font-outfit">
             <Typewriter
@@ -115,7 +128,8 @@ const Admin = () => {
             />
           </div>
           <p className="text-[#5C5C80] mb-8 text-sm sm:text-base leading-relaxed max-w-lg font-outfit">
-            CareerNexus empowers Admins to oversee and control TPO-level placement activities across the institution with precision and ease.
+            CareerNexus empowers Admins to oversee and control TPO-level
+            placement activities across the institution with precision and ease.
           </p>
         </motion.div>
 
@@ -158,7 +172,10 @@ const Admin = () => {
             viewport={{ once: true }}
           >
             <h2 className="text-4xl md:text-5xl font-extrabold text-[#2F2F5B] mb-6 font-outfit">
-              Powerful <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-indigo-600">Admin Features</span>
+              Powerful{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-indigo-600">
+                Admin Features
+              </span>
             </h2>
           </motion.div>
         </div>
@@ -171,13 +188,18 @@ const Admin = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="group relative bg-white/60 backdrop-blur-xl border border-white/40 p-10 rounded-[2.5rem] shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_-10px_rgba(130,90,255,0.2)]"
+              className="group relative bg-white/60 backdrop-blur-xl border border-white/40 p-10 rounded-[2.5rem] shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_-10px_rgba(130,90,255,0.2)] cursor-pointer"
+              onClick={() => feature.to && navigate(feature.to)}
             >
               {/* Animated Background Glow */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-40 transition-opacity duration-500 rounded-[2.5rem]`}></div>
+              <div
+                className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-40 transition-opacity duration-500 rounded-[2.5rem]`}
+              ></div>
 
               <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-6">
-                <div className={`text-4xl ${feature.iconColor} p-5 bg-white rounded-3xl shadow-sm border border-gray-100 group-hover:scale-110 transition-transform duration-500`}>
+                <div
+                  className={`text-4xl ${feature.iconColor} p-5 bg-white rounded-3xl shadow-sm border border-gray-100 group-hover:scale-110 transition-transform duration-500`}
+                >
                   {feature.icon}
                 </div>
                 <div>
@@ -207,7 +229,9 @@ const Admin = () => {
             About <span className="text-violet-600">Admin Portal</span>
           </h2>
           <p className="text-[#5C5C80] text-lg leading-relaxed font-outfit">
-            The CareerNexus Admin portal provides higher-level access for managing TPOs, overseeing placement strategy, and enhancing placement success across all departments.
+            The CareerNexus Admin portal provides higher-level access for
+            managing TPOs, overseeing placement strategy, and enhancing
+            placement success across all departments.
           </p>
         </motion.div>
       </section>
@@ -221,8 +245,6 @@ const Admin = () => {
           <p className="text-xs opacity-60">Your one-stop placement tracker</p>
         </div>
       </footer>
-
-
     </div>
   );
 };
