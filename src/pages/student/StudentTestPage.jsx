@@ -35,7 +35,7 @@ const StudentTestPage = () => {
     let timer;
 
     if (assessmentId) {
-      requestApi.get(`/api/exam/${assessmentId}/start`)
+      requestApi.get(`/exam/${assessmentId}/start`)
         .then(res => {
           if (res.data && res.data.questions && res.data.questions.length > 0) {
             setQuestions(res.data.questions);
@@ -94,7 +94,7 @@ const StudentTestPage = () => {
       };
     });
 
-    requestApi.post(`/api/exam/${assessmentId}/submit`, payload)
+    requestApi.post(`/exam/${assessmentId}/submit`, payload)
       .then((res) => {
         const data = res.data;
         toast.success(`Test submitted successfully! Score: ${data.score}/${data.totalQuestions} - ${data.status}`);

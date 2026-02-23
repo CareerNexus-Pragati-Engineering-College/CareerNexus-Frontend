@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import NavbarRecruiterDashboard from "../../components/NavbarRecruiterDashboard";
-import { FaClock, FaFileUpload, FaClipboardList, FaArrowLeft, FaCheckCircle } from "react-icons/fa";
+import { FaClock, FaFileUpload, FaClipboardList, FaArrowLeft, FaCheckCircle, FaPlus, FaTrash } from "react-icons/fa";
 import { motion } from "framer-motion";
 import requestApi from "../../services/request";
 import getuserId from "../../services/getUserId";
@@ -15,6 +15,18 @@ const RecruitmentProcessPage = () => {
   const [loading, setLoading] = useState(false);
   const userId = getuserId();
   const [min_marks, setmin_marks] = useState(0);
+
+  // Coding round configuration (problem + test cases)
+  const [codingAssessmentName, setCodingAssessmentName] = useState("");
+  const [codingQuestions, setCodingQuestions] = useState([
+    {
+      title: "",
+      description: "",
+      constraints: "",
+      points: 10,
+      testCases: [{ input: "", expectedOutput: "", isHidden: false, marks: 5 }],
+    },
+  ]);
 
   const { username, jobId } = useParams();
   const navigate = useNavigate();
@@ -46,55 +58,133 @@ const RecruitmentProcessPage = () => {
   };
 
   const handleSubmit = async () => { // <--- Make handleSubmit async
-    if (!selectedRound || !startTime || !endTime || !questionFile || !min_marks) { // Check jobId too
-      toast.error("Please fill in all fields, upload both files, and ensure recruiter ID/job ID are available.", { id: "missing-fields" });
+    if (!selectedRound || !startTime || !endTime || !jobId) {
+      toast.error("Please fill in all required fields and ensure job ID is available.", { id: "missing-fields" });
       return;
     }
 
-    setLoading(true); // <--- Set loading true before API call
+    setLoading(true);
 
     try {
-      const formData = new FormData();
+      // Aptitude Round -> classic MCQ PDF-based assessment
+      if (selectedRound === "Aptitude Round") {
+        if (!questionFile || !min_marks) {
+          toast.error("Please upload the aptitude MCQ PDF and set minimum marks.", { id: "missing-aptitude-fields" });
+          setLoading(false);
+          return;
+        }
 
-      console.log("Selected Round:", selectedRound);
-      const roundDetails = {
-        createdByUserId: userId,
-        jobPostId: jobId,
-        roundName: selectedRound,
-        startTime: startTime,
-        endTime: endTime,
-        min_marks: min_marks,
+        const formData = new FormData();
 
-      };
+        const roundDetails = {
+          createdByUserId: userId,
+          jobPostId: jobId,
+          roundName: selectedRound,
+          startTime: startTime,
+          endTime: endTime,
+          min_marks: min_marks,
+        };
 
+        formData.append("roundDetails", new Blob([JSON.stringify(roundDetails)], { type: "application/json" }));
+        formData.append("questionPdf", questionFile);
 
-      formData.append("roundDetails", new Blob([JSON.stringify(roundDetails)], { type: "application/json" }));
+        const response = await requestApi.post(
+          `exam/recruiter/mcq/assessment`,
+          formData
+        );
 
+        toast.success("Aptitude round configured successfully!", { id: "round-success" });
+        console.log("API Response:", response.data);
+      }
 
-      formData.append("questionPdf", questionFile);
+      // Coding Round -> coding problem + test cases, treated as elimination round
+      if (selectedRound === "Coding Round") {
+        if (!codingAssessmentName || !min_marks) {
+          toast.error("Please provide coding round name and minimum marks.", { id: "missing-coding-fields" });
+          setLoading(false);
+          return;
+        }
 
+        const payload = {
+          assessmentName: codingAssessmentName,
+          jobPostId: parseInt(jobId),
+          startTime: startTime,
+          endTime: endTime,
+          questions: codingQuestions,
+          mode: "ELIMINATION",
+          minMarks: min_marks,
+        };
 
+        const response = await requestApi.post("/coding-exam/tpo/create", payload);
+        toast.success("Coding elimination round configured successfully!", { id: "coding-round-success" });
+        console.log("Coding round API Response:", response.data);
+      }
 
-      const response = await requestApi.post(
-        `exam/recruiter/mcq/assessment`,
-        formData
-      );
-
-
-      toast.success("Recruitment round configured successfully!", { id: "round-success" });
-      console.log("API Response:", response.data);
+      // Reset common state
       setSelectedRound("");
       setStartTime("");
       setEndTime("");
       setQuestionFile(null);
-
+      setCodingAssessmentName("");
+      setCodingQuestions([
+        {
+          title: "",
+          description: "",
+          constraints: "",
+          points: 10,
+          testCases: [{ input: "", expectedOutput: "", isHidden: false, marks: 5 }],
+        },
+      ]);
 
     } catch (error) {
       console.error("Error configuring round:", error);
       toast.error("Failed to configure recruitment round: " + (error.response?.data || error.message), { id: "round-error" });
     } finally {
-      setLoading(false); // <--- Set loading false after API call
+      setLoading(false);
     }
+  };
+
+  // Coding round question handlers
+  const handleCodingQuestionChange = (qIndex, field, value) => {
+    const updated = [...codingQuestions];
+    updated[qIndex][field] = value;
+    setCodingQuestions(updated);
+  };
+
+  const handleAddCodingQuestion = () => {
+    setCodingQuestions([
+      ...codingQuestions,
+      {
+        title: "",
+        description: "",
+        constraints: "",
+        points: 10,
+        testCases: [{ input: "", expectedOutput: "", isHidden: false, marks: 5 }],
+      },
+    ]);
+  };
+
+  const handleRemoveCodingQuestion = (qIndex) => {
+    const updated = codingQuestions.filter((_, i) => i !== qIndex);
+    setCodingQuestions(updated);
+  };
+
+  const handleAddCodingTestCase = (qIndex) => {
+    const updated = [...codingQuestions];
+    updated[qIndex].testCases.push({ input: "", expectedOutput: "", isHidden: false, marks: 5 });
+    setCodingQuestions(updated);
+  };
+
+  const handleRemoveCodingTestCase = (qIndex, tcIndex) => {
+    const updated = [...codingQuestions];
+    updated[qIndex].testCases = updated[qIndex].testCases.filter((_, i) => i !== tcIndex);
+    setCodingQuestions(updated);
+  };
+
+  const handleCodingTestCaseChange = (qIndex, tcIndex, field, value) => {
+    const updated = [...codingQuestions];
+    updated[qIndex].testCases[tcIndex][field] = value;
+    setCodingQuestions(updated);
   };
 
   const handleBack = () => {
@@ -163,6 +253,19 @@ const RecruitmentProcessPage = () => {
               <option value="Aptitude Round">Aptitude Round</option> {/* <--- Change value to match backend enum/string */}
               <option value="Coding Round">Coding Round</option> {/* <--- Change value */}
             </select>
+
+            {/* Contextual help text based on selected round */}
+            {selectedRound === "Aptitude Round" && (
+              <p className="mt-3 text-xs text-gray-600">
+                Configure an aptitude MCQ round for this job. Upload the MCQ question PDF and set the minimum marks to qualify.
+              </p>
+            )}
+            {selectedRound === "Coding Round" && (
+              <p className="mt-3 text-xs text-gray-600">
+                Configure a coding MCQ elimination round for this job. Upload coding-related MCQ questions as a PDF and set the minimum marks.
+                Students who do not meet the minimum marks in this round will be automatically rejected for this job.
+              </p>
+            )}
           </motion.div>
 
           {/* Center: Start and End Time */}
@@ -201,7 +304,7 @@ const RecruitmentProcessPage = () => {
             </div>
           </motion.div>
 
-          {/* Right: Upload PDFs / Minimum Marks */}
+          {/* Right: Configuration panel (MCQ or Coding based on selection) */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -209,38 +312,195 @@ const RecruitmentProcessPage = () => {
             className="bg-purple-50 p-6 rounded-xl shadow-md"
           >
             <div className="space-y-4">
-              {/* Upload Questions PDF (unchanged) */}
-              <div>
-                <label className="flex items-center text-sm font-semibold text-gray-700 mb-2 gap-2">
-                  <FaFileUpload className="text-purple-600" />
-                  Upload Questions (PDF)
-                </label>
-                <input
-                  type="file"
-                  accept=".pdf"
-                  onChange={(e) => handleFileUpload(e, "question")}
-                  className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm"
-                />
-                {questionFile && (
-                  <p className="text-green-600 text-sm mt-1">{questionFile.name}</p>
-                )}
-              </div>
+              {/* MCQ Aptitude configuration */}
+              {selectedRound === "Aptitude Round" && (
+                <>
+                  <div>
+                    <label className="flex items-center text-sm font-semibold text-gray-700 mb-2 gap-2">
+                      <FaFileUpload className="text-purple-600" />
+                      Upload Aptitude Questions (PDF)
+                    </label>
+                    <input
+                      type="file"
+                      accept=".pdf"
+                      onChange={(e) => handleFileUpload(e, "question")}
+                      className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm"
+                    />
+                    {questionFile && (
+                      <p className="text-green-600 text-sm mt-1">{questionFile.name}</p>
+                    )}
+                  </div>
 
-              {/* Minimum Marks input (replaces Upload Answers) */}
-              <div>
-                <label className="flex items-center text-sm font-semibold text-gray-700 mb-2 gap-2">
-                  <FaCheckCircle className="text-purple-600" />
-                  Minimum Marks
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  value={min_marks || ""}
-                  onChange={(e) => setmin_marks(Number(e.target.value))}
-                  placeholder="Enter minimum marks"
-                  className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-                />
-              </div>
+                  <div>
+                    <label className="flex items-center text-sm font-semibold text-gray-700 mb-2 gap-2">
+                      <FaCheckCircle className="text-purple-600" />
+                      Minimum Marks
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={min_marks || ""}
+                      onChange={(e) => setmin_marks(Number(e.target.value))}
+                      placeholder="Enter minimum marks"
+                      className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* Coding Round configuration: problem + test cases */}
+              {selectedRound === "Coding Round" && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Coding Round Name</label>
+                    <input
+                      type="text"
+                      value={codingAssessmentName}
+                      onChange={(e) => setCodingAssessmentName(e.target.value)}
+                      placeholder="e.g. Coding Round - DSA"
+                      className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="flex items-center text-sm font-semibold text-gray-700 mb-2 gap-2">
+                      <FaCheckCircle className="text-purple-600" />
+                      Minimum Marks (Elimination Threshold)
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={min_marks || ""}
+                      onChange={(e) => setmin_marks(Number(e.target.value))}
+                      placeholder="Enter minimum marks for coding round"
+                      className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+
+                  <div className="mt-4 border-t border-gray-200 pt-4 space-y-4 max-h-96 overflow-y-auto pr-1">
+                    <div className="flex justify-between items-center mb-2">
+                      <h3 className="text-sm font-semibold text-purple-700">Coding Problems & Test Cases</h3>
+                      <button
+                        type="button"
+                        onClick={handleAddCodingQuestion}
+                        className="flex items-center gap-1 text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded-md hover:bg-purple-200"
+                      >
+                        <FaPlus size={10} /> Add Problem
+                      </button>
+                    </div>
+
+                    {codingQuestions.map((q, qIndex) => (
+                      <div key={qIndex} className="bg-white rounded-xl p-3 shadow-sm border border-purple-100 relative">
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveCodingQuestion(qIndex)}
+                          className="absolute top-2 right-2 text-red-400 hover:text-red-600"
+                        >
+                          <FaTrash size={12} />
+                        </button>
+                        <p className="text-xs font-semibold text-gray-700 mb-2">Problem {qIndex + 1}</p>
+                        <div className="space-y-2">
+                          <input
+                            type="text"
+                            value={q.title}
+                            onChange={(e) => handleCodingQuestionChange(qIndex, "title", e.target.value)}
+                            placeholder="Problem title"
+                            className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-xs"
+                          />
+                          <textarea
+                            rows={2}
+                            value={q.description}
+                            onChange={(e) => handleCodingQuestionChange(qIndex, "description", e.target.value)}
+                            placeholder="Problem description"
+                            className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-xs"
+                          />
+                          <textarea
+                            rows={2}
+                            value={q.constraints}
+                            onChange={(e) => handleCodingQuestionChange(qIndex, "constraints", e.target.value)}
+                            placeholder="Constraints (optional)"
+                            className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-xs"
+                          />
+
+                          <div className="flex items-center gap-2">
+                            <span className="text-[11px] text-gray-600">Max Points:</span>
+                            <input
+                              type="number"
+                              min="1"
+                              value={q.points}
+                              onChange={(e) => handleCodingQuestionChange(qIndex, "points", Number(e.target.value))}
+                              className="w-20 border border-gray-300 rounded-md px-2 py-1 text-xs"
+                            />
+                          </div>
+
+                          <div className="mt-2 border-t border-gray-100 pt-2">
+                            <div className="flex justify-between items-center mb-1">
+                              <span className="text-[11px] font-semibold text-gray-700">Test Cases</span>
+                              <button
+                                type="button"
+                                onClick={() => handleAddCodingTestCase(qIndex)}
+                                className="flex items-center gap-1 text-[10px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded"
+                              >
+                                <FaPlus size={8} /> Add Case
+                              </button>
+                            </div>
+
+                            {q.testCases.map((tc, tcIndex) => (
+                              <div key={tcIndex} className="mb-2 p-2 bg-gray-50 border border-gray-200 rounded-lg">
+                                <div className="flex justify-between items-center mb-1">
+                                  <span className="text-[10px] text-gray-600">Case {tcIndex + 1}</span>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRemoveCodingTestCase(qIndex, tcIndex)}
+                                    className="text-gray-400 hover:text-red-500"
+                                  >
+                                    <FaTrash size={10} />
+                                  </button>
+                                </div>
+                                <textarea
+                                  rows={1}
+                                  value={tc.input}
+                                  onChange={(e) => handleCodingTestCaseChange(qIndex, tcIndex, "input", e.target.value)}
+                                  placeholder="Standard Input"
+                                  className="w-full border border-gray-300 rounded-md px-2 py-1 text-[11px] mb-1"
+                                />
+                                <textarea
+                                  rows={1}
+                                  value={tc.expectedOutput}
+                                  onChange={(e) => handleCodingTestCaseChange(qIndex, tcIndex, "expectedOutput", e.target.value)}
+                                  placeholder="Expected Output"
+                                  className="w-full border border-gray-300 rounded-md px-2 py-1 text-[11px] mb-1"
+                                />
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-1">
+                                    <span className="text-[10px] text-gray-600">Marks:</span>
+                                    <input
+                                      type="number"
+                                      min="0"
+                                      value={tc.marks}
+                                      onChange={(e) => handleCodingTestCaseChange(qIndex, tcIndex, "marks", Number(e.target.value))}
+                                      className="w-16 border border-gray-300 rounded-md px-2 py-0.5 text-[11px]"
+                                    />
+                                  </div>
+                                  <label className="flex items-center gap-1 text-[10px] text-gray-600">
+                                    <input
+                                      type="checkbox"
+                                      checked={tc.isHidden}
+                                      onChange={(e) => handleCodingTestCaseChange(qIndex, tcIndex, "isHidden", e.target.checked)}
+                                      className="w-3 h-3"
+                                    />
+                                    Hidden (Private)
+                                  </label>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </motion.div>
 
@@ -288,6 +548,16 @@ const RecruitmentProcessPage = () => {
                 <p className="text-xs text-gray-600 mt-1">
                   Minimum Marks: {round.min_marks}
                 </p>
+                {round.roundName === "Coding Round" && round.examId && (
+                  <div className="mt-3">
+                    <button
+                      onClick={() => navigate(`/recruiter/${userId}/recruitment-process/${jobId}/coding-round/${round.examId}`)}
+                      className="text-xs font-semibold text-purple-600 hover:text-purple-800 underline"
+                    >
+                      View Coding Round Results
+                    </button>
+                  </div>
+                )}
               </motion.div>
             ))
           )}

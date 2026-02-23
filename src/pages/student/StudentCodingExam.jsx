@@ -63,8 +63,13 @@ const StudentCodingExam = () => {
     };
 
     const handleSubmitExam = async () => {
+<<<<<<< HEAD
         if (!window.confirm("Are you sure you want to submit your assessment? You cannot make changes after this.")) return;
 
+=======
+        if (!window.confirm("Are you sure you want to submit this coding practice test? You cannot make changes after this submission.")) return;
+        
+>>>>>>> 7deaa70c3737df4fe3d116ab10ba80010eb433f7
         setIsSubmitting(true);
         try {
             const submissions = Object.keys(answers).map(qId => ({
@@ -74,7 +79,7 @@ const StudentCodingExam = () => {
             }));
 
             const res = await requestApi.post(`/coding-exam/${assessmentId}/submit`, { submissions });
-            toast.success(`Exam submitted! Your score: ${res.data.totalScore} / ${res.data.maxScore}`);
+            toast.success(`Practice submitted! Your score: ${res.data.totalScore} / ${res.data.maxScore}`);
             navigate("/student/" + userId + "/coding-assessments");
         } catch (err) {
             toast.error(err.response?.data || "Submission failed");
@@ -105,6 +110,11 @@ const StudentCodingExam = () => {
                     <div>
                         <h1 className="text-white font-bold tracking-wide">{assessment.assessmentName}</h1>
                         <p className="text-xs text-gray-400">Student: {userId}</p>
+                        {assessment.totalScore != null && assessment.maxScore != null && (
+                            <p className="text-xs text-emerald-400 mt-1">
+                                Last practice score: {assessment.totalScore} / {assessment.maxScore}
+                            </p>
+                        )}
                     </div>
                 </div>
 

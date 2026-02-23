@@ -13,7 +13,7 @@ const StudentCodingAssessments = () => {
   useEffect(() => {
     const fetchAssessments = async () => {
       try {
-        const res = await requestApi.get("/coding-exam/all");
+        const res = await requestApi.get("/coding-exam/student/dashboard");
         setAssessments(res.data);
       } catch (err) {
         console.error("Failed to fetch assessments", err);
@@ -33,8 +33,10 @@ const StudentCodingAssessments = () => {
           animate={{ opacity: 1, y: 0 }}
           className="mb-12"
         >
-          <h1 className="text-4xl font-extrabold text-[#2F2F5B] mb-2 tracking-tight">Coding Assessments</h1>
-          <p className="text-[#5C5C80] text-lg">Participate in challenges and test your skills.</p>
+          <h1 className="text-4xl font-extrabold text-[#2F2F5B] mb-2 tracking-tight">Coding Practice Tests</h1>
+          <p className="text-[#5C5C80] text-lg">
+            Practice coding challenges and improve your skills. These scores are for your practice and do not affect job applications.
+          </p>
         </motion.div>
 
         {loading ? (
@@ -42,7 +44,7 @@ const StudentCodingAssessments = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-violet-600"></div>
           </div>
         ) : assessments.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="space-y-4">
             {assessments.map((test, index) => {
               const startTime = new Date(test.startTime);
               const endTime = new Date(test.endTime);
@@ -54,11 +56,12 @@ const StudentCodingAssessments = () => {
               return (
                 <motion.div
                   key={test.id}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="bg-white/80 backdrop-blur-xl border border-white/40 shadow-xl rounded-3xl p-6 flex flex-col hover:shadow-2xl transition-all duration-300 relative overflow-hidden group"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="bg-white/80 backdrop-blur-xl border border-white/40 shadow-sm rounded-2xl p-4 flex flex-col md:flex-row items-center gap-6 hover:shadow-md transition-all duration-300 relative overflow-hidden group"
                 >
+<<<<<<< HEAD
                   {/* Status Badge */}
                   <div className="absolute top-4 right-4 z-10">
                     {isActive ? (
@@ -73,37 +76,73 @@ const StudentCodingAssessments = () => {
                   </div>
 
                   <div className="w-14 h-14 bg-violet-100 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:rotate-12 transition-transform shadow-sm">
+=======
+                  {/* Leading Icon */}
+                  <div className="w-12 h-12 bg-violet-100 rounded-xl flex items-center justify-center text-2xl group-hover:rotate-12 transition-transform shrink-0">
+>>>>>>> 7deaa70c3737df4fe3d116ab10ba80010eb433f7
                     🚀
                   </div>
 
-                  <h3 className="text-xl font-bold text-[#2F2F5B] mb-2">{test.assessmentName}</h3>
-                  <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-                    <FaCalendarAlt className="text-violet-500" />
-                    {startTime.toLocaleDateString()}
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-500 mb-6 font-mono bg-gray-50 p-2 rounded-lg">
-                    <FaClock className="text-violet-500" />
-                    {startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {/* Main Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 mb-1">
+                      <h3 className="text-lg font-bold text-[#2F2F5B] truncate">{test.assessmentName}</h3>
+                      {test.solved && (
+                        <span className="bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full flex items-center gap-1">
+                           Solved
+                        </span>
+                      )}
+                    </div>
+                    
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500">
+                      <div className="flex items-center gap-1.5 font-medium">
+                        <FaCalendarAlt className="text-violet-500" />
+                        {startTime.toLocaleDateString()}
+                      </div>
+                      <div className="flex items-center gap-1.5 font-medium">
+                        <FaClock className="text-violet-500" />
+                        {startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="mt-auto">
+                  {/* Score Info (if solved) */}
+                  {test.solved && test.highestScore !== null && (
+                    <div className="hidden md:flex flex-col items-center px-4 border-l border-gray-100">
+                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Highest Score</span>
+                      <div className="text-lg font-black text-violet-600">
+                        {test.highestScore} <span className="text-xs text-gray-300 font-normal">/ {test.maxScore}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Action Button */}
+                  <div className="w-full md:w-auto shrink-0">
                     {isActive ? (
                       <Link
                         to={`/student/${userId}/coding-assessment/${test.id}`}
-                        className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 hover:shadow-lg hover:from-violet-700 hover:to-indigo-700 transition"
+                        className="w-full md:w-40 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 hover:shadow-lg hover:brightness-110 transition"
                       >
-                        Start Assessment <FaChevronRight />
+                        {test.solved ? "Retake Test" : "Start Now"} <FaChevronRight className="text-[10px]" />
                       </Link>
                     ) : isFuture ? (
-                      <button disabled className="w-full bg-gray-200 text-gray-400 font-bold py-3 rounded-xl cursor-not-allowed">
-                        Waiting to Start
-                      </button>
+                      <div className="w-full md:w-40 bg-blue-50 text-blue-600 text-xs font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 border border-blue-100">
+                         Upcoming
+                      </div>
                     ) : (
-                      <button disabled className="w-full bg-gray-100 text-gray-300 font-bold py-3 rounded-xl cursor-not-allowed">
-                        Assessment Closed
-                      </button>
+                      <div className="w-full md:w-40 bg-gray-50 text-gray-400 text-xs font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 border border-gray-100 italic">
+                         Closed
+                      </div>
                     )}
                   </div>
+
+                   {/* Mobile score display */}
+                   {test.solved && test.highestScore !== null && (
+                    <div className="md:hidden flex items-center gap-2 text-xs bg-violet-50 px-3 py-1 rounded-full border border-violet-100">
+                      <span className="text-violet-400 font-bold uppercase tracking-widest">Score:</span>
+                      <span className="font-black text-violet-700">{test.highestScore} / {test.maxScore}</span>
+                    </div>
+                  )}
                 </motion.div>
               );
             })}
@@ -111,8 +150,8 @@ const StudentCodingAssessments = () => {
         ) : (
           <div className="bg-white/60 backdrop-blur-md rounded-3xl p-16 text-center border border-dashed border-gray-300">
             <div className="text-6xl mb-6">📝</div>
-            <h2 className="text-2xl font-bold text-[#2F2F5B] mb-2">No Active Assessments</h2>
-            <p className="text-gray-500">There are no coding tests scheduled at the moment. Keep practicing!</p>
+            <h2 className="text-2xl font-bold text-[#2F2F5B] mb-2">No Practice Tests</h2>
+            <p className="text-gray-500">There are no coding practice tests available at the moment. Keep learning and revising your skills!</p>
           </div>
         )}
       </div>
