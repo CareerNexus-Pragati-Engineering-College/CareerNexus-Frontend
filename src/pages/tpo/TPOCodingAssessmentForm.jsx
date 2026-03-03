@@ -116,6 +116,7 @@ const TPOCodingAssessmentForm = () => {
   };
 
   return (
+    
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#F8E5EB] via-[#ECEAFE] to-[#D6E6FD] text-[#2C225A] font-outfit">
       <NavbarTpoDashboard />
       <div className="flex-grow pt-28 pb-16 px-4 max-w-5xl mx-auto w-full">
@@ -196,6 +197,9 @@ const TPOCodingAssessmentForm = () => {
               </div>
             </div>
 
+
+
+
             {/* 2. Questions Array */}
             <div className="space-y-6">
               <div className="flex justify-between items-center border-b border-violet-200 pb-2">
@@ -249,6 +253,8 @@ const TPOCodingAssessmentForm = () => {
                           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-violet-500"
                         />
                       </div>
+
+
                       <div className="sm:col-span-1">
                         <label className="block text-sm font-bold text-gray-700 mb-2">
                           Max Points
@@ -269,6 +275,8 @@ const TPOCodingAssessmentForm = () => {
                         />
                       </div>
                     </div>
+
+
 
                     <div>
                       <label className="block text-sm font-bold text-gray-700 mb-2">
@@ -309,6 +317,8 @@ const TPOCodingAssessmentForm = () => {
                       ></textarea>
                     </div>
 
+
+
                     {/* Test Cases Nested Array */}
                     <div className="mt-6 pt-6 border-t border-gray-100">
                       <div className="flex justify-between items-center mb-4">
@@ -323,6 +333,8 @@ const TPOCodingAssessmentForm = () => {
                           <FaPlus size={10} /> Add Test Case
                         </button>
                       </div>
+
+
 
                       <div className="space-y-4">
                         {q.testCases.map((tc, tcIndex) => (
@@ -426,6 +438,8 @@ const TPOCodingAssessmentForm = () => {
               ))}
             </div>
 
+
+
             {/* Submit */}
             <div className="flex justify-end pt-8 border-t border-gray-200">
               <button
@@ -445,6 +459,9 @@ const TPOCodingAssessmentForm = () => {
           </form>
         </motion.div>
       </div>
+
+
+
 
       {/* 📍 Footer */}
       <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-auto">
