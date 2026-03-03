@@ -34,6 +34,8 @@ const ShareResource = ({ onShare, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
 
+
+
   // Prevent background scrolling while modal is open
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -69,6 +71,8 @@ const ShareResource = ({ onShare, onClose }) => {
       });
       return;
     }
+
+
 
     try {
       setIsLoading(true);
@@ -114,6 +118,8 @@ const ShareResource = ({ onShare, onClose }) => {
     }
   };
 
+
+
   const inputClasses =
     "w-full bg-white/60 border border-gray-200 text-gray-800 text-sm rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-transparent outline-none p-2.5 transition-all hover:bg-white/90 shadow-sm backdrop-blur-md";
 
@@ -145,6 +151,9 @@ const ShareResource = ({ onShare, onClose }) => {
             <FaTimes size={18} />
           </button>
         </div>
+
+
+
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
@@ -237,6 +246,9 @@ const ShareResource = ({ onShare, onClose }) => {
             </div>
           </div>
 
+
+
+
           {/* Texts inputs - 2 columns */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
@@ -283,6 +295,9 @@ const ShareResource = ({ onShare, onClose }) => {
             />
           </div>
 
+
+
+
           {/* Upload Area */}
           <div
             className={`w-full border-2 border-dashed ${
@@ -328,6 +343,8 @@ const ShareResource = ({ onShare, onClose }) => {
             />
           </div>
 
+
+
           {/* Submit */}
           <button
             type="submit"
@@ -364,6 +381,9 @@ const ShareResource = ({ onShare, onClose }) => {
       </div>
     </div>
   );
+
+
+  
 
   // Render the modal into document.body to ensure it completely overlays the navbar and evades parent stacking context
   return ReactDOM.createPortal(modalContent, document.body);
