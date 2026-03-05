@@ -36,6 +36,8 @@ const StudentApplyJobs = () => {
   const userId = getUserId();
   const location = useLocation();
 
+
+
   const parseLocation = (loc) => {
     if (Array.isArray(loc)) return loc.join(", ");
     try {
@@ -49,6 +51,8 @@ const StudentApplyJobs = () => {
   useEffect(() => {
     const prefs = JSON.parse(localStorage.getItem("jobPreferences"));
     if (prefs) setFilters(prefs);
+
+    
 
     const queryParams = new URLSearchParams(location.search);
     const jobIdFromQuery = queryParams.get("jobId");

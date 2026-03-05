@@ -203,6 +203,7 @@ const StudentApplications = () => {
                   Find Jobs Now
                 </Link>
               </div>
+              
             ) : (
               <div className="grid gap-5">
                 <AnimatePresence>
