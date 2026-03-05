@@ -51,6 +51,7 @@ const StudentApplications = () => {
             icon: "ℹ️",
           });
         }
+
       } catch (error) {
         setAppliedJobs([]);
         toast.error("Failed to fetch applications. Please try again.");
@@ -60,6 +61,8 @@ const StudentApplications = () => {
     }
     fetchData();
   }, [userId]);
+
+
 
   // Fetch rounds when a job is selected
   useEffect(() => {
@@ -80,6 +83,9 @@ const StudentApplications = () => {
     };
     fetchJobRounds();
   }, [selectedJob]);
+
+
+
 
   const sortByDate = (order) => {
     const sorted = [...appliedJobs].sort((a, b) => {
@@ -105,6 +111,9 @@ const StudentApplications = () => {
         return "bg-gray-100 text-gray-700 border-gray-200";
     }
   };
+
+
+
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] font-poppins relative overflow-hidden">
@@ -166,6 +175,8 @@ const StudentApplications = () => {
             </div>
           </div>
 
+
+
           {/* Applications List */}
           <div className="bg-white/40 backdrop-blur-xl border border-white/80 rounded-3xl p-6 sm:p-8 shadow-[0_8px_30px_rgba(107,78,207,0.05)]">
             {isLoading ? (
@@ -192,6 +203,7 @@ const StudentApplications = () => {
                   Find Jobs Now
                 </Link>
               </div>
+              
             ) : (
               <div className="grid gap-5">
                 <AnimatePresence>
