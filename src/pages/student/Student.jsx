@@ -81,6 +81,8 @@ const Student = () => {
         </motion.div>
       </div>
 
+
+
       {/* 🎓 Student Landing Section */}
       <section className="min-h-screen pt-28 flex items-center">
         <div className="container mx-auto px-4 sm:px-8 lg:px-16 flex flex-col md:flex-row items-center justify-between gap-10">
@@ -106,12 +108,18 @@ const Student = () => {
                   loop: true,
                 }}
               />
+
+
             </div>
+
+
 
             <p className="text-[#3f3f5c] mb-8 text-sm sm:text-base md:text-lg">
               The student portal of CareerNexus helps streamline your placement preparation,
               resume updates, and goal tracking all in one powerful interface.
             </p>
+
+
 
             <ScrollLink
               to="student-features"
@@ -130,6 +138,8 @@ const Student = () => {
             </ScrollLink>
           </motion.div>
 
+
+
           <motion.div
             initial={{ opacity: 0, scale: 0.8, y: 60 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -146,6 +156,8 @@ const Student = () => {
           </motion.div>
         </div>
       </section>
+
+
 
       {/* 🚀 Features Section */}
       <section
@@ -224,6 +236,8 @@ const Student = () => {
         </div>
       </section>
 
+
+
       {/* 📍 Footer */}
       <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-10">
         <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2 font-outfit">
@@ -236,5 +250,7 @@ const Student = () => {
     </div>
   );
 };
+
+
 
 export default Student;
