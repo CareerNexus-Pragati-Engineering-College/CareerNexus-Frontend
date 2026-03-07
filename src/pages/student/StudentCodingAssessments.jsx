@@ -24,6 +24,7 @@ const StudentCodingAssessments = () => {
     fetchAssessments();
   }, []);
 
+
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#F8E5EB] via-[#ECEAFE] to-[#D6E6FD] text-[#2C225A] font-poppins">
       <NavbarStudentDashboard />
@@ -41,6 +42,7 @@ const StudentCodingAssessments = () => {
             for your practice and do not affect job applications.
           </p>
         </motion.div>
+
 
         {loading ? (
           <div className="flex justify-center items-center h-64">
@@ -87,6 +89,7 @@ const StudentCodingAssessments = () => {
                     🚀
                   </div>
 
+
                   {/* Main Info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-1">
@@ -120,7 +123,9 @@ const StudentCodingAssessments = () => {
                     </div>
                   </div>
 
+
                   {/* Score Info (if solved) */}
+                  
                   {test.solved && test.highestScore !== null && (
                     <div className="hidden md:flex flex-col items-center px-4 border-l border-gray-100">
                       <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
