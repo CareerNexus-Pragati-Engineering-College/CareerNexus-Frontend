@@ -25,6 +25,8 @@ const StudentCodingExam = () => {
   // Store code for each question: { questionId: { code: string, language: string } }
   const [answers, setAnswers] = useState({});
 
+
+
   useEffect(() => {
     const fetchExam = async () => {
       try {
@@ -54,6 +56,8 @@ const StudentCodingExam = () => {
     fetchExam();
   }, [assessmentId, navigate]);
 
+
+
   const handleCodeUpdate = (newCode) => {
     if (!assessment) return;
     const qId = assessment.questions[currentQuestionIndex].id;
@@ -80,6 +84,8 @@ const StudentCodingExam = () => {
     )
       return;
 
+
+      
     setIsSubmitting(true);
     try {
       const submissions = Object.keys(answers).map((qId) => ({
