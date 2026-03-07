@@ -62,7 +62,9 @@ const StudentApplyJobs = () => {
       try {
         const res = await requestApi.get(`/jobs/all`);
 
+
         const jobsWithSaved = res.data.map((job) => ({
+          
           job_title: job.jobTitle,
           company_name: job.companyName,
           job_description: job.jobDescription,
