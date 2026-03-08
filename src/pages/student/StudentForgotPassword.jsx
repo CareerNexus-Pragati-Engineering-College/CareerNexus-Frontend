@@ -14,6 +14,8 @@ const StudentForgotPassword = () => {
     window.scrollTo(0, 0);
   }, []);
 
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -94,6 +96,7 @@ const StudentForgotPassword = () => {
               </div>
             </div>
 
+
             <div className="relative">
               <FaLock className="absolute left-3 top-3.5 text-violet-400" />
               <input
@@ -116,6 +119,7 @@ const StudentForgotPassword = () => {
           </form>
 
 
+
         </motion.div>
       </div>
 
@@ -131,5 +135,7 @@ const StudentForgotPassword = () => {
     </div>
   );
 };
+
+
 
 export default StudentForgotPassword;

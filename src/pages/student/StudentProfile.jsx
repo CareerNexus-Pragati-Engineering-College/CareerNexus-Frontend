@@ -5,6 +5,8 @@ import toast from "react-hot-toast";
 import getuserId from "../../services/getUserId";
 import requestApi from "../../services/request";
 
+
+
 import {
   FaArrowLeft,
   FaUserEdit,
@@ -37,6 +39,8 @@ function parseArray(value) {
   }
   return [];
 }
+
+
 
 const SUGGESTED_SKILLS = [
   "Java", "Python", "C++", "C", "JavaScript", "TypeScript",
@@ -127,6 +131,8 @@ const StudentProfile = () => {
     const { name, value } = e.target;
     setStudent(prev => ({ ...prev, [name]: value }));
   };
+
+  
 
   const handleProfilePicChange = (e) => {
     const file = e.target.files[0];

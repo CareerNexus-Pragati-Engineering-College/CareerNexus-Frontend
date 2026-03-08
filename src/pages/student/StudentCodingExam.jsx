@@ -106,6 +106,7 @@ const StudentCodingExam = () => {
     } finally {
       setIsSubmitting(false);
     }
+    
   };
 
   if (loading)
