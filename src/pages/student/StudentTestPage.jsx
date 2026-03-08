@@ -135,8 +135,12 @@ const StudentTestPage = () => {
     );
   }
 
+
+
   return (
     <div ref={fullScreenRef} className="flex w-full h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A]">
+
+
 
       {/* Sidebar */}
       <div className="w-1/5 p-4 border-r border-violet-300 flex flex-col gap-4">
@@ -172,6 +176,8 @@ const StudentTestPage = () => {
         </div>
       </div>
 
+
+
       {/* Question Panel */}
       <div className="w-4/5 p-8 overflow-y-auto">
         {questions.length > 0 && (
@@ -197,5 +203,7 @@ const StudentTestPage = () => {
     </div>
   );
 };
+
+
 
 export default StudentTestPage;
