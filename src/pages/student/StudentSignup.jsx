@@ -13,6 +13,8 @@ import {
 import { motion } from "framer-motion";
 import axios from "axios";
 
+
+
 const StudentSignup = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -30,6 +32,8 @@ const StudentSignup = () => {
     }
   }, []);
 
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -39,6 +43,8 @@ const StudentSignup = () => {
         email,
         password,
       });
+
+
 
       toast.success("Registration Successful redirect to login ..");
       navigate("/student/login");
@@ -51,6 +57,8 @@ const StudentSignup = () => {
       console.error("Signup Error:", error);
     }
   };
+
+
 
   const inputClasses = "w-full pl-11 pr-10 py-3.5 rounded-xl bg-white/80 border border-purple-100 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all shadow-sm";
 
@@ -72,6 +80,8 @@ const StudentSignup = () => {
             Back
           </NavLink>
 
+
+
           {/* 👤 Icon & Title */}
           <div className="flex flex-col items-center mt-6">
             <motion.div
@@ -81,6 +91,8 @@ const StudentSignup = () => {
               className="w-16 h-16 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center mb-5 text-white shadow-xl shadow-purple-500/30 text-3xl"
             >
               <FaUserGraduate />
+
+
             </motion.div>
             <h2 className="text-3xl font-bold text-center bg-gradient-to-r from-purple-800 to-indigo-800 bg-clip-text text-transparent">
               Join CareerNexus
@@ -89,6 +101,9 @@ const StudentSignup = () => {
               Create your student account
             </p>
           </div>
+
+
+
 
           {/* 📄 Form */}
           <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
@@ -104,6 +119,7 @@ const StudentSignup = () => {
                 required
               />
             </div>
+
 
             <div className="relative">
               <FaEnvelope className="absolute left-4 top-[1.1rem] text-purple-400 text-lg" />
@@ -152,9 +168,11 @@ const StudentSignup = () => {
               >
                 Log in
               </NavLink>
+
             </p>
           </form>
         </motion.div>
+        
       </div>
 
       {/* 📍 Footer */}
