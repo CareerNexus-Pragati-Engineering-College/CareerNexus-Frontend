@@ -20,6 +20,8 @@ const StudentLogin = () => {
   const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST;
   const backendPort = import.meta.env.VITE_APP_BACKEND_PORT;
 
+
+
   useEffect(() => {
     window.scrollTo(0, 0);
     if (localStorage.getItem("token") && localStorage.getItem("role") == "student") {
@@ -52,6 +54,7 @@ const StudentLogin = () => {
       toast.error(err.response?.data?.error + " " + err.response?.data?.message || "Login failed. Please try again.");
     }
   };
+
 
   const inputClasses = "w-full pl-11 pr-10 py-3.5 rounded-xl bg-white/80 border border-purple-100 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all shadow-sm";
 
@@ -133,6 +136,7 @@ const StudentLogin = () => {
               </NavLink>
             </div>
 
+
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -155,6 +159,8 @@ const StudentLogin = () => {
         </motion.div>
       </div>
 
+
+
       {/* 📍 Footer */}
       <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-auto">
         <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2 font-outfit">
@@ -167,5 +173,7 @@ const StudentLogin = () => {
     </div >
   );
 };
+
+
 
 export default StudentLogin;
