@@ -158,6 +158,7 @@ const StudentTestPage = () => {
             >
               {index + 1}
             </button>
+
           ))}
         </div>
         <div className="flex flex-col gap-2 mt-6">
@@ -178,7 +179,8 @@ const StudentTestPage = () => {
 
 
 
-      {/* Question Panel */}
+                               {/* Question Panel */}
+                               
       <div className="w-4/5 p-8 overflow-y-auto">
         {questions.length > 0 && (
           <div className="space-y-6">

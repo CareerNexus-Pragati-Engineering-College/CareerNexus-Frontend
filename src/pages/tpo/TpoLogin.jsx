@@ -13,6 +13,9 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 
+
+
+
 const TpoLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [userId, setuserId] = useState("");
@@ -20,6 +23,8 @@ const TpoLogin = () => {
   const navigate = useNavigate();
   const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST;
   const backendPort = import.meta.env.VITE_APP_BACKEND_PORT;
+
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -56,6 +61,8 @@ const TpoLogin = () => {
     }
   };
 
+
+
   const inputClasses = "w-full pl-11 pr-10 py-3.5 rounded-xl bg-white/80 border border-purple-100 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all shadow-sm";
 
   return (
@@ -76,6 +83,8 @@ const TpoLogin = () => {
             Back
           </NavLink>
 
+
+
           {/* 👤 Icon & Title */}
           <div className="flex flex-col items-center mt-6">
             <motion.div
@@ -84,6 +93,9 @@ const TpoLogin = () => {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="w-16 h-16 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center mb-5 text-white shadow-xl shadow-purple-500/30 text-3xl"
             >
+
+
+
               <FaUserTie />
             </motion.div>
             <h2 className="text-3xl font-bold text-center bg-gradient-to-r from-purple-800 to-indigo-800 bg-clip-text text-transparent">
@@ -93,6 +105,9 @@ const TpoLogin = () => {
               Sign in to <span className="text-purple-600 font-semibold">CareerNexus</span>
             </p>
           </div>
+
+
+
 
           {/* 📄 Form */}
           <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
@@ -107,6 +122,8 @@ const TpoLogin = () => {
                 required
               />
             </div>
+
+
 
             <div className="relative">
               <FaLock className="absolute left-4 top-[1.1rem] text-purple-400 text-lg" />

@@ -65,6 +65,8 @@ const TpoHome = () => {
           </motion.div>
         </section>
 
+
+
         {/* 📈 Stats Grid */}
         <section className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 mb-20 px-4">
           {studentStats.map((stat, index) => (
@@ -76,6 +78,10 @@ const TpoHome = () => {
               whileHover={{ y: -10, scale: 1.02 }}
               className="group relative bg-white/60 backdrop-blur-xl border border-white/40 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] rounded-[2rem] p-8 text-center transition-shadow duration-300 hover:shadow-[0_20px_50px_-10px_rgba(130,90,255,0.2)]"
             >
+
+
+
+
               {/* Optional background glow on hover */}
               <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[2rem]"></div>
 
@@ -89,6 +95,9 @@ const TpoHome = () => {
             </motion.div>
           ))}
         </section>
+
+
+
 
         {/* 🏢 Recruiters Section */}
         <section className="max-w-6xl mx-auto mb-20 text-center px-4">
@@ -117,6 +126,8 @@ const TpoHome = () => {
             ))}
           </motion.div>
         </section>
+
+
 
         {/* 🏫 College Info Section */}
         <section className="max-w-4xl mx-auto px-4">
@@ -147,6 +158,9 @@ const TpoHome = () => {
         </section>
       </motion.div>
 
+
+
+
       {/* 📍 Footer */}
       <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-auto">
         <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2 font-outfit">
@@ -159,5 +173,8 @@ const TpoHome = () => {
     </div>
   );
 };
+
+
+
 
 export default TpoHome;
