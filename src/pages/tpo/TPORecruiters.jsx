@@ -7,6 +7,9 @@ import NavbarTpoDashboard from "../../components/NavbarTPODashboard";
 import TPORecruiterModal from "./TPORecruiterModal";
 import requestApi from "../../services/request";
 
+
+
+
 const TPORecruiters = () => {
   const [recruiters, setRecruiters] = useState([]);
   const [expandedRecruiter, setExpandedRecruiter] = useState(null);
@@ -15,6 +18,8 @@ const TPORecruiters = () => {
   const [applicantCounts, setApplicantCounts] = useState({}); // { jobId: count }
   const [applicants, setApplicants] = useState({});
   const { userId } = useParams();
+
+
 
   // Fallback dummy data if API fails to load
   const dummyData = [
@@ -69,6 +74,9 @@ const TPORecruiters = () => {
     },
   ];
 
+
+
+
   // Fetch recruiters with jobs on mount, fallback to dummy on error
   useEffect(() => {
     async function fetchRecruiters() {
@@ -100,6 +108,8 @@ const TPORecruiters = () => {
     }
   };
 
+
+
   const GetApplicants = async (jobId) => {
     try {
       const response = await requestApi.get(`applications/student/applications/${jobId}`);
@@ -123,6 +133,8 @@ const TPORecruiters = () => {
     }
   };
 
+
+
   // Expand or collapse job
   const toggleJob = (jobId) => {
     if (expandedJob === jobId) {
@@ -133,6 +145,8 @@ const TPORecruiters = () => {
       setExpandedJob(jobId);
     }
   };
+
+
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#F8E5EB] via-[#ECEAFE] to-[#D6E6FD] text-[#2C225A] font-outfit">
@@ -232,6 +246,10 @@ const TPORecruiters = () => {
                             </button>
                           </div>
 
+
+
+
+
                           {/* Applicants Table */}
                           <AnimatePresence>
                             {expandedJob === job.id && (
@@ -286,10 +304,15 @@ const TPORecruiters = () => {
             ))}
           </div>
 
+
+
           {/* Applicant Modal */}
           <TPORecruiterModal student={selectedStudent} onClose={() => setSelectedStudent(false)} />
         </motion.div>
       </div>
+
+
+
 
       {/* 📍 Footer */}
       <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-auto">
@@ -303,5 +326,8 @@ const TPORecruiters = () => {
     </div>
   );
 };
+
+
+
 
 export default TPORecruiters;
