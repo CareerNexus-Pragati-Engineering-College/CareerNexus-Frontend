@@ -7,6 +7,11 @@ import requestApi from "../../services/request";
 import getuserId from "../../services/getUserId";
 import { FaArrowLeft, FaUserEdit, FaSave, FaCamera, FaUser, FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 
+
+
+
+
+
 const TPOProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -28,6 +33,11 @@ const TPOProfile = () => {
     phone: "",
     email: emailfromUrl || "",
   });
+
+
+
+
+
 
   useEffect(() => {
     if (pageMode === "data") {
@@ -95,6 +105,10 @@ const TPOProfile = () => {
     }
   };
 
+
+
+
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -127,6 +141,9 @@ const TPOProfile = () => {
       )}
     </div>
   );
+
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 font-outfit flex flex-col">
@@ -213,7 +230,11 @@ const TPOProfile = () => {
             </div>
           </div>
 
+
+
+
           {/* Right Content Area (Scrollable Info) */}
+
           <div className="w-full lg:w-2/3 flex flex-col gap-6 sm:gap-8">
 
             {/* Section 1: Personal Details */}
@@ -252,5 +273,7 @@ const TPOProfile = () => {
     </div>
   );
 };
+
+
 
 export default TPOProfile;
