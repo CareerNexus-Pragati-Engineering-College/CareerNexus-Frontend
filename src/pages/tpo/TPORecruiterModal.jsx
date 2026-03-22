@@ -2,6 +2,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import { User, FileDown } from "lucide-react";
 
+
+
 const TPORecruiterModal = ({ student, onClose }) => {
   if (!student) return null;
   const backendUrl = import.meta.env.VITE_APP_BACKEND_HOST
@@ -14,6 +16,8 @@ const TPORecruiterModal = ({ student, onClose }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
+
+
       <motion.div
         className="bg-white/90 backdrop-blur-xl border border-white/50 shadow-2xl rounded-3xl max-w-lg w-full relative overflow-hidden flex flex-col"
         initial={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -21,7 +25,11 @@ const TPORecruiterModal = ({ student, onClose }) => {
         exit={{ scale: 0.9, opacity: 0, y: 20 }}
         transition={{ type: "spring", stiffness: 300, damping: 25 }}
       >
+
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-violet-500 to-indigo-500"></div>
+
+
+
 
         {/* Header */}
         <div className="px-6 py-6 flex items-center justify-between border-b border-violet-100 bg-white/50">
@@ -45,6 +53,9 @@ const TPORecruiterModal = ({ student, onClose }) => {
             ✕
           </button>
         </div>
+
+
+
 
         {/* Content */}
         <div className="p-6 space-y-5 text-gray-700 bg-white/40">
@@ -85,6 +96,9 @@ const TPORecruiterModal = ({ student, onClose }) => {
           </div>
         </div>
 
+
+
+
         {/* Footer */}
         <div className="px-6 py-5 bg-gray-50/50 border-t border-gray-100 flex justify-end gap-3 rounded-b-3xl">
           <button
@@ -106,6 +120,10 @@ const TPORecruiterModal = ({ student, onClose }) => {
       </motion.div>
     </motion.div>
   );
+
+
 };
+
+
 
 export default TPORecruiterModal;
