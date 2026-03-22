@@ -8,10 +8,15 @@ import toast from "react-hot-toast";
 import { FaArrowLeft, FaSearch, FaDownload, FaFilter } from "react-icons/fa";
 import NavbarTpoDashboard from "../../components/NavbarTPODashboard";
 
+
+
+
 const departments = [
   "CSE", "CSE-IT", "CSE-AI", "CSE-AIML", "CSE-DS", "Cyber Security",
   "ECE", "EEE", "MECH", "CIVIL"
 ];
+
+
 
 const platforms = ["LinkedIn", "LeetCode", "HackerRank", "GitHub"];
 
@@ -59,6 +64,8 @@ const dummyData = [
     profileLink: "https://leetcode.com/meena",
   },
 ];
+
+
 
 const TpoStudents = () => {
   const navigate = useNavigate();
@@ -114,6 +121,9 @@ const TpoStudents = () => {
   };
 
 
+
+
+
   useEffect(() => {
     console.log(filteredData);
   }, [filteredData])
@@ -147,6 +157,10 @@ const TpoStudents = () => {
         >
           <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-violet-500 to-indigo-500"></div>
 
+
+
+
+
           {/* Header & Back */}
           <div className="flex items-center gap-4 mb-2">
             <Link
@@ -161,6 +175,9 @@ const TpoStudents = () => {
             </h2>
           </div>
           <p className="text-[#5C5C80] mb-8 text-lg sm:pl-14">View and download student platform profiles from various departments.</p>
+
+
+
 
           {/* Dropdown Filters */}
           <div className="flex flex-col sm:flex-row flex-wrap gap-4 mb-8 p-6 bg-white/50 border border-violet-100 rounded-2xl shadow-sm">
@@ -211,6 +228,8 @@ const TpoStudents = () => {
             </button>
           </div>
 
+
+
           {/* Search & Download */}
           {filteredData.length > 0 && (
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
@@ -233,6 +252,8 @@ const TpoStudents = () => {
               </button>
             </div>
           )}
+
+
 
           {/* Table */}
           {filteredSearchResults.length > 0 ? (
@@ -279,6 +300,8 @@ const TpoStudents = () => {
           ) : null}
         </motion.div>
       </div>
+
+
 
       {/* 📍 Footer */}
       <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-auto">
