@@ -1,15 +1,20 @@
 // src/pages/admin/AdminAccessForm.jsx
 import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+
 import {
   FaEnvelope,
   FaArrowLeft,
   FaUserTie,
   FaUser,
 } from "react-icons/fa";
+
+
 import { motion } from "framer-motion";
 import requestApi from "../../services/request";
 import toast from "react-hot-toast";
+
+
 
 const AdminAccessForm = () => {
   const navigate = useNavigate();
@@ -39,6 +44,9 @@ const AdminAccessForm = () => {
     }
   };
 
+
+
+
   const inputClasses = "w-full pl-11 pr-10 py-3.5 rounded-xl bg-white/80 border border-purple-100 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all shadow-sm";
 
   return (
@@ -49,7 +57,11 @@ const AdminAccessForm = () => {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="w-full max-w-md bg-white/70 backdrop-blur-2xl border border-white/80 p-8 sm:p-10 rounded-[2rem] shadow-2xl relative"
       >
-        {/* 🔙 Back Button */}
+       
+       
+       
+       
+                       {/* 🔙 Back Button */}
         <NavLink
           to="/admin"
           className="absolute top-6 left-6 flex items-center gap-2 px-4 py-2 bg-white/50 hover:bg-white/90 border border-purple-100/50 hover:border-purple-300 rounded-full text-gray-600 hover:text-purple-700 text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-300 backdrop-blur-md group z-50"
@@ -58,7 +70,9 @@ const AdminAccessForm = () => {
           Back
         </NavLink>
 
-        {/* 👤 Icon & Title */}
+        
+        
+                              {/* 👤 Icon & Title */}
         <div className="flex flex-col items-center mt-6">
           <motion.div
             initial={{ scale: 0 }}

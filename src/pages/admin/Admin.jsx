@@ -215,7 +215,12 @@ const Admin = () => {
               className="group relative bg-white/60 backdrop-blur-xl border border-white/40 p-10 rounded-[2.5rem] shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_-10px_rgba(130,90,255,0.2)] cursor-pointer"
               onClick={() => feature.to && navigate(feature.to)}
             >
-              {/* Animated Background Glow */}
+
+
+
+
+
+                           {/* Animated Background Glow */}
               <div
                 className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-40 transition-opacity duration-500 rounded-[2.5rem]`}
               ></div>
@@ -240,7 +245,10 @@ const Admin = () => {
         </div>
       </section>
 
-      {/* 📘 About Section */}
+      
+      
+      
+                            {/* 📘 About Section */}
       <section id="admin-about" className="py-24 px-6 bg-transparent">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -260,7 +268,11 @@ const Admin = () => {
         </motion.div>
       </section>
 
-      {/* 📍 Footer */}
+      
+      
+      
+      
+                            {/* 📍 Footer */}
       <footer className="bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-10">
         <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2">
           <p className="text-sm sm:text-base opacity-90">
@@ -272,5 +284,11 @@ const Admin = () => {
     </div>
   );
 };
+
+
+
+
+
+
 
 export default Admin;
