@@ -16,6 +16,9 @@ import {
 } from "react-icons/fa";
 import NavbarAdmin from "../../components/NavbarAdminDashboard"; // ✅ using NavbarAdmin
 
+
+
+
 const tpoFeatures = [
   {
     icon: <FaFileAlt />,
@@ -55,14 +58,22 @@ const tpoFeatures = [
   },
 ];
 
+
+
 const Admin = () => {
   const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+
+
   return (
     <div className="bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A] scroll-smooth font-outfit">
+
+
+
+
       {/* 🆕 Navbar with "Add" Button */}
       <NavbarAdmin
         extraButton={{
@@ -71,6 +82,8 @@ const Admin = () => {
           icon: <FaPlus className="text-base" />,
         }}
       />
+
+      
 
       {/* 🔙 Back to Main Home */}
       <div className="fixed top-[90px] left-3 z-50 hidden md:block">
