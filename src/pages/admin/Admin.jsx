@@ -83,9 +83,9 @@ const Admin = () => {
         }}
       />
 
-      
 
-      {/* 🔙 Back to Main Home */}
+
+                          {/* 🔙 Back to Main Home */}
       <div className="fixed top-[90px] left-3 z-50 hidden md:block">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -102,12 +102,18 @@ const Admin = () => {
         </motion.div>
       </div>
 
-      {/* 🧑‍💼 Admin Hero Section */}
+      
+      
+                          {/* 🧑‍💼 Admin Hero Section */}
       <section
         id="admin-home"
         className="min-h-screen pt-28 px-6 md:px-20 flex flex-col md:flex-row items-center justify-between gap-10"
       >
-        {/* 📝 Text */}
+       
+       
+       
+       
+                       {/* 📝 Text */}
         <motion.div
           initial={{ opacity: 0, x: -80 }}
           animate={{ opacity: 1, x: 0 }}
@@ -147,7 +153,9 @@ const Admin = () => {
           </p>
         </motion.div>
 
-        {/* 📷 Image */}
+        
+        
+                    {/* 📷 Image */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8, y: 60 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -164,7 +172,9 @@ const Admin = () => {
         </motion.div>
       </section>
 
-      {/* 🔧 Admin Features */}
+      
+      
+                        {/* 🔧 Admin Features */}
       <section
         id="admin-features"
         className="min-h-screen bg-gradient-to-b from-[#E4EBFE] to-[#F8E5EB] py-20 px-6 sm:px-10 md:px-24"
