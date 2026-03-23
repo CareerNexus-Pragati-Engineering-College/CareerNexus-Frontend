@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import requestApi from "../../services/request";
 import toast from "react-hot-toast";
 
+
+
+
 const AdminCreateUser = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -48,7 +51,10 @@ const AdminCreateUser = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="max-w-xl w-full bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 overflow-hidden"
             >
-                {/* Header */}
+                
+                
+                
+                                        {/* Header */}
                 <div className="bg-gradient-to-r from-violet-600 to-indigo-600 p-10 text-white text-center relative">
                     <button 
                         onClick={() => navigate("/admin")}
@@ -63,7 +69,11 @@ const AdminCreateUser = () => {
                     <p className="text-violet-100 mt-2 font-medium">Automatic password generation & email notification</p>
                 </div>
 
-                {/* Form */}
+                    
+                    
+                    
+                    
+                            {/* Form */}
                 <div className="p-10">
                     {!success ? (
                         <form onSubmit={handleSubmit} className="space-y-8">
