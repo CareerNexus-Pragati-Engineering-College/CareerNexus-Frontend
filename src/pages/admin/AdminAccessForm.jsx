@@ -91,7 +91,9 @@ const AdminAccessForm = () => {
           <p className="text-xs text-gray-400 mt-1 italic text-center">Passwords are auto-generated and emailed.</p>
         </div>
 
-        {/* 📄 Form */}
+        
+        
+                            {/* 📄 Form */}
         <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
           <div className="relative">
             <FaUser className="absolute left-4 top-[1.1rem] text-purple-400 text-lg" />
@@ -128,7 +130,12 @@ const AdminAccessForm = () => {
               <option value="recruiter">Recruiter</option>
               <option value="tpo">TPO</option>
             </select>
-            {/* Custom dropdown arrow to match styling */}
+            
+            
+            
+            
+            
+                              {/* Custom dropdown arrow to match styling */}
             <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center px-2 text-purple-400">
               <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                 <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
@@ -147,8 +154,15 @@ const AdminAccessForm = () => {
           </motion.button>
         </form>
       </motion.div>
+
+
+
+
     </div>
   );
 };
+
+
+
 
 export default AdminAccessForm;
