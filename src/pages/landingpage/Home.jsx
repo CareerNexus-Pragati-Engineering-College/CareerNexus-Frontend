@@ -5,6 +5,8 @@ import { Link as ScrollLink } from "react-scroll";
 import { FaArrowRight, FaChartLine, FaChartPie, FaBell, FaTasks } from "react-icons/fa";
 import NavbarLanding from "../../components/NavbarLanding";
 
+
+
 const features = [
   {
     title: "Smart Placement Tracker",
@@ -41,14 +43,21 @@ const Home = () => {
     window.scrollTo(0, 0);
   }, []);
 
+
+
   return (
     <div className="text-[#4A4A7B] bg-soft-glow scroll-smooth overflow-x-hidden">
       <NavbarLanding />
 
-      {/* 🏠 Landing Section */}
+
+
+                      {/* 🏠 Landing Section */}
       <section id="home" className="min-h-screen pt-28 flex items-center">
         <div className="container mx-auto px-4 sm:px-8 lg:px-16 flex flex-col md:flex-row items-center justify-between gap-10">
-          {/* Text Content */}
+          
+          
+          
+                        {/* Text Content */}
           <motion.div
             className="max-w-xl"
             initial={{ opacity: 0, x: -80 }}
@@ -99,7 +108,9 @@ const Home = () => {
             </ScrollLink>
           </motion.div>
 
-          {/* Hero Image */}
+          
+          
+                      {/* Hero Image */}
           <motion.div
             initial={{ opacity: 0, scale: 0.7 }}
             animate={{ opacity: 1, scale: 1 }}
