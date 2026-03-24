@@ -78,6 +78,10 @@ const AdminCreateUser = () => {
                     {!success ? (
                         <form onSubmit={handleSubmit} className="space-y-8">
                             <div className="space-y-6">
+                                
+                                
+                                
+                                
                                 {/* User ID */}
                                 <div>
                                     <label className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-3 block">Username / ID</label>
@@ -95,6 +99,9 @@ const AdminCreateUser = () => {
                                     </div>
                                 </div>
 
+                                
+                                
+                                
                                 {/* Email */}
                                 <div>
                                     <label className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-3 block">Email Address</label>
@@ -112,6 +119,9 @@ const AdminCreateUser = () => {
                                     </div>
                                 </div>
 
+                                
+                                
+                                
                                 {/* Role Selection */}
                                 <div>
                                     <label className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4 block">Assign Role</label>
@@ -179,5 +189,7 @@ const AdminCreateUser = () => {
         </div>
     );
 };
+
+
 
 export default AdminCreateUser;
