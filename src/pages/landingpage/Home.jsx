@@ -182,7 +182,11 @@ const Home = () => {
                 viewport={{ once: true }}
                 className={`group relative bg-white border border-gray-100 p-8 rounded-3xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_-10px_rgba(79,70,229,0.15)] ${feature.borderColor} hover:border-opacity-50`}
               >
-                {/* Hover Gradient Background */}
+                  
+                  
+                  
+                  
+                    {/* Hover Gradient Background */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl`}></div>
 
                 <div className="relative z-10">
@@ -203,7 +207,11 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 💼 About Section */}
+                      
+                      
+                      
+                      
+                       {/* 💼 About Section */}
       <section id="about" className="py-24 px-6 bg-gradient-to-b from-[#F8E5EB] to-[#E4EBFE]">
         <div className="container mx-auto">
           <motion.div
