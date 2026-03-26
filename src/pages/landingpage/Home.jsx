@@ -128,9 +128,14 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 🚀 Features Section */}
+          
+          
+          
+                  {/* 🚀 Features Section */}
       <section id="features" className="py-24 relative overflow-hidden bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE]">
-        {/* Background Decorative Elements */}
+        
+        
+                {/* Background Decorative Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] bg-purple-100 rounded-full blur-[100px] opacity-50"></div>
           <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-blue-100 rounded-full blur-[100px] opacity-50"></div>
