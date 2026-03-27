@@ -6,6 +6,10 @@ import { motion } from "framer-motion";
 import requestApi from "../../services/request";
 import getUserId from "../../services/getUserId";
 import toast from "react-hot-toast";
+
+
+
+
 const ApplicationsPage = () => {
   const [postedJobs, setPostedJobs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -37,6 +41,10 @@ const ApplicationsPage = () => {
     navigate(`/recruiter/${userId}/recruitment-process/${jobId}`);
   };
 
+
+
+
+  
   // Safely filter jobs by title (handling undefined values)
   const filteredJobs = postedJobs.filter((job) =>
     (job.jobTitle || "").toLowerCase().includes(searchTerm.toLowerCase())
