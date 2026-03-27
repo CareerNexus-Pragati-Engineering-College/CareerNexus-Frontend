@@ -44,7 +44,7 @@ const ApplicationsPage = () => {
 
 
 
-  
+
   // Safely filter jobs by title (handling undefined values)
   const filteredJobs = postedJobs.filter((job) =>
     (job.jobTitle || "").toLowerCase().includes(searchTerm.toLowerCase())
@@ -52,7 +52,12 @@ const ApplicationsPage = () => {
 
   return (
     <>
-      <NavbarRecruiterDashboard />
+      
+      
+      
+                
+                
+                <NavbarRecruiterDashboard />
       <div className="pt-24 px-4 pb-16 min-h-screen bg-white text-gray-900 font-poppins">
         <div className="max-w-6xl mx-auto space-y-10">
           <div className="flex items-center gap-4">
@@ -66,7 +71,11 @@ const ApplicationsPage = () => {
             <h1 className="text-4xl font-bold text-gray-800">Applications</h1>
           </div>
 
-          {/* Search Input */}
+         
+         
+         
+         
+                       {/* Search Input */}
           <div className="max-w-md">
             <input
               type="text"
@@ -77,7 +86,10 @@ const ApplicationsPage = () => {
             />
           </div>
 
-          {/* Job List */}
+          
+          
+          
+                    {/* Job List */}
           {filteredJobs.length === 0 ? (
             <p className="text-gray-500 text-sm">No matching jobs found.</p>
           ) : (
