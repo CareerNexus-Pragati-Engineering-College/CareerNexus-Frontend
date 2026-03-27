@@ -101,7 +101,10 @@ const ApplicationsPage = () => {
                 transition={{ duration: 0.4, delay: index * 0.1 }}
                 className="bg-white border border-gray-300 rounded-2xl p-8 shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-8 hover:shadow-xl transition duration-300"
               >
-                {/* Applicant Count */}
+                
+                
+                
+                          {/* Applicant Count */}
                 <div className="flex items-center gap-4 min-w-[120px]">
                   <div className="p-4 rounded-full bg-purple-100 text-purple-600 shadow-inner">
                     <FaUsers size={30} />
@@ -114,7 +117,10 @@ const ApplicationsPage = () => {
                   </div>
                 </div>
 
-                {/* Job Info */}
+                
+                
+                
+                      {/* Job Info */}
                 <div className="flex-1 min-w-0 space-y-1">
                   <p className="text-xl font-semibold text-gray-800 truncate">{job.jobTitle || "Untitled Job"}</p>
                   <p className="text-sm text-gray-700"><span className="font-semibold">Job ID:</span> {job.jobId || "N/A"}</p>
@@ -123,7 +129,11 @@ const ApplicationsPage = () => {
                   </p>
                 </div>
 
-                {/* Start Recruitment Button */}
+                
+                
+                
+                
+                        {/* Start Recruitment Button */}
                 <motion.button
                   onClick={() => handleStartRecruitment(job.jobId)}
                   whileHover={{ scale: 1.05, boxShadow: "0 0 12px rgba(165,100,255,0.7)" }}
