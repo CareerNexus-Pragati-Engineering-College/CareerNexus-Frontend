@@ -13,6 +13,10 @@ import {
 } from "react-icons/fa";
 import NavbarRecruiter from "../../components/NavbarRecruiter"; // ✅ updated
 
+
+
+
+
 const recruiterFeatures = [
   {
     icon: <FaClipboardList />,
@@ -52,12 +56,16 @@ const recruiterFeatures = [
   },
 ];
 
+
+
+
 const Recruiter = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   return (
+
     <div className="bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A] scroll-smooth font-poppins overflow-x-hidden">
       {/* 🔙 Back to Main Home */}
       <div className="fixed top-[90px] left-3 z-50 hidden md:block">
@@ -76,12 +84,21 @@ const Recruiter = () => {
         </motion.div>
       </div>
 
-      {/* 🧑‍💼 Hero Section */}
+                
+                
+                
+                
+                {/* 🧑‍💼 Hero Section */}
       <section
         id="recruiter-home"
         className="min-h-screen pt-28 px-6 md:px-20 flex flex-col md:flex-row items-center justify-between gap-10"
       >
-        {/* 📝 Text */}
+                  
+                  
+                  
+                  
+                  
+                  {/* 📝 Text */}
         <motion.div
           initial={{ opacity: 0, x: -80 }}
           animate={{ opacity: 1, x: 0 }}
