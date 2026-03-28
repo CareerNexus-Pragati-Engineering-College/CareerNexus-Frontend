@@ -142,7 +142,10 @@ const Recruiter = () => {
           </ScrollLink>
         </motion.div>
 
-        {/* 📷 Image */}
+            
+            
+            
+            {/* 📷 Image */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8, y: 60 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -159,7 +162,10 @@ const Recruiter = () => {
         </motion.div>
       </section>
 
-      {/* 🚀 Features Section */}
+      
+      
+            
+            {/*  Features Section */}
       <section
         id="recruiter-features"
         className="py-32 relative overflow-hidden bg-gradient-to-b from-[#E4EBFE]/50 to-[#F8E5EB]/50"
