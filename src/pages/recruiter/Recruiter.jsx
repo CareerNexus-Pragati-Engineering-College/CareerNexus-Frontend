@@ -205,7 +205,8 @@ const Recruiter = () => {
                   {feature.desc}
                 </p>
 
-                {/* Decorative background element */}
+                
+                      {/* Decorative background element */}
                 <div className={`absolute -bottom-10 -right-10 opacity-[0.03] text-9xl ${feature.text} group-hover:scale-110 group-hover:-rotate-12 transition-transform duration-700 pointer-events-none`}>
                   {feature.icon}
                 </div>
@@ -215,7 +216,10 @@ const Recruiter = () => {
         </div>
       </section>
 
-      {/* 📖 About */}
+      
+      
+      
+                  {/* 📖 About */}
       <section id="recruiter-about" className="py-24 px-6 bg-gradient-to-b from-[#F8E5EB] to-[#E4EBFE]">
         <div className="container mx-auto">
           <motion.div
@@ -242,7 +246,9 @@ const Recruiter = () => {
         </div>
       </section>
 
-      {/* 📍 Navbar */}
+      
+      
+                {/* 📍 Navbar */}
       <NavbarRecruiter />
 
       {/* 📍 Footer */}
