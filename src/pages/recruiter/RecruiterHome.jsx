@@ -155,7 +155,10 @@ const RecruiterDashboard = () => {
           </div>
         </section>
 
-        {/* 🛠️ Modern Quick Access Hub */}
+                      
+                      
+                      
+                      {/* 🛠️ Modern Quick Access Hub */}
         <section className="mb-12">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-bold text-[#2F2F5B]">Management Hub</h2>
@@ -208,7 +211,12 @@ const RecruiterDashboard = () => {
         </section>
       </motion.main>
 
-      {/* 📍 Footer */}
+                      
+                      
+                      
+                      
+                      
+                      {/* 📍 Footer */}
       <footer className="bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-10">
         <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2 font-outfit">
           <p className="text-sm sm:text-base opacity-90">
