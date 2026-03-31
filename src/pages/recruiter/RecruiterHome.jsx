@@ -90,7 +90,10 @@ const RecruiterDashboard = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        {/* ✨ Hero Section - Centered and Clean */}
+                
+                
+                
+                {/* ✨ Hero Section - Centered and Clean */}
         <div className="text-center max-w-4xl mx-auto mb-20">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -124,7 +127,11 @@ const RecruiterDashboard = () => {
           </motion.div>
         </div>
 
-        {/* 📊 Stats Section */}
+                              
+                              
+                              
+                              
+                              {/* 📊 Stats Section */}
         <section className="mb-24">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {trackerStats.map((stat, index) => (
