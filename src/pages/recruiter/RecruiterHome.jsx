@@ -7,6 +7,9 @@ import requestApi from "../../services/request";
 import getUserId from "../../services/getUserId";
 import toast from "react-hot-toast";
 
+
+
+
 import {
   FaUniversity,
   FaSchool,
@@ -75,7 +78,11 @@ const RecruiterDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] font-outfit">
-      <NavbarRecruiterDashboard />
+                
+                
+                
+                
+                <NavbarRecruiterDashboard />
 
       <motion.main
         className="pt-28 pb-12 px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto"
