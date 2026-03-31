@@ -54,7 +54,11 @@ const RecruiterCodingRoundResults = () => {
 
   return (
     <>
-      <NavbarRecruiterDashboard />
+
+                  
+                  
+                  
+                  <NavbarRecruiterDashboard />
       <div className="pt-20 px-4 pb-12 min-h-screen bg-white font-poppins text-gray-800">
         {/* Back button */}
         <div className="max-w-6xl mx-auto mb-6">
@@ -115,7 +119,7 @@ const RecruiterCodingRoundResults = () => {
                 )}
               </motion.div>
 
-              {/* Failed */}
+                                {/* Failed */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
