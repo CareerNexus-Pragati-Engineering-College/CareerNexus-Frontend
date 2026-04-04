@@ -234,7 +234,10 @@ const RecruiterJob = () => {
         </button>
       </div>
 
-      {/* Success Animation */}
+                        
+                        
+                        
+                        {/* Success Animation */}
       <AnimatePresence>
         {showSuccessAnimation && (
           <motion.div
@@ -251,12 +254,19 @@ const RecruiterJob = () => {
         )}
       </AnimatePresence>
 
-      {/* Main Container */}
+                        
+                        
+                        
+                        
+                        {/* Main Container */}
       <div className="min-h-screen pt-36 pb-16 px-4 sm:px-6 lg:px-8 bg-slate-50 text-slate-900 font-outfit select-none">
 
         <div className="max-w-[1400px] mx-auto flex flex-col xl:flex-row gap-8 items-start">
 
-          {/* Form Container (Left Column) */}
+                                  
+                                  
+                                  
+                                  {/* Form Container (Left Column) */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
