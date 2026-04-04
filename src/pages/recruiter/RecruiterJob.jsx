@@ -113,6 +113,9 @@ const RecruiterJob = () => {
 
     if (hasEmpty) return showToast("Fill all fields", "danger");
 
+
+
+
     const payload = {
       postedBy: { userId },
       companyName: job.company_name,
@@ -159,6 +162,8 @@ const RecruiterJob = () => {
     }
   };
 
+
+
   const handleEdit = (index) => {
     const jobToEdit = filteredJobs[index + (currentPage - 1) * jobsPerPage];
     setJob({
@@ -191,6 +196,9 @@ const RecruiterJob = () => {
     }
   };
 
+
+
+
   const openModal = (job) => {
     setSelectedJob(job);
     setShowModal(true);
@@ -207,9 +215,14 @@ const RecruiterJob = () => {
     currentPage * jobsPerPage
   );
 
+
+
   return (
     <>
-      <NavbarRecruiterDashboard />
+
+
+
+                        <NavbarRecruiterDashboard />
 
 
       <div className="absolute top-20 left-0 w-full p-4 sm:p-6 z-50 pointer-events-none">
