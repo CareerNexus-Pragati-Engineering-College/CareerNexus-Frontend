@@ -283,7 +283,11 @@ const RecruiterJob = () => {
             </div>
 
             <div className="space-y-5">
-              {/* Form Inputs */}
+              
+              
+              
+                              
+                              {/* Form Inputs */}
               {Object.entries({
                 company_name: "Company Name",
                 job_title: "Job Title",
@@ -302,7 +306,12 @@ const RecruiterJob = () => {
                 </div>
               ))}
 
-              {/* Location Input */}
+              
+              
+              
+                          
+                            
+                            {/* Location Input */}
               <div>
                 <label className="block mb-2 text-xs font-bold text-slate-400 uppercase tracking-wider">Locations</label>
                 <div className="w-full flex flex-col gap-3">
@@ -338,7 +347,11 @@ const RecruiterJob = () => {
                 </div>
               </div>
 
-              {/* Textareas */}
+              
+              
+              
+                                    
+                                    {/* Textareas */}
               {["job_description", "recruitment_process"].map((key) => (
                 <div key={key}>
                   <label className="block mb-2 text-xs font-bold text-slate-400 uppercase tracking-wider">
