@@ -395,13 +395,18 @@ const RecruiterJob = () => {
           </motion.div>
 
 
-          {/* Right Column (Job List & Filters) */}
+          
+          
+          
+                            {/* Right Column (Job List & Filters) */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             className="flex-1 w-full flex flex-col gap-6"
           >
-            {/* Filter */}
+            
+            
+                              {/* Filter */}
             <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-2 sm:p-3 flex items-center relative overflow-hidden">
               <div className="absolute left-0 top-0 bottom-0 w-2 bg-indigo-500"></div>
               <HiMagnifyingGlass className="text-slate-400 text-2xl absolute left-8" />
@@ -414,7 +419,13 @@ const RecruiterJob = () => {
               />
             </div>
 
-            {/* List */}
+                                
+                                
+                                
+                                
+                                
+                                
+                                {/* List */}
             <div className="space-y-4">
               {currentJobs.map((job, index) => (
                 <motion.div
@@ -483,7 +494,13 @@ const RecruiterJob = () => {
               )}
             </div>
 
-            {/* Pagination */}
+            
+            
+            
+            
+                                
+                                
+                                {/* Pagination */}
             {totalPages > 1 && (
               <div className="mt-8 flex justify-center items-center gap-3 bg-white p-4 rounded-3xl border border-slate-200 shadow-sm w-fit mx-auto">
                 {[...Array(totalPages)].map((_, i) => (
