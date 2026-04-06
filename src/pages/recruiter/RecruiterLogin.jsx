@@ -68,14 +68,17 @@ const RecruiterLogin = () => {
       >
 
 
-        
+
         <NavLink
           to="/recruiter"
           className="absolute top-6 left-6 flex items-center gap-2 px-4 py-2 bg-white/50 hover:bg-white/90 border border-purple-100/50 hover:border-purple-300 rounded-full text-gray-600 hover:text-purple-700 text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-300 backdrop-blur-md group z-50"
         >
+
           <FaArrowLeft className="group-hover:-translate-x-1 transition-transform duration-300" />
           Back
         </NavLink>
+
+
 
         <div className="flex flex-col items-center mt-6">
           <motion.div
@@ -85,6 +88,9 @@ const RecruiterLogin = () => {
             className="w-16 h-16 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center mb-5 text-white shadow-xl shadow-purple-500/30 text-3xl"
           >
             <FaUserTie />
+
+
+
           </motion.div>
           <h2 className="text-3xl font-bold text-center bg-gradient-to-r from-purple-800 to-indigo-800 bg-clip-text text-transparent">
             Welcome Recruiter
@@ -93,6 +99,10 @@ const RecruiterLogin = () => {
             Sign in to <span className="text-purple-600 font-semibold">CareerNexus</span>
           </p>
         </div>
+
+
+
+
 
         <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
           <div className="relative">
@@ -106,6 +116,9 @@ const RecruiterLogin = () => {
               required
             />
           </div>
+
+
+
 
           <div className="relative">
             <FaLock className="absolute left-4 top-[1.1rem] text-purple-400 text-lg" />
@@ -124,6 +137,9 @@ const RecruiterLogin = () => {
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </div>
           </div>
+
+
+          
 
           <div className="flex items-center justify-between text-sm text-gray-600 gap-2 px-1">
             <label className="flex items-center gap-2 cursor-pointer group">
