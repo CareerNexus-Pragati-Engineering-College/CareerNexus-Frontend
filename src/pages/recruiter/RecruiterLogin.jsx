@@ -28,6 +28,8 @@ const RecruiterLogin = () => {
     }
   }, []);
 
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!userId || !password) {
@@ -48,9 +50,15 @@ const RecruiterLogin = () => {
     }
   };
 
+
+
   const inputClasses = "w-full pl-11 pr-10 py-3.5 rounded-xl bg-white/80 border border-purple-100 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all shadow-sm";
 
+
+
   return (
+
+
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex items-center justify-center px-4 py-16 font-outfit">
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
@@ -58,6 +66,9 @@ const RecruiterLogin = () => {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="w-full max-w-md bg-white/70 backdrop-blur-2xl border border-white/80 p-8 sm:p-10 rounded-[2rem] shadow-2xl relative"
       >
+
+
+        
         <NavLink
           to="/recruiter"
           className="absolute top-6 left-6 flex items-center gap-2 px-4 py-2 bg-white/50 hover:bg-white/90 border border-purple-100/50 hover:border-purple-300 rounded-full text-gray-600 hover:text-purple-700 text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-300 backdrop-blur-md group z-50"
