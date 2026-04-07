@@ -7,6 +7,9 @@ import requestApi from "../../services/request";
 import getuserId from "../../services/getUserId";
 import { FaArrowLeft, FaUserEdit, FaSave, FaCamera, FaUser, FaPhoneAlt, FaBuilding, FaIdBadge, FaEnvelope } from "react-icons/fa";
 
+
+
+
 const RecruiterProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,6 +33,9 @@ const RecruiterProfile = () => {
     phone: "",
     email: emailfromUrl || "",
   });
+
+
+
 
   useEffect(() => {
     if (pageMode === "data") {
@@ -80,6 +86,9 @@ const RecruiterProfile = () => {
     );
   }
 
+
+
+
   const handleChange = (e) => {
     setRecruiter({ ...recruiter, [e.target.name]: e.target.value });
   };
@@ -96,6 +105,9 @@ const RecruiterProfile = () => {
       return;
     }
 
+
+
+    
     try {
       const payload = {
         firstName: recruiter.firstName,

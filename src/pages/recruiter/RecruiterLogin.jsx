@@ -151,6 +151,9 @@ const RecruiterLogin = () => {
             </a>
           </div>
 
+
+
+
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -164,5 +167,7 @@ const RecruiterLogin = () => {
     </div >
   );
 };
+
+
 
 export default RecruiterLogin;
