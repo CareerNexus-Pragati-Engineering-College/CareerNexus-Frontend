@@ -157,6 +157,8 @@ const RecruiterProfile = () => {
     }
   };
 
+
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -164,6 +166,9 @@ const RecruiterProfile = () => {
       setProfileImage(URL.createObjectURL(file));
     }
   };
+
+
+
 
   const InputField = ({ label, name, type = "text", disabled = false, icon = null }) => (
     <div className="flex flex-col">
@@ -203,7 +208,11 @@ const RecruiterProfile = () => {
         </button>
       </div>
 
-      {/* Main Container: Split Layout */}
+      
+      
+      
+      
+                      {/* Main Container: Split Layout */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
@@ -211,7 +220,10 @@ const RecruiterProfile = () => {
         className="w-full max-w-6xl mt-16 flex flex-col lg:flex-row gap-6 sm:gap-8"
       >
 
-        {/* Left Sidebar (Sticky) */}
+       
+       
+       
+                   {/* Left Sidebar (Sticky) */}
         <div className="w-full lg:w-1/3 flex flex-col gap-6">
           <div className="bg-white/80 backdrop-blur-xl border border-white rounded-[2rem] shadow-xl p-8 flex flex-col items-center relative overflow-hidden lg:sticky lg:top-24">
 
