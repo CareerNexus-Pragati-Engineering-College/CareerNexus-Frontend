@@ -305,10 +305,20 @@ const RecruiterProfile = () => {
           </div>
         </div>
 
-        {/* Right Content Area (Scrollable Info) */}
+        
+        
+        
+        
+                      
+                      
+                        {/* Right Content Area (Scrollable Info) */}
         <div className="w-full lg:w-2/3 flex flex-col gap-6 sm:gap-8">
 
-          {/* Section 1: Personal Details */}
+                    
+                    
+                          
+                          
+                          {/* Section 1: Personal Details */}
           <div className="bg-white/80 backdrop-blur-xl border border-white rounded-[2rem] shadow-xl p-8 sm:p-10">
             <div className="flex items-center gap-4 mb-8">
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center text-purple-600 shadow-sm border border-white">
@@ -327,7 +337,12 @@ const RecruiterProfile = () => {
             </div>
           </div>
 
-          {/* Section 2: Professional Details */}
+                  
+                  
+                  
+                  
+                  
+                            {/* Section 2: Professional Details */}
           <div className="bg-white/80 backdrop-blur-xl border border-white rounded-[2rem] shadow-xl p-8 sm:p-10">
             <div className="flex items-center gap-4 mb-8">
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-100 to-rose-100 flex items-center justify-center text-pink-600 shadow-sm border border-white">
@@ -348,4 +363,7 @@ const RecruiterProfile = () => {
     </div>
   );
 };
+
+
+
 export default RecruiterProfile;
