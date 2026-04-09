@@ -227,10 +227,17 @@ const RecruiterProfile = () => {
         <div className="w-full lg:w-1/3 flex flex-col gap-6">
           <div className="bg-white/80 backdrop-blur-xl border border-white rounded-[2rem] shadow-xl p-8 flex flex-col items-center relative overflow-hidden lg:sticky lg:top-24">
 
-            {/* Background Accent */}
+                    
+                    
+                    
+                    
+                        {/* Background Accent */}
             <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-purple-500 to-indigo-500"></div>
 
-            {/* Profile Image */}
+            
+            
+            
+                          {/* Profile Image */}
             <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-white relative z-10 mt-10 group cursor-pointer transition-transform hover:scale-105">
               <img src={profileImage} alt="Profile" className="w-full h-full rounded-full object-cover" />
 
@@ -253,7 +260,12 @@ const RecruiterProfile = () => {
               )}
             </div>
 
-            {/* Details */}
+            
+            
+                    
+                    
+                    
+                          {/* Details */}
             <div className="text-center mt-5 mb-6 w-full relative z-10">
               <h1 className="text-2xl font-bold text-gray-900 mb-1">
                 {recruiter.firstName || recruiter.lastName ? `${recruiter.firstName} ${recruiter.lastName}` : "Recruiter Name"}
@@ -265,7 +277,13 @@ const RecruiterProfile = () => {
               <p className="text-gray-500 text-sm font-medium mt-1">{recruiter.company || "Company"}</p>
             </div>
 
-            {/* Edit/Save Button */}
+            
+            
+            
+            
+                      
+                      
+                        {/* Edit/Save Button */}
             <button
               onClick={() => isEditing ? handleSave() : handleEditToggle()}
               className={`w-full mt-2 flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold shadow-md transition-all duration-300 ${isEditing
