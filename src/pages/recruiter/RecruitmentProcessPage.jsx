@@ -74,9 +74,11 @@ const RecruitmentProcessPage = () => {
     setLoading(true);
 
 
-    
+
     try {
       // Aptitude Round -> classic MCQ PDF-based assessment
+
+
       if (selectedRound === "Aptitude Round") {
         if (!questionFile || !min_marks) {
           toast.error("Please upload the aptitude MCQ PDF and set minimum marks.", { id: "missing-aptitude-fields" });
@@ -94,6 +96,8 @@ const RecruitmentProcessPage = () => {
           endTime: endTime,
           min_marks: min_marks,
         };
+
+        
 
         formData.append("roundDetails", new Blob([JSON.stringify(roundDetails)], { type: "application/json" }));
         formData.append("questionPdf", questionFile);
