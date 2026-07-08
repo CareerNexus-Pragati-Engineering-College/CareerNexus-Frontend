@@ -129,10 +129,14 @@ const RecruitmentProcessPage = () => {
           minMarks: min_marks,
         };
 
+
+
         const response = await requestApi.post("/coding-exam/tpo/create", payload);
         toast.success("Coding elimination round configured successfully!", { id: "coding-round-success" });
         console.log("Coding round API Response:", response.data);
       }
+
+
 
       // Reset common state
       setSelectedRound("");
@@ -150,6 +154,8 @@ const RecruitmentProcessPage = () => {
         },
       ]);
 
+
+      
     } catch (error) {
       console.error("Error configuring round:", error);
       toast.error("Failed to configure recruitment round: " + (error.response?.data || error.message), { id: "round-error" });
