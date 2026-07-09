@@ -288,7 +288,10 @@ const RecruitmentProcessPage = () => {
             )}
           </motion.div>
 
-          {/* Center: Start and End Time */}
+
+
+
+                                  {/* Center: Start and End Time */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -309,6 +312,9 @@ const RecruitmentProcessPage = () => {
                 />
               </div>
 
+
+
+
               <div>
                 <label className="flex items-center text-sm font-semibold text-gray-700 mb-2 gap-2">
                   <FaClock className="text-purple-600" />
@@ -324,7 +330,9 @@ const RecruitmentProcessPage = () => {
             </div>
           </motion.div>
 
-          {/* Right: Configuration panel (MCQ or Coding based on selection) */}
+
+
+                                {/* Right: Configuration panel (MCQ or Coding based on selection) */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -332,7 +340,8 @@ const RecruitmentProcessPage = () => {
             className="bg-purple-50 p-6 rounded-xl shadow-md"
           >
             <div className="space-y-4">
-              {/* MCQ Aptitude configuration */}
+                            
+                            {/* MCQ Aptitude configuration */}
               {selectedRound === "Aptitude Round" && (
                 <>
                   <div>
