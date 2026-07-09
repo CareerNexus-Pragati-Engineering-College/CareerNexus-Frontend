@@ -238,7 +238,10 @@ const RecruitmentProcessPage = () => {
     <>
       <NavbarRecruiterDashboard />
 
-      {/* Back Button */}
+
+
+                            {/* Back Button */}
+
       <div className="pt-20 px-6">
         <button
           onClick={handleBack}
@@ -248,6 +251,8 @@ const RecruitmentProcessPage = () => {
           Back to Applications
         </button>
       </div>
+
+      
 
       <div className="px-6 pb-16 bg-white min-h-screen font-poppins text-gray-800">
         <h1 className="text-3xl font-bold mb-10 text-purple-700 text-center">Recruitment Process</h1>
