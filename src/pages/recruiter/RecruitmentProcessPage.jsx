@@ -7,6 +7,8 @@ import requestApi from "../../services/request";
 import getuserId from "../../services/getUserId";
 import toast from "react-hot-toast";
 
+
+
 const RecruitmentProcessPage = () => {
   const [selectedRound, setSelectedRound] = useState("");
   const [startTime, setStartTime] = useState("");
@@ -28,11 +30,15 @@ const RecruitmentProcessPage = () => {
     },
   ]);
 
+
+
+
   const { username, jobId } = useParams();
   const navigate = useNavigate();
 
   const [configuredRounds, setConfiguredRounds] = useState([]);
   const [loadingRounds, setLoadingRounds] = useState(false);
+
 
 
 
@@ -57,6 +63,8 @@ const RecruitmentProcessPage = () => {
     else setAnswerFile(file);
   };
 
+
+
   const handleSubmit = async () => { // <--- Make handleSubmit async
     if (!selectedRound || !startTime || !endTime || !jobId) {
       toast.error("Please fill in all required fields and ensure job ID is available.", { id: "missing-fields" });
@@ -65,8 +73,12 @@ const RecruitmentProcessPage = () => {
 
     setLoading(true);
 
+
+
     try {
       // Aptitude Round -> classic MCQ PDF-based assessment
+
+
       if (selectedRound === "Aptitude Round") {
         if (!questionFile || !min_marks) {
           toast.error("Please upload the aptitude MCQ PDF and set minimum marks.", { id: "missing-aptitude-fields" });
@@ -84,6 +96,8 @@ const RecruitmentProcessPage = () => {
           endTime: endTime,
           min_marks: min_marks,
         };
+
+        
 
         formData.append("roundDetails", new Blob([JSON.stringify(roundDetails)], { type: "application/json" }));
         formData.append("questionPdf", questionFile);
@@ -115,10 +129,14 @@ const RecruitmentProcessPage = () => {
           minMarks: min_marks,
         };
 
+
+
         const response = await requestApi.post("/coding-exam/tpo/create", payload);
         toast.success("Coding elimination round configured successfully!", { id: "coding-round-success" });
         console.log("Coding round API Response:", response.data);
       }
+
+
 
       // Reset common state
       setSelectedRound("");
@@ -136,6 +154,8 @@ const RecruitmentProcessPage = () => {
         },
       ]);
 
+
+      
     } catch (error) {
       console.error("Error configuring round:", error);
       toast.error("Failed to configure recruitment round: " + (error.response?.data || error.message), { id: "round-error" });
