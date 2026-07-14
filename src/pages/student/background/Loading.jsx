@@ -44,15 +44,23 @@ const Loading= ({ isLoading = true, message = "Loading..." }) => {
           animate="visible"
           exit="exit"
         >
-          {/* Semi-transparent dark overlay */}
+          
+          
+          
+                  {/* Semi-transparent dark overlay */}
           <div className="absolute inset-0 bg-gray-950 bg-opacity-80 backdrop-blur-sm"></div>
 
-          {/* Spinner content */}
+         
+         
+         
+                   {/* Spinner content */}
           <motion.div
             className="relative bg-gray-800 p-8 rounded-xl shadow-2xl flex flex-col items-center justify-center gap-4 border border-gray-700"
             variants={spinnerVariants}
           >
-            {/* SVG Spinner Animation */}
+            
+            
+                  {/* SVG Spinner Animation */}
             <svg
               className="animate-spin h-12 w-12 text-blue-500"
               xmlns="http://www.w3.org/2000/svg"
