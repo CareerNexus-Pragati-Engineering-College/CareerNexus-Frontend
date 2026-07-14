@@ -8,6 +8,9 @@ const AnimatedBackground = ({ isLightMode }) => {
   }, []);
 
   return (
+
+
+    
     <Particles
       id="code-sync-bg"
       init={particlesInit}
