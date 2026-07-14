@@ -2,12 +2,18 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+
+
+
+
 // Animation variants for the backdrop
 const backdropVariants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { duration: 0.3 } },
   exit: { opacity: 0, transition: { duration: 0.2 } },
 };
+
+
 
 // Animation variants for the spinner container
 const spinnerVariants = {
@@ -24,6 +30,9 @@ const spinnerVariants = {
  * @param {boolean} [props.isLoading=true] - Controls the visibility of the spinner.
  * @param {string} [props.message="Loading..."] - Optional message to display below the spinner.
  */
+
+
+
 const Loading= ({ isLoading = true, message = "Loading..." }) => {
   return (
     <AnimatePresence>
