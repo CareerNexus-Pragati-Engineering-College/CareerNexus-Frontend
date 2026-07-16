@@ -68,7 +68,10 @@ await logout()
             Applications
           </NavLink>
 
-          {/* Profile Dropdown */}
+          
+          
+                        
+                              {/* Profile Dropdown */}
           <div className="relative">
             <button
               className="flex items-center text-white hover:text-violet-400 focus:outline-none"
@@ -99,7 +102,15 @@ await logout()
           </div>
         </div>
 
-        {/* Mobile Toggle */}
+        
+        
+        
+        
+        
+        
+                                  
+                                  
+                                  {/* Mobile Toggle */}
         <div className="md:hidden text-white text-xl">
           <button onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? <FaTimes /> : <FaBars />}
@@ -107,7 +118,10 @@ await logout()
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      
+      
+      
+                                      {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-[#0f0c1d] px-6 pb-6 space-y-4 text-white text-base">
           <NavLink
