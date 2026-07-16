@@ -12,6 +12,8 @@ import {
 import getUserId from "../services/getUserId";
 import logout from "../services/logout"; // Import the logout function
 
+
+
 const NavbarRecruiterDashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -24,10 +26,15 @@ await logout()
     navigate("/recruiter");
   };
 
+
+
+
   return (
     <nav className="w-full fixed top-0 left-0 z-50 bg-gradient-to-r from-[#0f0c1d] via-[#1b1433] to-[#0f0c1d] shadow-md font-poppins">
       <div className="max-w-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
+        
+        
+                {/* Logo */}
         <NavLink to={`/recruiter/${userId}/home`} className="flex items-center gap-3">
           <img
             src="/images/logo.png"
@@ -39,7 +46,12 @@ await logout()
           </span>
         </NavLink>
 
-        {/* Desktop Menu */}
+        
+        
+        
+        
+        
+                      {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-6 text-white text-base">
           <NavLink
             to={`/recruiter/${userId}/jobpostings`}
