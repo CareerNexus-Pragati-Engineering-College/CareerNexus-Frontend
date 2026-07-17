@@ -148,6 +148,9 @@ await logout()
               setShowDropdown(false);
             }}
           >
+
+
+            
             <FaUserCircle className="text-lg text-violet-400" />
             Profile
           </NavLink>
@@ -158,6 +161,8 @@ await logout()
               handleLogout();
             }}
           >
+
+
             <FaSignOutAlt className="text-lg" />
             Logout
           </button>
