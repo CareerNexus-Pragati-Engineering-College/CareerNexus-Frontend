@@ -3,6 +3,9 @@ import { NavLink } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
 import { FaBars, FaTimes } from "react-icons/fa";
 
+
+
+
 const NavbarStudent = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -19,7 +22,12 @@ const NavbarStudent = () => {
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-[#0f0c1d] via-[#1b1433] to-[#0f0c1d] shadow-md">
       <div className="max-w-auto  flex items-center justify-between px-4 sm:px-8 lg:px-12 py-4">
-        {/* 🔹 Logo */}
+        
+        
+        
+                            
+                            
+                            {/* 🔹 Logo */}
         <NavLink to="/" className="flex items-center gap-3 group">
           <img
             src="/images/logo.png"
@@ -31,7 +39,13 @@ const NavbarStudent = () => {
           </span>
         </NavLink>
 
-        {/* 🖥️ Desktop Links */}
+        
+        
+        
+                            
+                            
+                            {/* 🖥️ Desktop Links */}
+                            
         <div className="hidden md:flex items-center space-x-6 text-white text-base font-poppins">
           {scrollLinks.map((link) => (
             <ScrollLink
