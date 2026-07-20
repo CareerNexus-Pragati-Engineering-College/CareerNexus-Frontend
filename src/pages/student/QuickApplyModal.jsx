@@ -27,7 +27,11 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
   const [urls, setUrls] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Helper: safely parse arrays
+  
+  
+  
+  
+                  // Helper: safely parse arrays
   function parseArray(value) {
     if (!value) return [];
     try {
@@ -38,7 +42,9 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
     }
   }
 
-  // Fetch student data on mount
+  
+  
+                        // Fetch student data on mount
   useEffect(() => {
     const fetchStudentData = async () => {
       try {
@@ -68,7 +74,11 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
     if (userId) fetchStudentData();
   }, [userId]);
 
-  // Handle input changes
+              
+  
+  
+  
+                          // Handle input changes
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     const newValue = name === "resume" ? files[0] : value;
