@@ -176,7 +176,13 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
     }
   };
 
-  // Toggle edit mode
+  
+  
+  
+  
+                            
+  
+                                // Toggle edit mode
   const handleEditToggle = () => {
     if (isEditing) {
       setFormData(originalData);
@@ -202,7 +208,13 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
 
   return (
     <div className="bg-white/95 backdrop-blur-xl w-full rounded-3xl shadow-2xl relative overflow-hidden font-poppins border border-violet-100 flex flex-col max-h-[90vh]">
-      {/* Dynamic Header */}
+      
+      
+      
+      
+                                          {/* Dynamic Header */}
+
+
       <div className="bg-gradient-to-r from-violet-600 to-indigo-600 p-6 sm:p-8 flex-shrink-0 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
         <button
@@ -220,7 +232,13 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
         </div>
       </div>
 
-      {/* Scrollable Form Area */}
+      
+      
+                                          
+                                          
+                                          {/* Scrollable Form Area */}
+
+                                          
       <div className="p-6 sm:p-8 overflow-y-auto scrollbar-hide flex-1 bg-gradient-to-b from-white to-violet-50/30">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="flex items-center justify-between border-b border-gray-100 pb-2">
