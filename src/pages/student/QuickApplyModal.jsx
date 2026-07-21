@@ -94,7 +94,9 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
     });
   };
 
-  // Validate form
+              
+  
+                                  // Validate form
   const validate = () => {
     const newErrors = {};
     Object.entries(formData).forEach(([key, value]) => {
@@ -107,7 +109,10 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle form submission
+  
+  
+  
+                                  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
