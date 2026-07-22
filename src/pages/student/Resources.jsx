@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import NavbarStudentDashboard from "../../components/NavbarStudentDashboard";
+
+
+
 import {
   FaBook,
   FaCode,
@@ -11,6 +14,10 @@ import {
   FaDownload,
   FaExternalLinkAlt
 } from "react-icons/fa";
+
+
+
+
 import { motion, AnimatePresence } from "framer-motion";
 import { academicStructure } from "./academicData";
 import ShareResource from "./ShareResource";
@@ -25,6 +32,8 @@ const branches = [
   "CSE", "CSE-AI", "CSE-DS", "CSE-AIML", "CSE-CS", "CSE-IT",
   "ECE", "EEE", "CIVIL", "MECH",
 ];
+
+
 
 const Resources = () => {
   const [category, setCategory] = useState(null);
@@ -121,6 +130,9 @@ const Resources = () => {
             >
               Cancel
             </button>
+
+
+
             <button
               className="px-5 py-2.5 bg-red-500 text-white font-semibold rounded-xl hover:bg-red-600 shadow-md shadow-red-500/30 transition-colors"
               onClick={async () => {
@@ -136,12 +148,17 @@ const Resources = () => {
             >
               Yes, Delete
             </button>
+
+
+
           </div>
         </div>
       ),
       overlayClassName: "bg-black/40 backdrop-blur-sm fixed inset-0 flex items-center justify-center z-50",
     });
   };
+
+
 
   const technicalResources = {
     "Programming Languages": ["C", "C++", "Java", "Python", "JavaScript", "Go"],
@@ -163,7 +180,11 @@ const Resources = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] font-poppins relative overflow-hidden">
-      {/* Background Decorative Elements */}
+      
+      
+      
+      
+                        {/* Background Decorative Elements */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-violet-400/20 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-400/20 rounded-full blur-[120px] pointer-events-none"></div>
 
