@@ -280,7 +280,10 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
             ))}
           </div>
 
-          {/* Resume Upload Box */}
+                                    
+                                    
+                                    
+                                    {/* Resume Upload Box */}
           {!isEditing && (
             <div className="mt-8">
               <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
@@ -310,7 +313,11 @@ const QuickApplyModal = ({ job, onClose, onApply, userId }) => {
             </div>
           )}
 
-          {/* Action Area */}
+                                  
+                                  
+                                  
+                                  
+                                  {/* Action Area */}
           <div className="pt-6 border-t border-gray-100 mt-8 flex flex-col sm:flex-row justify-end gap-3">
             <button
               type="button"
