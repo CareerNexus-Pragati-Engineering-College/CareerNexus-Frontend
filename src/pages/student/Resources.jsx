@@ -453,7 +453,7 @@ const Resources = () => {
                   </div>
 
 
-                  
+
 
                   {Object.keys(getSubjects()).length > 0 ? (
                     <div className="grid md:grid-cols-2 gap-8">
@@ -471,6 +471,8 @@ const Resources = () => {
                           <h3 className="text-xl sm:text-2xl font-bold text-[#2C225A] mb-6 pb-4 border-b border-gray-100">
                             {subject}
                           </h3>
+
+
 
                           <div className="flex-grow space-y-6">
                             {resources.map((res, i) => (
@@ -491,6 +493,9 @@ const Resources = () => {
                                       >
                                         <FaFilePdf /> View PDF
                                       </a>
+
+
+
                                       <a
                                         href={res.pdf}
                                         download
@@ -500,6 +505,8 @@ const Resources = () => {
                                       </a>
                                     </>
                                   )}
+
+                                  
 
                                   {res.videoLink && (
                                     <a
