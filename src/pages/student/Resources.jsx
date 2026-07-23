@@ -321,7 +321,7 @@ const Resources = () => {
         
                                   {/* Academic Flow */}
 
-                                  
+
         {category === "academic" && (
           <div className="space-y-8">
             {/* Breadcrumb / Back Button */}
@@ -347,7 +347,14 @@ const Resources = () => {
               )}
             </AnimatePresence>
 
-            {/* Selection Steps */}
+            
+            
+            
+            
+                                        
+                                        
+                                        {/* Selection Steps */}
+
             <div className="bg-white/50 backdrop-blur-xl border border-white/80 rounded-3xl p-8 shadow-[0_8px_30px_rgba(107,78,207,0.05)]">
               {!year && (
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
@@ -368,6 +375,8 @@ const Resources = () => {
                   </div>
                 </motion.div>
               )}
+
+
 
               {year && !regulation && (
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
@@ -442,6 +451,9 @@ const Resources = () => {
                       {Object.keys(getSubjects()).length} Subjects Found
                     </span>
                   </div>
+
+
+                  
 
                   {Object.keys(getSubjects()).length > 0 ? (
                     <div className="grid md:grid-cols-2 gap-8">
