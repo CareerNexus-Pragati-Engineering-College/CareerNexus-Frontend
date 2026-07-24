@@ -36,7 +36,9 @@ const ShareResource = ({ onShare, onClose }) => {
 
 
 
-  // Prevent background scrolling while modal is open
+ 
+ 
+                             // Prevent background scrolling while modal is open
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -107,7 +109,7 @@ const ShareResource = ({ onShare, onClose }) => {
       });
 
       if (onShare) onShare();
-      onClose(); // Close modal after success
+      onClose();                  // Close modal after success
     } catch (error) {
       console.error("Upload failed:", error);
       toast.error(error.response?.data || "Failed to upload resource.", {
@@ -120,6 +122,8 @@ const ShareResource = ({ onShare, onClose }) => {
 
 
 
+
+  
   const inputClasses =
     "w-full bg-white/60 border border-gray-200 text-gray-800 text-sm rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-transparent outline-none p-2.5 transition-all hover:bg-white/90 shadow-sm backdrop-blur-md";
 
