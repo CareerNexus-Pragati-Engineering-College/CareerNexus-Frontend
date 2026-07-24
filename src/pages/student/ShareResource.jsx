@@ -123,7 +123,7 @@ const ShareResource = ({ onShare, onClose }) => {
 
 
 
-  
+
   const inputClasses =
     "w-full bg-white/60 border border-gray-200 text-gray-800 text-sm rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-transparent outline-none p-2.5 transition-all hover:bg-white/90 shadow-sm backdrop-blur-md";
 
@@ -159,9 +159,13 @@ const ShareResource = ({ onShare, onClose }) => {
 
 
 
-        {/* Form */}
+                              
+                              {/* Form */}
+
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
-          {/* Grid for Dropdowns - 4 columns on md screens to save vertical space */}
+          
+          
+                          {/* Grid for Dropdowns - 4 columns on md screens to save vertical space */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="space-y-1">
               <label className="text-xs font-semibold text-gray-600 uppercase ml-1">
@@ -253,7 +257,10 @@ const ShareResource = ({ onShare, onClose }) => {
 
 
 
-          {/* Texts inputs - 2 columns */}
+                              {/* Texts inputs - 2 columns */}
+
+
+                              
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
               <label className="text-xs font-semibold text-gray-600 uppercase ml-1">
