@@ -36,7 +36,9 @@ const ShareResource = ({ onShare, onClose }) => {
 
 
 
-  // Prevent background scrolling while modal is open
+ 
+ 
+                             // Prevent background scrolling while modal is open
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -107,7 +109,7 @@ const ShareResource = ({ onShare, onClose }) => {
       });
 
       if (onShare) onShare();
-      onClose(); // Close modal after success
+      onClose();                  // Close modal after success
     } catch (error) {
       console.error("Upload failed:", error);
       toast.error(error.response?.data || "Failed to upload resource.", {
@@ -117,6 +119,8 @@ const ShareResource = ({ onShare, onClose }) => {
       setIsLoading(false);
     }
   };
+
+
 
 
 
@@ -155,9 +159,13 @@ const ShareResource = ({ onShare, onClose }) => {
 
 
 
-        {/* Form */}
+                              
+                              {/* Form */}
+
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
-          {/* Grid for Dropdowns - 4 columns on md screens to save vertical space */}
+          
+          
+                          {/* Grid for Dropdowns - 4 columns on md screens to save vertical space */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="space-y-1">
               <label className="text-xs font-semibold text-gray-600 uppercase ml-1">
@@ -249,7 +257,10 @@ const ShareResource = ({ onShare, onClose }) => {
 
 
 
-          {/* Texts inputs - 2 columns */}
+                              {/* Texts inputs - 2 columns */}
+
+
+                              
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
               <label className="text-xs font-semibold text-gray-600 uppercase ml-1">
